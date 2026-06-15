@@ -1,0 +1,203 @@
+{
+  "title": "Müşteri Kampanyaları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Kampanya kodu veya ad ara…",
+    "keys": ["campaignCode", "name", "description"]
+  },
+  "hideColumnFilters": true,
+  "advancedFiltersLayout": {
+    "defaultSpan": 3,
+    "rows": [
+      {
+        "filters": [{ "key": "transactionType" }, { "key": "currency" }, { "key": "status" }]
+      }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "transactionType",
+      "label": "İşlem türü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Kişiye Transfer", "value": "WalletToPerson" },
+        { "label": "Yurt Dışına Transfer", "value": "InternationalTransfer" },
+        { "label": "Banka Hesabına Transfer", "value": "WalletToBankAccount" },
+        { "label": "Bakiye Yükleme", "value": "WalletTopUp" }
+      ]
+    },
+    {
+      "key": "currency",
+      "label": "Para birimi",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "TRY", "value": "TRY" },
+        { "label": "USD", "value": "USD" },
+        { "label": "EUR", "value": "EUR" }
+      ]
+    },
+    {
+      "key": "status",
+      "label": "Statü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" }
+      ]
+    }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Kampanya" },
+    "export": { "label": "Dışa Aktar" }
+  },
+  "columns": [
+    {
+      "key": "campaignCode",
+      "title": "Kampanya Kodu",
+      "dataIndex": "campaignCode",
+      "sortable": true,
+      "mono": true,
+      "width": 140,
+      "render": "renderCode"
+    },
+    {
+      "key": "name",
+      "title": "Ad",
+      "dataIndex": "name",
+      "sortable": true,
+      "minWidth": 180,
+      "render": "renderName"
+    },
+    {
+      "key": "description",
+      "title": "Açıklama",
+      "dataIndex": "description",
+      "sortable": false,
+      "minWidth": 240,
+      "render": "renderDescription"
+    },
+    {
+      "key": "fixedFeeGainRate",
+      "title": "Sabit Kazanç",
+      "dataIndex": "fixedFeeGainRate",
+      "sortable": true,
+      "align": "right",
+      "mono": true,
+      "width": 130,
+      "render": "renderPct"
+    },
+    {
+      "key": "commissionGainRate",
+      "title": "Komisyon Kazanç",
+      "dataIndex": "commissionGainRate",
+      "sortable": true,
+      "align": "right",
+      "mono": true,
+      "width": 150,
+      "render": "renderPct"
+    },
+    {
+      "key": "transactionType",
+      "title": "İşlem türü",
+      "dataIndex": "transactionType",
+      "sortable": true,
+      "width": 200,
+      "render": "renderTransactionType"
+    },
+    {
+      "key": "currency",
+      "title": "Para birimi",
+      "dataIndex": "currency",
+      "sortable": true,
+      "mono": true,
+      "width": 110
+    },
+    {
+      "key": "startDate",
+      "title": "Başlangıç",
+      "dataIndex": "startDate",
+      "sortable": true,
+      "width": 130,
+      "render": "renderStartDate"
+    },
+    {
+      "key": "endDate",
+      "title": "Bitiş",
+      "dataIndex": "endDate",
+      "sortable": true,
+      "width": 130,
+      "render": "renderEndDate"
+    },
+    {
+      "key": "minTxAmount",
+      "title": "Min. İşlem",
+      "dataIndex": "minTxAmount",
+      "sortable": true,
+      "mono": true,
+      "align": "right",
+      "width": 120,
+      "render": "renderNullableNumber"
+    },
+    {
+      "key": "maxGainPerTx",
+      "title": "Max. Kazanç (Tx)",
+      "dataIndex": "maxGainPerTx",
+      "sortable": true,
+      "mono": true,
+      "align": "right",
+      "width": 140,
+      "render": "renderNullableNumber"
+    },
+    {
+      "key": "maxGainTotal",
+      "title": "Max. Kazanç (Toplam)",
+      "dataIndex": "maxGainTotal",
+      "sortable": true,
+      "mono": true,
+      "align": "right",
+      "width": 160,
+      "render": "renderNullableNumber"
+    },
+    {
+      "key": "maxUsageCount",
+      "title": "Max Kullanım",
+      "dataIndex": "maxUsageCount",
+      "sortable": true,
+      "mono": true,
+      "align": "right",
+      "width": 130,
+      "render": "renderNullableNumber"
+    },
+    {
+      "key": "changedBy",
+      "title": "Değiştiren",
+      "dataIndex": "changedBy",
+      "sortable": false,
+      "minWidth": 140,
+      "render": "renderChangedBy"
+    },
+    {
+      "key": "status",
+      "title": "Statü",
+      "dataIndex": "status",
+      "sortable": true,
+      "width": 110,
+      "render": "renderStatus"
+    },
+    {
+      "key": "actions",
+      "title": "",
+      "dataIndex": "id",
+      "sortable": false,
+      "width": 72,
+      "render": "renderActions"
+    }
+  ]
+}

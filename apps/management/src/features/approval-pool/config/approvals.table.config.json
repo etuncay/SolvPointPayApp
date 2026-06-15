@@ -1,0 +1,20 @@
+{
+  "title": "Onay havuzu",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [20, 50, 100] },
+  "columns": [
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "mono": true, "width": 140 },
+    { "key": "screenName", "title": "Ekran", "dataIndex": "screenName", "width": 200 },
+    { "key": "initiatedByName", "title": "Başlatan", "dataIndex": "initiatedByName", "width": 160 },
+    { "key": "initiatedAt", "title": "Tarih", "dataIndex": "initiatedAt", "mono": true, "width": 160, "render": "renderDate" },
+    { "key": "firstApproverName", "title": "1. Onay", "dataIndex": "firstApproverName", "width": 140 },
+    { "key": "firstApprovalAt", "title": "1. Tarih", "dataIndex": "firstApprovalAt", "mono": true, "width": 160, "render": "renderDate" },
+    { "key": "secondApproverName", "title": "2. Onay", "dataIndex": "secondApproverName", "width": 140 },
+    { "key": "secondApprovalAt", "title": "2. Tarih", "dataIndex": "secondApprovalAt", "mono": true, "width": 160, "render": "renderDate" },
+    { "key": "uiStatus", "title": "Durum", "dataIndex": "uiStatus", "render": "renderStatus", "width": 140 },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderActions", "width": 120, "align": "right", "excludeFromExport": true }
+  ]
+}
+

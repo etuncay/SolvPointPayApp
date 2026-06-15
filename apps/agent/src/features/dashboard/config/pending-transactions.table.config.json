@@ -1,0 +1,20 @@
+{
+  "title": "Bekleyen İşlemler",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "transactionNo", "title": "İşlem No", "dataIndex": "transactionNo", "mono": true, "width": 140 },
+    { "key": "createdAt", "title": "Tarih", "dataIndex": "createdAt", "width": 150 },
+    { "key": "senderName", "title": "Gönderen", "dataIndex": "senderName", "width": 140 },
+    { "key": "receiverName", "title": "Alıcı", "dataIndex": "receiverName", "width": 140 },
+    { "key": "iban", "title": "IBAN", "dataIndex": "iban", "mono": true, "width": 200 },
+    { "key": "transactionType", "title": "İşlem Türü", "dataIndex": "transactionType", "render": "renderTxType", "width": 160 },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "format": "currency", "align": "right", "mono": true, "width": 120 },
+    { "key": "currency", "title": "PB", "dataIndex": "currency", "width": 70, "align": "center" },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "width": 180 },
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "mono": true, "width": 130 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderStatus", "width": 110 }
+  ]
+}

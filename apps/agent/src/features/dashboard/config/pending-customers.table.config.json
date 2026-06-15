@@ -1,0 +1,14 @@
+{
+  "title": "Bekleyen Müşteriler",
+  "rowKey": "customerId",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "width": 120 },
+    { "key": "customerNo", "title": "Müşteri No", "dataIndex": "customerNo", "mono": true, "width": 120 },
+    { "key": "idNo", "title": "Kimlik No", "dataIndex": "idNo", "mono": true, "width": 140 },
+    { "key": "name", "title": "Ad Soyad", "dataIndex": "name", "width": 180 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderCustStatus", "width": 130 }
+  ]
+}

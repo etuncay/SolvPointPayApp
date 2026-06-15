@@ -1,0 +1,24 @@
+---
+description: On-demand intake orchestrator — infer, AskQuestion, brief, plan, skill route. Loaded via hooks or greenfield/plan/design prompts.
+alwaysApply: false
+---
+
+# Project intake workflow
+
+Infer-first brief intake, then plan/implement separation. **Full steps:** [project-intake/SKILL.md](../skills/project-intake/SKILL.md).
+
+## When required
+
+Greenfield, new feature without brief, create plan, design/mockup, scaffold — unless: implement-plan, scoped fix/refactor, `skip intake`, or matching brief exists in `.cursor/plans/_briefs/`.
+
+## Flow
+
+0. **Prompt refinement** (when `intake.prompt_refinement` ≠ off and hook routes `[route:prompt-refinement]`): [prompt-refinement/SKILL.md](../skills/prompt-refinement/SKILL.md) → structured prompt → user approval
+1. Read [project.defaults.yaml](../config/project.defaults.yaml) + [project.intake-fields.yaml](../config/project.intake-fields.yaml)
+2. Infer: user prompt → repo signals → config defaults → AskQuestion for gaps
+3. Save brief: `.cursor/plans/_briefs/{slug}.brief.md` ([template](../plans/_templates/project-brief.template.md))
+4. Route skill: design → [design-intake](../skills/design-intake/SKILL.md); plan → [implementation-plan](../skills/implementation-plan/SKILL.md); scaffold → [module-scaffolder](../skills/module-scaffolder/SKILL.md)
+5. Plan: `.cursor/plans/features/{slug}.plan.md` — get approval before code
+6. Implement: plan body read-only; only `todos[].status`; verify per [verification.md](../plans/_shared/verification.md)
+
+Registry: [registry.json](../skills/claude-skills-router/registry.json). Options: [intake-canonical-options.md](../plans/_shared/intake-canonical-options.md).

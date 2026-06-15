@@ -1,0 +1,36 @@
+{
+  "title": "Bildirim Şablonları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Şablon adı veya konu ara…",
+    "keys": ["name", "subject", "code"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "type",
+      "label": "Bildirim Türü",
+      "type": "select",
+      "span": 4,
+      "options": [
+        { "label": "Tüm türler", "value": "any" },
+        { "label": "SMS", "value": "SMS" },
+        { "label": "Email", "value": "Email" },
+        { "label": "Push", "value": "Push" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "name", "title": "Şablon Adı", "dataIndex": "name", "sortable": true, "minWidth": 180 },
+    { "key": "notificationType", "title": "Tür", "dataIndex": "notificationType", "sortable": true, "width": 120, "render": "renderType" },
+    { "key": "subject", "title": "Konu", "dataIndex": "subject", "sortable": true, "minWidth": 220 },
+    { "key": "lastTriggeredAt", "title": "Son Tetiklenme", "dataIndex": "lastTriggeredAt", "sortable": true, "width": 170, "render": "renderLastTriggered" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Şablon" }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Belgeler",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [20, 50] },
+  "columns": [
+    { "key": "docType", "title": "Tip", "dataIndex": "docType", "render": "renderDocType", "width": 180 },
+    { "key": "fileName", "title": "Dosya", "dataIndex": "fileName", "mono": true },
+    { "key": "uploadedAt", "title": "Yükleme", "dataIndex": "uploadedAt", "width": 160 },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderDocDownload", "width": 120, "align": "right", "excludeFromExport": true }
+  ]
+}
+

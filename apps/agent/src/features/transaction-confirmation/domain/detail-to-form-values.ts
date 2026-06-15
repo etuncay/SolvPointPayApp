@@ -1,0 +1,63 @@
+import { fmtNumber } from '@/lib/format';
+import type { TransactionDetail } from './transaction-detail';
+import type { SecurityChecks } from './types';
+
+/** TransactionDetail → DynamicForm düz alanları. */
+export function detailToFormValues(
+  detail: TransactionDetail,
+  lang: string,
+  t: (key: string, fb?: string) => string,
+  security: SecurityChecks,
+  otp: string,
+  agentRoleLabel: string,
+): Record<string, unknown> {
+  const isFx = detail.sourceCurrency !== detail.targetCurrency;
+  const total = detail.principalAmount + detail.feeFixed + detail.feeVariable;
+
+  return {
+    sender_name: detail.sender.name,
+    sender_customerNo: detail.sender.customerNo != null ? String(detail.sender.customerNo) : '—',
+    sender_walletNo: detail.sender.walletNo ?? '—',
+    sender_phone: detail.sender.phone ?? '—',
+    sender_iban: detail.sender.iban ?? '—',
+    sender_city: detail.sender.city ?? '—',
+    receiver_name: detail.receiver.name,
+    receiver_customerNo: detail.receiver.customerNo != null ? String(detail.receiver.customerNo) : '—',
+    receiver_walletNo: detail.receiver.walletNo ?? '—',
+    receiver_phone: detail.receiver.phone ?? '—',
+    receiver_iban: detail.receiver.iban ?? '—',
+    receiver_city: detail.receiver.city ?? '—',
+    referenceNo: detail.referenceNo,
+    foreignReferenceNo: detail.foreignReferenceNo ?? '—',
+    principalAmount: `${fmtNumber(detail.principalAmount, lang)} ${detail.sourceCurrency}`,
+    targetAmount:
+      detail.targetAmount != null
+        ? `${fmtNumber(detail.targetAmount, lang)} ${detail.targetCurrency}`
+        : '—',
+    fxRate: detail.fxRate != null ? String(detail.fxRate) : '—',
+    feeFixed: fmtNumber(detail.feeFixed, lang),
+    feeVariable: fmtNumber(detail.feeVariable, lang),
+    totalPaid: `${fmtNumber(total, lang)} ${detail.sourceCurrency}`,
+    createdAt: detail.createdAt,
+    withdrawalDate: detail.withdrawalDate ?? '—',
+    transactionType: t(`wa_tx_${detail.transactionType}`),
+    paymentPurpose: detail.paymentPurpose ?? '—',
+    status: t(`tx_status_${detail.status}`),
+    description: detail.description ?? '—',
+    senderAuth_name: detail.senderAuthorized?.name ?? '—',
+    senderAuth_title: detail.senderAuthorized?.title ?? '—',
+    senderAuth_phone: detail.senderAuthorized?.phone ?? '—',
+    receiverAuth_name: detail.receiverAuthorized?.name ?? '—',
+    receiverAuth_title: detail.receiverAuthorized?.title ?? '—',
+    receiverAuth_phone: detail.receiverAuthorized?.phone ?? '—',
+    agentRole: agentRoleLabel,
+    agentName: (detail.senderAgent ?? detail.receiverAgent)?.name ?? '—',
+    security: { otp, checks: security },
+    _showSenderIban: !!detail.sender.iban,
+    _showReceiverIban: !!detail.receiver.iban,
+    _showFx: isFx,
+    _hasSenderAuth: !!detail.senderAuthorized,
+    _hasReceiverAuth: !!detail.receiverAuthorized,
+    _hasAgents: !!(detail.senderAgent || detail.receiverAgent),
+  };
+}

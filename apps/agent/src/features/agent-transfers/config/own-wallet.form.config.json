@@ -1,0 +1,64 @@
+{
+  "fields": [
+    {
+      "name": "fullName",
+      "type": "Input",
+      "label": "Gönderen",
+      "col": 4,
+      "readOnly": true,
+      "shouldRender": "values._hasSender === true"
+    },
+    {
+      "name": "authorizedPersonIdNo",
+      "type": "Input",
+      "label": "Yetkili Kişi Kimlik No",
+      "col": 2,
+      "shouldRender": "values._corporate === true"
+    },
+    {
+      "name": "currency",
+      "type": "Select",
+      "label": "Para Birimi",
+      "col": 2,
+      "options": [],
+      "rules": [{ "required": true, "message": "ag_tr_err_currency" }]
+    },
+    {
+      "name": "walletNo",
+      "type": "Input",
+      "label": "Cüzdan No",
+      "col": 2,
+      "readOnly": true,
+      "shouldRender": "values._hasSender === true"
+    },
+    {
+      "name": "amount",
+      "type": "InputNumber",
+      "label": "Tutar",
+      "col": 2,
+      "min": 0,
+      "rules": [{ "required": true, "message": "ag_tr_err_amount" }]
+    },
+    {
+      "name": "clientReference",
+      "type": "Input",
+      "label": "İşlem Referans No",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_tr_err_reference" }]
+    },
+    {
+      "name": "isSuspicious",
+      "type": "Switch",
+      "label": "Şüpheli İşlem",
+      "col": 2,
+      "defaultValue": false
+    }
+  ],
+  "buttonToolbar": {
+    "position": "bottom",
+    "buttons": [
+      { "key": "continue", "label": "Devam Et", "variant": "primary" },
+      { "key": "cancel", "label": "İptal", "variant": "ghost" }
+    ]
+  }
+}

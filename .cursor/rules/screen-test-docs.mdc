@@ -1,0 +1,30 @@
+---
+description: Auto screen testing + per-screen test docs under user_test/<app>/ when UI screens change.
+alwaysApply: false
+globs: "**/*.{tsx,jsx,vue,svelte,html,cshtml,razor}"
+---
+
+# Screen test docs
+
+When implementing or changing a UI screen, produce **both** outputs via [screen-test-protocol/SKILL.md](../skills/screen-test-protocol/SKILL.md):
+
+1. **Automatic browser test** with `cursor-ide-browser` when a dev server is reachable — log in, click, fill forms, and exercise create / edit / delete. Stop on login wall / captcha / 2FA / payment / irreversible actions and fall back to manual docs.
+2. **Per-screen Markdown doc** at `user_test/<app>/processes/NN-slug.md` (one file per screen) from [user_test/_templates/](../../user_test/_templates/), so the end user can re-run the test manually.
+
+## Gate
+
+| `defaults.shared.screen_test_docs` | Behavior |
+|------------------------------------|----------|
+| `auto` (default) | Run browser test when server up; always write docs |
+| `on-request` | Only when user asks; otherwise write manual docs only |
+| `off` | Skip |
+
+Also skip for pure backend/no-UI changes or brief `verification: skip-for-now`.
+
+## Folder contract
+
+- One folder per app under `user_test/<app>/` (`index.md`, `processes/`, `fixtures/`, `runs/`); create from templates if missing.
+- Update the screen's **Otomatik test sonucu** + checklist after each run, and append `user_test/<app>/runs/YYYY-MM-DD-*.md`.
+- Docs language follows `locale.chat`; no real PII (synthetic / mock seed only); no code changes inside `user_test/`.
+
+Verification path: [verification.md](../plans/_shared/verification.md).

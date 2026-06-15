@@ -1,0 +1,20 @@
+{
+  "name": "@epay/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./css/tokens.css": "./css/tokens.css",
+    "./css/base.css": "./css/base.css",
+    ".": "./src/index.ts"
+  },
+  "files": ["css", "src"],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@epay/tsconfig": "workspace:*",
+    "typescript": "^5.8.3"
+  }
+}

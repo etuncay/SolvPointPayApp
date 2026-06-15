@@ -1,0 +1,28 @@
+{
+  "title": "KYC İncelemeleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "VKN/TCKN, ad, telefon veya email ara…",
+    "keys": ["entityNo", "identityNo", "displayName", "phone", "email"]
+  },
+  "hideColumnFilters": true,
+  "columns": [
+    { "key": "entityNo", "title": "VKN/TCKN", "dataIndex": "entityNo", "sortable": true, "width": 140, "render": "renderMono" },
+    { "key": "entityTypeFull", "title": "Tür", "dataIndex": "entityTypeFull", "sortable": true, "width": 140 },
+    { "key": "identityDocumentExtended", "title": "Kimlik Tipi", "dataIndex": "identityDocumentExtended", "sortable": true, "width": 160 },
+    { "key": "identityNo", "title": "Kimlik No", "dataIndex": "identityNo", "sortable": true, "width": 150, "render": "renderMono" },
+    { "key": "displayName", "title": "Ad Soyad", "dataIndex": "displayName", "sortable": true, "minWidth": 190 },
+    { "key": "phone", "title": "Telefon", "dataIndex": "phone", "sortable": true, "width": 140 },
+    { "key": "email", "title": "Email", "dataIndex": "email", "sortable": true, "minWidth": 190 },
+    { "key": "birthDate", "title": "Doğum", "dataIndex": "birthDate", "sortable": true, "width": 120, "render": "renderBirthDate" },
+    { "key": "queryTime", "title": "Sorgu Zamanı", "dataIndex": "queryTime", "sortable": true, "width": 180, "render": "renderQueryTime" },
+    { "key": "queryResultLabel", "title": "Sorgu Sonucu", "dataIndex": "queryResultLabel", "sortable": true, "width": 140 },
+    { "key": "previousQueryResultLabel", "title": "Önceki Sonuç", "dataIndex": "previousQueryResultLabel", "sortable": true, "width": 140, "render": "renderPreviousResult" },
+    { "key": "blockageReason", "title": "Bloke Nedeni", "dataIndex": "blockageReason", "minWidth": 180, "render": "renderBlockageReason" },
+    { "key": "kycStatusDisplay", "title": "KYC Durumu", "dataIndex": "kycStatusDisplay", "sortable": true, "width": 170, "render": "renderKycStatus" }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Fraud Vakaları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "İşlem no, case no veya müşteri ara…",
+    "keys": ["transactionNo", "id", "senderName", "receiverName", "senderCustomerNo"]
+  },
+  "hideColumnFilters": true,
+  "columns": [
+    { "key": "transactionNo", "title": "İşlem No", "dataIndex": "transactionNo", "sortable": true, "width": 140, "render": "renderMonoWithWarn" },
+    { "key": "transactionDate", "title": "İşlem Tarihi", "dataIndex": "transactionDate", "sortable": true, "width": 140, "render": "renderSoftMonoWithWarn" },
+    { "key": "priority", "title": "Öncelik", "dataIndex": "priority", "sortable": true, "width": 110, "render": "renderPriority" },
+    { "key": "transactionType", "title": "İşlem Tipi", "dataIndex": "transactionType", "sortable": true, "width": 150, "render": "renderTransactionType" },
+    { "key": "ruleTitle", "title": "Kural", "dataIndex": "ruleTitle", "minWidth": 200, "render": "renderWithWarn" },
+    { "key": "riskScore", "title": "Risk Skoru", "dataIndex": "riskScore", "sortable": true, "width": 110, "render": "renderMonoWithWarn" },
+    { "key": "senderCustomerNo", "title": "Gönderen No", "dataIndex": "senderCustomerNo", "sortable": true, "width": 130, "render": "renderMonoOrDashWithWarn" },
+    { "key": "senderName", "title": "Gönderen", "dataIndex": "senderName", "minWidth": 170, "render": "renderWithWarn" },
+    { "key": "receiverCustomerNo", "title": "Alıcı No", "dataIndex": "receiverCustomerNo", "sortable": true, "width": 130, "render": "renderMonoOrDashWithWarn" },
+    { "key": "receiverName", "title": "Alıcı", "dataIndex": "receiverName", "minWidth": 170, "render": "renderWithWarn" },
+    { "key": "iban", "title": "IBAN", "dataIndex": "iban", "width": 170, "render": "renderMonoOrDashWithWarn" },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "sortable": true, "width": 130, "render": "renderAmountWithWarn" },
+    { "key": "channel", "title": "Kanal", "dataIndex": "channel", "sortable": true, "width": 110, "render": "renderChannel" },
+    { "key": "transactionStatus", "title": "İşlem Durumu", "dataIndex": "transactionStatus", "sortable": true, "width": 130, "render": "renderTransactionStatus" },
+    { "key": "caseStatus", "title": "Vaka Durumu", "dataIndex": "caseStatus", "sortable": true, "width": 140, "render": "renderCaseStatus" },
+    { "key": "assignedUserName", "title": "Atanan", "dataIndex": "assignedUserName", "sortable": true, "width": 150, "render": "renderAssignee" }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "title": "Btrans Entegrasyonları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Hatalı", "value": "error" },
+      { "label": "Beklemede", "value": "OnHold" },
+      { "label": "Tamamlandı", "value": "Completed" }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "reportName",
+      "label": "Rapor",
+      "type": "select",
+      "span": 4,
+      "options": [{ "label": "Tümü", "value": "all" }]
+    },
+    {
+      "key": "dateFrom",
+      "label": "Başlangıç",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "dateTo",
+      "label": "Bitiş",
+      "type": "date",
+      "span": 3
+    }
+  ],
+  "columns": [
+    { "key": "reportDate", "title": "Rapor Tarihi", "dataIndex": "reportDate", "sortable": true, "width": 130, "render": "renderDate" },
+    { "key": "reportName", "title": "Rapor Adı", "dataIndex": "reportName", "sortable": true, "minWidth": 220, "render": "renderReportName" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" },
+    { "key": "actions", "title": "Aksiyon", "dataIndex": "id", "width": 180, "render": "renderActions" }
+  ]
+}

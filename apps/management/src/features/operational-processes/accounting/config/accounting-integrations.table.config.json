@@ -1,0 +1,36 @@
+{
+  "title": "Muhasebe Entegrasyonları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Referans, gönderen veya alıcı ara…",
+    "keys": ["referenceNo", "senderNo", "receiverNo", "senderName", "receiverName"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Hatalı", "value": "error" },
+      { "label": "Beklemede", "value": "OnHold" },
+      { "label": "Tamamlandı", "value": "Completed" }
+    ]
+  },
+  "columns": [
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "sortable": true, "width": 150 },
+    { "key": "transactionAt", "title": "İşlem Zamanı", "dataIndex": "transactionAt", "sortable": true, "width": 180, "render": "renderDate" },
+    { "key": "transactionType", "title": "İşlem Tipi", "dataIndex": "transactionType", "sortable": true, "width": 140, "render": "renderTransactionType" },
+    { "key": "senderDisplay", "title": "Gönderen", "dataIndex": "senderDisplay", "sortable": true, "minWidth": 180 },
+    { "key": "receiverDisplay", "title": "Alıcı", "dataIndex": "receiverDisplay", "sortable": true, "minWidth": 180 },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "sortable": true, "width": 140, "render": "renderAmount" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 130, "render": "renderStatus" },
+    { "key": "lastSentAt", "title": "Son Gönderim", "dataIndex": "lastSentAt", "sortable": true, "width": 170, "render": "renderLastSentAt" },
+    { "key": "serviceOutputShort", "title": "Servis Çıktısı", "dataIndex": "serviceOutputShort", "minWidth": 210 },
+    { "key": "attemptCount", "title": "Deneme", "dataIndex": "attemptCount", "sortable": true, "width": 100 },
+    { "key": "actions", "title": "Aksiyon", "dataIndex": "id", "width": 180, "render": "renderActions" }
+  ]
+}

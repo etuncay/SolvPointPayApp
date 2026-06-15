@@ -1,0 +1,10 @@
+---
+description: Canonical discipline text moved to core.mdc. Manual @cursor-guidelines reminder only.
+alwaysApply: false
+---
+
+# Cursor guidelines (stub)
+
+**Canonical:** [core.mdc](core.mdc) — `alwaysApply: true`.
+
+Do not duplicate content here. Read `core.mdc` for discipline, locale, and intake pointer.

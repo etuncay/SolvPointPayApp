@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "description": "Token estimates and activation rules for on-screen context reporting. Display-only — not injected into prompts.",
+  "rules": [
+    {
+      "id": "core",
+      "label": "core.mdc",
+      "path": ".cursor/rules/core.mdc",
+      "mode": "always",
+      "tokens": 400
+    },
+    {
+      "id": "quality-standards",
+      "label": "quality-standards.mdc",
+      "path": ".cursor/rules/quality-standards.mdc",
+      "mode": "extensions",
+      "extensions": ["tsx", "jsx", "vue", "svelte", "css", "scss", "html"],
+      "tokens": 480
+    },
+    {
+      "id": "screen-test-docs",
+      "label": "screen-test-docs.mdc",
+      "path": ".cursor/rules/screen-test-docs.mdc",
+      "mode": "extensions",
+      "extensions": ["tsx", "jsx", "vue", "svelte", "html", "cshtml", "razor"],
+      "tokens": 400
+    },
+    {
+      "id": "plan-authoring",
+      "label": "plan-authoring.mdc",
+      "path": ".cursor/rules/plan-authoring.mdc",
+      "mode": "path_suffix",
+      "suffix": ".plan.md",
+      "path_contains": ".cursor/plans/",
+      "tokens": 440
+    },
+    {
+      "id": "project-intake-workflow",
+      "label": "project-intake-workflow.mdc",
+      "path": ".cursor/rules/project-intake-workflow.mdc",
+      "mode": "on_intake",
+      "tokens": 370
+    }
+  ],
+  "intake_artifacts": [
+    {
+      "id": "project.defaults",
+      "label": "project.defaults.yaml",
+      "path": ".cursor/config/project.defaults.yaml",
+      "tokens": 1200
+    },
+    {
+      "id": "intake-fields",
+      "label": "project.intake-fields.yaml",
+      "path": ".cursor/config/project.intake-fields.yaml",
+      "tokens": 750
+    }
+  ],
+  "skill_tokens": {
+    "prompt-refinement": 380,
+    "project-intake": 540,
+    "module-scaffolder": 560,
+    "focused-fix": 740,
+    "implementation-plan": 520,
+    "screen-test-protocol": 1280,
+    "design-intake": 610,
+    "api-design-reviewer": 640,
+    "dependency-auditor": 620,
+    "ci-cd-pipeline-builder": 450,
+    "codebase-onboarding": 400,
+    "database-schema-designer": 490,
+    "senior-secops": 935,
+    "handoff": 445,
+    "mcp-server-builder": 510
+  }
+}

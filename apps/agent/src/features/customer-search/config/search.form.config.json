@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "name": "customerNo",
+      "type": "Input",
+      "label": "Müşteri No",
+      "col": 2,
+      "placeholder": "Müşteri no veya MUS-…"
+    },
+    {
+      "name": "idNo",
+      "type": "Input",
+      "label": "Kimlik No",
+      "col": 2,
+      "placeholder": "TCKN / pasaport no"
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "search", "label": "Sorgula", "variant": "primary", "icon": "search" }
+    ]
+  }
+}

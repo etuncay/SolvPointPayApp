@@ -1,0 +1,28 @@
+{
+  "title": "Dokümanlar",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Doküman no, tip veya oluşturan ara…",
+    "keys": ["id", "documentTypeName", "createdBy"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    { "key": "dateFrom", "label": "Tarih (Baş)", "type": "date", "span": 3 },
+    { "key": "dateTo", "label": "Tarih (Bitiş)", "type": "date", "span": 3 },
+    { "key": "category", "label": "Kategori", "type": "select", "span": 3, "options": [{ "label": "Tüm kategoriler", "value": "any" }] },
+    { "key": "documentTypeId", "label": "Doküman Tipi", "type": "select", "span": 4, "options": [{ "label": "Tüm tipler", "value": "any" }] },
+    { "key": "status", "label": "Durum", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }, { "label": "Active", "value": "Active" }, { "label": "Archived", "value": "Archived" }, { "label": "Inactive", "value": "Inactive" }, { "label": "Rejected", "value": "Rejected" }, { "label": "Expired", "value": "Expired" }] }
+  ],
+  "columns": [
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "sortable": true, "width": 190, "render": "renderDateTime" },
+    { "key": "documentCategory", "title": "Kategori", "dataIndex": "documentCategory", "sortable": true, "width": 140, "render": "renderCategory" },
+    { "key": "documentTypeName", "title": "Doküman Tipi", "dataIndex": "documentTypeName", "sortable": true, "minWidth": 220 },
+    { "key": "documentStatus", "title": "Durum", "dataIndex": "documentStatus", "sortable": true, "width": 130, "render": "renderStatus" },
+    { "key": "createdBy", "title": "Oluşturan", "dataIndex": "createdBy", "sortable": true, "width": 170, "render": "renderSoft" },
+    { "key": "approvedBy", "title": "Onaylayan", "dataIndex": "approvedBy", "sortable": true, "width": 170, "render": "renderApprovedBy" }
+  ]
+}

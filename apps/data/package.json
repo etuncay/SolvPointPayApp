@@ -1,0 +1,24 @@
+{
+  "name": "@epay/data",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Mock backend katmanı (Dexie); gerçek API'ye geçişte HTTP adapter",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./seed-playground-mock-data": "./src/db/seed-playground-mock-data.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@epay/domain": "workspace:*",
+    "dexie": "^4.0.11"
+  },
+  "devDependencies": {
+    "@epay/tsconfig": "workspace:*",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

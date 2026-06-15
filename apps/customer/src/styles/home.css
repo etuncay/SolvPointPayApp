@@ -1,0 +1,28 @@
+/* Ana sayfa — cüzdan şeridi ve hoş geldin alanı */
+.home-wallets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 1100px) {
+  .home-wallets {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.home-greeting-wave {
+  display: inline-block;
+}
+
+.home-tx-card .card-head {
+  margin-bottom: 4px;
+}
+
+.home-tx-card .table-wrap {
+  box-shadow: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}

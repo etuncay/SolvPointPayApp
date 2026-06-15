@@ -1,0 +1,191 @@
+/* Skor tanımlama — tablo ve aksiyon grid */
+
+.rs-def-table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-elev);
+}
+
+.rs-def-table thead th.rs-col-score,
+.rs-def-table thead th.rs-col-actions {
+  text-align: right;
+}
+
+.rs-def-table tbody tr.is-selected td {
+  background: var(--accent-soft);
+}
+
+.rs-def-table tbody tr.is-selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.rs-def-table tbody tr.is-selected:hover td {
+  background: color-mix(in oklch, var(--accent-soft), var(--accent) 8%);
+}
+
+.rs-def-table .rs-col-title {
+  font-weight: 500;
+  min-width: 140px;
+}
+
+.rs-def-table .rs-col-condition {
+  white-space: normal;
+  max-width: 360px;
+}
+
+.rs-def-table .rs-col-score {
+  text-align: right;
+  width: 88px;
+}
+
+.rs-def-table .rs-col-status {
+  width: 100px;
+}
+
+.rs-def-table .rs-col-actions {
+  width: 52px;
+  text-align: right;
+}
+
+.rs-dsl-chip {
+  display: inline-block;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg);
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  word-break: break-word;
+  white-space: normal;
+}
+
+.rs-score-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-fg);
+  background: color-mix(in oklch, var(--accent-soft), var(--accent) 12%);
+  border: 1px solid color-mix(in oklch, var(--line), var(--accent) 35%);
+}
+
+.rs-def-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 13px;
+}
+
+/* Risk aksiyonları matrisi */
+.rs-actions-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rs-actions-row {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-elev);
+}
+
+@media (max-width: 720px) {
+  .rs-actions-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.rs-actions-level {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.rs-actions-level .risk-seg {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rs-actions-range {
+  font-size: 11px;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+}
+
+.rs-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 8px;
+}
+
+.rs-action-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--fg-muted);
+  background: var(--bg-sunken);
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.rs-action-chip:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--fg);
+  border-color: var(--line-strong);
+}
+
+.rs-action-chip.is-on {
+  color: var(--accent-fg);
+  background: var(--accent-soft);
+  border-color: color-mix(in oklch, var(--accent), var(--line) 40%);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-soft), var(--accent) 25%);
+}
+
+.rs-action-chip:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.rs-action-chip.is-on:disabled {
+  opacity: 1;
+}
+
+.rs-actions-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rs-actions-summary .badge {
+  font-size: 10px;
+}

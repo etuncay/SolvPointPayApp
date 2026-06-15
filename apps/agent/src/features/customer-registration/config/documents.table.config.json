@@ -1,0 +1,14 @@
+{
+  "title": "Müşteri Belgeleri",
+  "rowKey": "key",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [20] },
+  "columns": [
+    { "key": "uploadedAt", "title": "Yüklenme Tarihi", "dataIndex": "uploadedAt", "width": 130 },
+    { "key": "category", "title": "Doküman Kategorisi", "dataIndex": "category", "render": "renderDocCategory", "width": 160 },
+    { "key": "typeLabel", "title": "Doküman Türü", "dataIndex": "typeLabel", "render": "renderDocType", "width": 180 },
+    { "key": "docStatus", "title": "Belge Durumu", "dataIndex": "docStatus", "render": "renderDocStatus", "width": 120 },
+    { "key": "approval", "title": "Onay Durumu", "dataIndex": "approval", "render": "renderDocApproval", "width": 130 }
+  ]
+}

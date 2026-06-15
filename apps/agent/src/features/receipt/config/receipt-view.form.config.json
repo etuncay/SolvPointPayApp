@@ -1,0 +1,13 @@
+{
+  "fields": [
+    {
+      "name": "receiptBody",
+      "type": "CustomComponent",
+      "component": "ReceiptDocumentBody",
+      "col": 4
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [{ "key": "print", "label": "Yazdır", "variant": "primary", "icon": "printer" }]
+  }
+}

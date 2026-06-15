@@ -1,0 +1,50 @@
+---
+description: Plan authoring rules for .cursor/plans. Plan prose English; rule English.
+alwaysApply: false
+globs: .cursor/plans/**/*.plan.md
+---
+
+# Plan authoring
+
+When writing or editing plans under `.cursor/plans/`:
+
+**Output locale:** [output-locale.md](../plans/_shared/output-locale.md) — plan body and user replies **English**; code identifiers **English**.
+
+## Required
+
+1. YAML frontmatter with `name`, `overview`, `todos[]`, `isProject: false`
+2. **Brief (approved)** section — copy from `.cursor/plans/_briefs/{slug}.brief.md` or inline if brief is embedded
+3. **Scope** — in scope / out of scope
+4. **Verification** — link [verification.md](../plans/_shared/verification.md); scenarios table if UI
+
+## UI pattern (conditional)
+
+Apply stack-specific UI rules from brief:
+
+| brief.ui_pattern / stack | Required in plan |
+|--------------------------|------------------|
+| `component-library` | Library name + page/component tree |
+| `tailwind-custom` | Token/theme + component list |
+| `bootstrap` | Bootstrap layout + component mapping |
+| `vanilla-js` | HTML/CSS/JS file tree, no framework sections |
+| `native-ui` | Platform UI kit (Material, SwiftUI, etc.) |
+
+Do not force a product-specific UI DSL unless the brief and repo confirm it.
+
+## Plan vs implement
+
+| Mode | Plan file |
+|------|-----------|
+| Create plan | New or intentional overwrite; English body |
+| Implement | Body read-only; only `todos[].status` |
+| Close | Optional English status line in `overview` |
+
+## Save paths
+
+```
+.cursor/plans/_briefs/{slug}.brief.md     ← intake output
+.cursor/plans/features/{slug}.plan.md     ← feature plan
+.cursor/plans/design-{slug}.plan.md     ← design-only
+```
+
+Skill: [implementation-plan/SKILL.md](../skills/implementation-plan/SKILL.md)

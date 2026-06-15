@@ -1,0 +1,313 @@
+{
+  "panels": [
+    {
+      "key": "general",
+      "title": "Kimlik Bilgileri",
+      "no": "·",
+      "icon": "user",
+      "meta": "Müşteri tipine göre alanlar değişir",
+      "fields": [
+        {
+          "name": "customerType",
+          "type": "Select",
+          "label": "Müşteri Tipi",
+          "col": 2,
+          "options": [
+            {
+              "label": "Bireysel",
+              "value": "individual"
+            },
+            {
+              "label": "Tüzel",
+              "value": "corporate"
+            }
+          ],
+          "rules": [
+            {
+              "required": true,
+              "message": "Müşteri tipi seçiniz"
+            }
+          ]
+        },
+        {
+          "name": "status",
+          "type": "Select",
+          "label": "Durum",
+          "col": 2,
+          "options": [
+            {
+              "label": "Aktif",
+              "value": "Active"
+            },
+            {
+              "label": "Pasif",
+              "value": "Passive"
+            },
+            {
+              "label": "Bloke",
+              "value": "Blocked"
+            }
+          ],
+          "defaultValue": "Active"
+        },
+        {
+          "name": "nameRow",
+          "type": "Row",
+          "shouldRender": "values.customerType === \"individual\"",
+          "fields": [
+            {
+              "name": "firstName",
+              "type": "Input",
+              "label": "Ad",
+              "col": 2,
+              "placeholder": "Adınız",
+              "rules": [
+                { "required": true, "message": "Ad zorunludur" },
+                { "minLength": 2, "message": "En az 2 karakter" }
+              ]
+            },
+            {
+              "name": "lastName",
+              "type": "Input",
+              "label": "Soyad",
+              "col": 2,
+              "placeholder": "Soyadınız",
+              "rules": [{ "required": true, "message": "Soyad zorunludur" }]
+            }
+          ]
+        },
+        {
+          "name": "tckn",
+          "type": "Input",
+          "label": "TCKN",
+          "col": 2,
+          "placeholder": "11 hane",
+          "shouldRender": "values.customerType === \"individual\"",
+          "rules": [
+            {
+              "required": true,
+              "message": "TCKN zorunludur"
+            },
+            {
+              "pattern": "^[0-9]{11}$",
+              "patternMessage": "TCKN 11 haneli olmalıdır"
+            }
+          ]
+        },
+        {
+          "name": "birthDate",
+          "type": "DatePicker",
+          "label": "Doğum Tarihi",
+          "col": 2,
+          "shouldRender": "values.customerType === \"individual\""
+        },
+        {
+          "name": "tradeName",
+          "type": "Input",
+          "label": "Ticari Unvan",
+          "col": 2,
+          "shouldRender": "values.customerType === \"corporate\"",
+          "rules": [
+            {
+              "required": true,
+              "message": "Ticari unvan zorunludur"
+            }
+          ]
+        },
+        {
+          "name": "taxNo",
+          "type": "Input",
+          "label": "Vergi No",
+          "col": 2,
+          "placeholder": "10 hane",
+          "shouldRender": "values.customerType === \"corporate\"",
+          "rules": [
+            {
+              "required": true,
+              "message": "Vergi no zorunludur"
+            },
+            {
+              "pattern": "^[0-9]{10}$",
+              "patternMessage": "10 haneli olmalıdır"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "contact",
+      "title": "İletişim Bilgileri",
+      "no": "8",
+      "icon": "mail",
+      "fields": [
+        {
+          "name": "email",
+          "type": "Input",
+          "label": "E-posta",
+          "col": 2,
+          "placeholder": "ornek@mail.com",
+          "rules": [
+            {
+              "required": true,
+              "message": "E-posta zorunludur"
+            },
+            {
+              "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+              "patternMessage": "Geçerli e-posta giriniz"
+            }
+          ]
+        },
+        {
+          "name": "phone",
+          "type": "MaskedInput",
+          "label": "Telefon",
+          "col": 2,
+          "mask": "+90 (###) ### ## ##",
+          "placeholder": "+90 (5xx) xxx xx xx",
+          "rules": [
+            {
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "type": "Select",
+          "label": "Ülke",
+          "col": 2,
+          "options": [
+            {
+              "label": "Türkiye",
+              "value": "TR"
+            },
+            {
+              "label": "Almanya",
+              "value": "DE"
+            },
+            {
+              "label": "İngiltere",
+              "value": "UK"
+            },
+            {
+              "label": "Fransa",
+              "value": "FR"
+            }
+          ],
+          "rules": [
+            {
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "city",
+          "type": "Select",
+          "label": "Şehir",
+          "col": 2,
+          "optionsFromApi": {
+            "endpoint": "getCities",
+            "dependsOn": "country"
+          }
+        },
+        {
+          "name": "address",
+          "type": "TextArea",
+          "label": "Adres",
+          "col": 4,
+          "rows": 3,
+          "maxLength": 500
+        }
+      ]
+    },
+    {
+      "key": "preferences",
+      "title": "Tercihler",
+      "no": "9",
+      "icon": "settings",
+      "meta": "Bildirim ve limit ayarları",
+      "fields": [
+        {
+          "name": "language",
+          "type": "RadioGroup",
+          "label": "Dil Tercihi",
+          "col": 2,
+          "options": [
+            {
+              "label": "Türkçe",
+              "value": "tr"
+            },
+            {
+              "label": "English",
+              "value": "en"
+            },
+            {
+              "label": "العربية",
+              "value": "ar"
+            }
+          ],
+          "defaultValue": "tr"
+        },
+        {
+          "name": "kycLevel",
+          "type": "Select",
+          "label": "KYC Seviyesi",
+          "col": 2,
+          "shouldRender": "values.customerType === \"individual\"",
+          "options": [
+            {
+              "label": "Seviye 0 — Doğrulanmadı",
+              "value": "0"
+            },
+            {
+              "label": "Seviye 1 — Kimlik doğrulandı",
+              "value": "1"
+            },
+            {
+              "label": "Seviye 2 — Adres doğrulandı",
+              "value": "2"
+            },
+            {
+              "label": "Seviye 3 — Fon kaynağı doğrulandı",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "name": "smsNotify",
+          "type": "Switch",
+          "label": "SMS Bildirimi",
+          "col": 1,
+          "placeholder": "Aktif",
+          "defaultValue": true
+        },
+        {
+          "name": "emailNotify",
+          "type": "Switch",
+          "label": "E-posta Bildirimi",
+          "col": 1,
+          "placeholder": "Aktif",
+          "defaultValue": true
+        },
+        {
+          "name": "monthlyLimit",
+          "type": "InputNumber",
+          "label": "Aylık Limit (TRY)",
+          "col": 2,
+          "min": 0,
+          "max": 10000000,
+          "step": 1000,
+          "defaultValue": 185000,
+          "shouldRender": "values.customerType === \"individual\""
+        },
+        {
+          "name": "notes",
+          "type": "TextArea",
+          "label": "Notlar",
+          "col": 4,
+          "rows": 2,
+          "placeholder": "Ek bilgiler..."
+        }
+      ]
+    }
+  ]
+}

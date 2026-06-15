@@ -1,0 +1,53 @@
+import type { FinancialReconciliation } from '@/features/operational-processes/financial-reconciliation/domain/types';
+
+/** 8.5 seed — FR-001/002/003 senaryo vektörleri */
+export const FINANCIAL_RECONCILIATIONS_SEED: FinancialReconciliation[] = [
+  {
+    id: 'FR-001',
+    asOfTimestamp: '2026-05-24 23:59:00',
+    inventoryBalance: 12_450_880.12,
+    accountingBalance: 12_450_880.12,
+    bankTotalBalance: 12_450_880.12,
+    diffInventoryAccounting: 0,
+    diffInventoryBank: 0,
+    status: 'Matched',
+    description: null,
+    createdAt: '2026-05-25 00:05:00',
+  },
+  {
+    id: 'FR-002',
+    asOfTimestamp: '2026-05-23 23:59:00',
+    inventoryBalance: 12_401_200,
+    accountingBalance: 12_402_450.5,
+    bankTotalBalance: 12_400_700,
+    diffInventoryAccounting: -1_250.5,
+    diffInventoryBank: 500,
+    status: 'PendingReview',
+    description: null,
+    createdAt: '2026-05-24 00:05:00',
+  },
+  {
+    id: 'FR-003',
+    asOfTimestamp: '2026-05-22 23:59:00',
+    inventoryBalance: 12_380_000,
+    accountingBalance: 12_381_100,
+    bankTotalBalance: 12_379_200,
+    diffInventoryAccounting: -1_100,
+    diffInventoryBank: 800,
+    status: 'Adjusted',
+    description: 'Muhasebe kesinti kaydı manuel düzeltildi; banka gecikmeli yansıma.',
+    createdAt: '2026-05-23 00:05:00',
+  },
+  {
+    id: 'FR-004',
+    asOfTimestamp: '2026-05-21 23:59:00',
+    inventoryBalance: 12_350_500,
+    accountingBalance: 12_350_500,
+    bankTotalBalance: 12_350_500,
+    diffInventoryAccounting: 0,
+    diffInventoryBank: 0,
+    status: 'Matched',
+    description: null,
+    createdAt: '2026-05-22 00:05:00',
+  },
+];

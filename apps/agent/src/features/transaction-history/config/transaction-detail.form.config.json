@@ -1,0 +1,41 @@
+{
+  "panels": [
+    {
+      "key": "parties",
+      "title": "Taraflar",
+      "fields": [
+        { "name": "senderName", "type": "Input", "label": "Gönderen", "readOnly": true, "col": 2 },
+        { "name": "receiverName", "type": "Input", "label": "Alıcı", "readOnly": true, "col": 2 },
+        { "name": "iban", "type": "Input", "label": "IBAN", "readOnly": true, "col": 4, "shouldRender": "values._hasIban" },
+        { "name": "roleLabel", "type": "Input", "label": "Rol", "readOnly": true, "col": 2 },
+        { "name": "txTypeLabel", "type": "Input", "label": "İşlem tipi", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "amounts",
+      "title": "Tutarlar",
+      "fields": [
+        { "name": "amountLabel", "type": "Input", "label": "Tutar", "readOnly": true, "col": 2 },
+        { "name": "feesLabel", "type": "Input", "label": "Ücret", "readOnly": true, "col": 2 },
+        { "name": "totalLabel", "type": "Input", "label": "Toplam tahsilat", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "meta",
+      "title": "Meta",
+      "fields": [
+        { "name": "dateLabel", "type": "Input", "label": "Tarih", "readOnly": true, "col": 2 },
+        { "name": "referenceNo", "type": "Input", "label": "Referans", "readOnly": true, "col": 2 },
+        { "name": "currency", "type": "Input", "label": "PB", "readOnly": true, "col": 2 },
+        { "name": "description", "type": "Input", "label": "Açıklama", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "revenue",
+      "title": "Gelir",
+      "fields": [
+        { "name": "revenueLabel", "type": "Input", "label": "Gelir (TRY)", "readOnly": true, "col": 4 }
+      ]
+    }
+  ]
+}

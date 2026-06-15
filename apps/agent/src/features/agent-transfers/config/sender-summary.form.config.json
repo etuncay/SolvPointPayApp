@@ -1,0 +1,10 @@
+{
+  "fields": [
+    {
+      "name": "senderCard",
+      "type": "CustomComponent",
+      "component": "TransferSenderCard",
+      "col": 4
+    }
+  ]
+}

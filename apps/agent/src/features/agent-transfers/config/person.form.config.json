@@ -1,0 +1,97 @@
+{
+  "fields": [
+    {
+      "name": "fullName",
+      "type": "Input",
+      "label": "Gönderen",
+      "col": 4,
+      "readOnly": true,
+      "shouldRender": "values._hasSender === true"
+    },
+    {
+      "name": "authorizedPersonIdNo",
+      "type": "Input",
+      "label": "Yetkili Kişi Kimlik No",
+      "col": 2,
+      "shouldRender": "values._corporate === true"
+    },
+    {
+      "name": "receiverIdNo",
+      "type": "Input",
+      "label": "Alıcı Kimlik No (opsiyonel)",
+      "col": 2,
+      "placeholder": "TCKN"
+    },
+    {
+      "name": "receiverName",
+      "type": "Input",
+      "label": "Alıcı Ad Soyad",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_tr_err_receiver_name" }]
+    },
+    {
+      "name": "receiverPhone",
+      "type": "Input",
+      "label": "Alıcı Telefon",
+      "col": 2
+    },
+    {
+      "name": "receiverEmail",
+      "type": "Input",
+      "label": "Alıcı E-posta",
+      "col": 2
+    },
+    {
+      "name": "currency",
+      "type": "Select",
+      "label": "Para Birimi",
+      "col": 2,
+      "options": [{ "label": "TRY", "value": "TRY" }],
+      "defaultValue": "TRY"
+    },
+    {
+      "name": "amount",
+      "type": "InputNumber",
+      "label": "Tutar",
+      "col": 2,
+      "min": 0,
+      "rules": [{ "required": true, "message": "ag_tr_err_amount" }]
+    },
+    {
+      "name": "paymentPurpose",
+      "type": "Select",
+      "label": "Ödeme Türü",
+      "col": 2,
+      "options": [],
+      "rules": [{ "required": true, "message": "ag_tr_err_payment_purpose" }]
+    },
+    {
+      "name": "description",
+      "type": "TextArea",
+      "label": "Açıklama",
+      "col": 4,
+      "rows": 2
+    },
+    {
+      "name": "clientReference",
+      "type": "Input",
+      "label": "İşlem Referans No",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_tr_err_reference" }]
+    },
+    {
+      "name": "isSuspicious",
+      "type": "Switch",
+      "label": "Şüpheli İşlem",
+      "col": 2,
+      "defaultValue": false
+    }
+  ],
+  "buttonToolbar": {
+    "position": "bottom",
+    "buttons": [
+      { "key": "continue", "label": "Devam Et", "variant": "primary" },
+      { "key": "cancel", "label": "İptal", "variant": "ghost" }
+    ]
+  }
+}

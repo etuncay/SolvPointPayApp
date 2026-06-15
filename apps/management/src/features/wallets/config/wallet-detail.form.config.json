@@ -1,0 +1,77 @@
+{
+  "panels": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "fields": [
+        { "name": "ownerNo", "type": "Input", "label": "Sahip No", "readOnly": true, "col": 2, "shouldRender": "values._cat !== \"system\"" },
+        { "name": "ownerName", "type": "Input", "label": "Ad", "readOnly": true, "col": 2, "shouldRender": "values._cat !== \"system\"" },
+        { "name": "phone", "type": "Input", "label": "Telefon", "readOnly": true, "col": 2, "shouldRender": "values._cat !== \"system\"" },
+        { "name": "idNo", "type": "Input", "label": "Kimlik No", "readOnly": true, "col": 2, "shouldRender": "values._cat !== \"system\"" },
+        { "name": "walletNo", "type": "Input", "label": "Hesap", "readOnly": true, "col": 2 },
+        { "name": "balance", "type": "Input", "label": "Bakiye", "readOnly": true, "col": 2 },
+        { "name": "ccy", "type": "Input", "label": "PB", "readOnly": true, "col": 2 },
+        { "name": "blocked", "type": "Input", "label": "Bloke", "readOnly": true, "col": 2 },
+        { "name": "available", "type": "Input", "label": "Kullanılabilir", "readOnly": true, "col": 2 },
+        { "name": "createdAt", "type": "Input", "label": "Oluşturulma", "readOnly": true, "col": 2 },
+        { "name": "blockEndDate", "type": "Input", "label": "Bloke bitiş", "readOnly": true, "col": 2, "shouldRender": "!!values.blockEndDate" }
+      ]
+    },
+    {
+      "key": "tx",
+      "title": "İşlem",
+      "fields": [
+        { "name": "lastTxAt", "type": "Input", "label": "Son işlem", "readOnly": true, "col": 2 },
+        { "name": "lastTxAmount", "type": "Input", "label": "Son tutar", "readOnly": true, "col": 2 },
+        { "name": "txToday", "type": "Input", "label": "Bugün adet", "readOnly": true, "col": 2 },
+        { "name": "txAmtToday", "type": "Input", "label": "Bugün tutar", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "withdrawal",
+      "title": "Çekim limitleri",
+      "fields": [
+        { "name": "w_Single", "type": "InputNumber", "label": "Tek işlem", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "w_DailyCount", "type": "InputNumber", "label": "Günlük adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "w_DailyAmount", "type": "InputNumber", "label": "Günlük tutar", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "w_MonthlyCount", "type": "InputNumber", "label": "Aylık adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "w_MonthlyAmount", "type": "InputNumber", "label": "Aylık tutar", "col": 2, "enableRules": "values._canEditLimits === true" }
+      ]
+    },
+    {
+      "key": "transfer",
+      "title": "Transfer limitleri",
+      "fields": [
+        { "name": "t_Single", "type": "InputNumber", "label": "Tek işlem", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "t_DailyCount", "type": "InputNumber", "label": "Günlük adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "t_DailyAmount", "type": "InputNumber", "label": "Günlük tutar", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "t_MonthlyCount", "type": "InputNumber", "label": "Aylık adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "t_MonthlyAmount", "type": "InputNumber", "label": "Aylık tutar", "col": 2, "enableRules": "values._canEditLimits === true" }
+      ]
+    },
+    {
+      "key": "international",
+      "title": "Yurt dışı limitleri",
+      "fields": [
+        { "name": "i_Single", "type": "InputNumber", "label": "Tek işlem", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "i_DailyCount", "type": "InputNumber", "label": "Günlük adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "i_DailyAmount", "type": "InputNumber", "label": "Günlük tutar", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "i_MonthlyCount", "type": "InputNumber", "label": "Aylık adet", "col": 2, "enableRules": "values._canEditLimits === true" },
+        { "name": "i_MonthlyAmount", "type": "InputNumber", "label": "Aylık tutar", "col": 2, "enableRules": "values._canEditLimits === true" }
+      ]
+    },
+    {
+      "key": "history",
+      "title": "Limit geçmişi",
+      "fields": [
+        { "name": "history", "type": "CustomComponent", "component": "WalletLimitHistory", "col": 4 }
+      ]
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "saveLimits", "label": "Limitleri kaydet", "variant": "primary", "icon": "save", "shouldRender": "values._canEditLimits === true" }
+    ]
+  }
+}
+

@@ -1,0 +1,14 @@
+{
+  "fields": [
+    {
+      "name": "welcomeMessage",
+      "type": "Input",
+      "label": "Hoş geldin mesajı",
+      "col": 4,
+      "placeholder": "Ana sayfada görünen mesaj"
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [{ "key": "save", "label": "Kaydet", "variant": "primary" }]
+  }
+}

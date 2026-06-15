@@ -1,0 +1,70 @@
+{
+  "title": "Personel İzin & Rapor",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Ad, unvan veya not ara…",
+    "keys": ["firstName", "lastName", "title", "notes"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "leaveType",
+      "label": "İzin/Rapor Türü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tüm türler", "value": "any" },
+        { "label": "Yıllık İzin", "value": "AnnualLeave" },
+        { "label": "Sağlık Raporu", "value": "SickLeave" },
+        { "label": "Mazeret İzni", "value": "ExcuseLeave" },
+        { "label": "Ücretsiz İzin", "value": "UnpaidLeave" },
+        { "label": "Doğum İzni", "value": "MaternityLeave" },
+        { "label": "Diğer", "value": "Other" }
+      ]
+    },
+    {
+      "key": "dateFrom",
+      "label": "Tarih (Başlangıç)",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "dateTo",
+      "label": "Tarih (Bitiş)",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "departmentId",
+      "label": "Departman",
+      "type": "select",
+      "span": 3,
+      "options": [{ "label": "Tüm departmanlar", "value": "" }]
+    }
+  ],
+  "tabs": [
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" },
+    { "key": "Pending", "title": "Beklemede", "filters": { "status": "Pending" }, "countKey": "pendingCount" },
+    { "key": "Approved", "title": "Onaylandı", "filters": { "status": "Approved" }, "countKey": "approvedCount" },
+    { "key": "Rejected", "title": "Reddedildi", "filters": { "status": "Rejected" }, "countKey": "rejectedCount" },
+    { "key": "Canceled", "title": "İptal", "filters": { "status": "Canceled" }, "countKey": "canceledCount" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni İzin / Rapor" }
+  },
+  "columns": [
+    { "key": "firstName", "title": "Adı", "dataIndex": "firstName", "sortable": true, "width": 120 },
+    { "key": "lastName", "title": "Soyadı", "dataIndex": "lastName", "sortable": true, "width": 120 },
+    { "key": "departmentName", "title": "Departman", "dataIndex": "departmentName", "sortable": true, "minWidth": 130 },
+    { "key": "title", "title": "Unvan", "dataIndex": "title", "sortable": true, "minWidth": 150 },
+    { "key": "leaveType", "title": "İzin/Rapor Türü", "dataIndex": "leaveType", "sortable": true, "minWidth": 150, "render": "renderLeaveType" },
+    { "key": "dateRange", "title": "Tarih", "dataIndex": "dateRange", "sortable": false, "minWidth": 180 },
+    { "key": "totalDays", "title": "Toplam Gün", "dataIndex": "totalDays", "sortable": true, "width": 110, "mono": true },
+    { "key": "notes", "title": "Notlar", "dataIndex": "notes", "sortable": false, "minWidth": 180 },
+    { "key": "taskStatus", "title": "Status", "dataIndex": "taskStatus", "sortable": true, "width": 120, "render": "renderTaskStatus" }
+  ]
+}

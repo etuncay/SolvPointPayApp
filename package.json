@@ -1,0 +1,31 @@
+{
+  "name": "solvpoint-pay-app",
+  "private": true,
+  "description": "SolvPoint Pay — epay monorepo",
+  "scripts": {
+    "dev": "turbo dev --filter=@epay/management",
+    "dev:management": "turbo dev --filter=@epay/management",
+    "dev:agent": "turbo dev --filter=@epay/agent",
+    "dev:customer": "turbo dev --filter=@epay/customer",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,css,md}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.0"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

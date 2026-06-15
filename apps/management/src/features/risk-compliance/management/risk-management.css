@@ -1,0 +1,359 @@
+/* Risk yönetim — referans listeleri, gruplar, yönlendirme */
+
+.rm-ref-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
+  gap: 0;
+  min-height: 280px;
+}
+
+@media (max-width: 720px) {
+  .rm-ref-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rm-ref-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-right: 1px solid var(--line);
+  background: var(--bg-sunken);
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+@media (max-width: 720px) {
+  .rm-ref-nav {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    max-height: 200px;
+  }
+}
+
+.rm-ref-nav-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.rm-ref-nav-btn:hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+
+.rm-ref-nav-btn.is-active {
+  background: var(--accent-soft);
+  color: var(--accent-fg);
+  font-weight: 500;
+}
+
+.rm-ref-editor {
+  padding: 16px 18px;
+}
+
+.rm-ref-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.rm-ref-toolbar-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  flex: 1;
+  min-width: 120px;
+}
+
+.rm-ref-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.rm-ref-add .input {
+  flex: 1;
+}
+
+.rm-ref-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 36px;
+}
+
+.rm-ref-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--fg);
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+}
+
+.rm-ref-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.rm-ref-chip-remove:hover {
+  color: var(--danger-fg);
+}
+
+.rm-ref-empty {
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.rm-ref-occupation {
+  border-top: 1px solid var(--line);
+  padding: 16px 18px;
+}
+
+.rm-ref-occupation-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Ortak tablo — taban stiller itable sınıfından gelir */
+.rm-table-wrap {
+  overflow-x: auto;
+}
+
+.rm-table .input,
+.rm-table .select,
+.rm-table .textarea {
+  width: 100%;
+  min-width: 0;
+}
+
+.rm-table .input[type='number'] {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.rm-table .select {
+  font-size: 13px;
+}
+
+.rm-table .textarea {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.45;
+  min-height: 52px;
+  resize: vertical;
+}
+
+.rm-dsl-chip {
+  display: inline-block;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg);
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.rm-col-actions {
+  width: 48px;
+  text-align: right;
+}
+
+.rm-col-auto {
+  width: 120px;
+}
+
+.rm-col-group {
+  width: 180px;
+}
+
+/* Otomatik dağıt toggle */
+.rm-auto-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.rm-auto-chip {
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.rm-auto-chip:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.rm-auto-chip.is-on {
+  background: var(--accent-soft);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+.rm-auto-chip:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+
+.rm-route-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* Vaka grupları */
+.rm-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rm-group-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+
+.rm-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rm-group-head:hover {
+  background: var(--bg-hover);
+}
+
+.rm-group-head-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rm-group-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.rm-group-meta {
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.rm-group-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.rm-group-members {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.rm-group-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.rm-group-member:hover {
+  background: var(--bg-hover);
+}
+
+.rm-group-member .t-mute {
+  font-size: 11px;
+}
+
+.rm-overlap-banner {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  font-size: 12.5px;
+  color: var(--danger-fg);
+  background: var(--danger-soft);
+  border: 1px solid color-mix(in oklch, var(--danger), var(--line) 55%);
+}
+
+/* Parametreler */
+.rm-params-info {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid color-mix(in oklch, var(--accent), var(--line) 82%);
+  background: color-mix(in oklch, var(--accent-soft), var(--bg-elev) 70%);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.rm-params-info strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.rm-params-field {
+  max-width: 240px;
+}
+
+.rm-params-field .input {
+  font-family: var(--font-mono);
+}

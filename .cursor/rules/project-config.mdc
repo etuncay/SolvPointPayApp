@@ -1,0 +1,10 @@
+---
+description: Config loading merged into core.mdc. Read on greenfield/intake only.
+alwaysApply: false
+---
+
+# Project config (stub)
+
+**Canonical:** [core.mdc](core.mdc) — intake pointer.
+
+Before intake or greenfield: read [project.defaults.yaml](../config/project.defaults.yaml). AskQuestion fields: [project.intake-fields.yaml](../config/project.intake-fields.yaml).

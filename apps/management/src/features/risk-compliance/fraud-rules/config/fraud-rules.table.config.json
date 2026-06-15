@@ -1,0 +1,49 @@
+{
+  "title": "Dolandırıcılık Kuralları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Kural adı veya kod ara…",
+    "keys": ["title", "id"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Aktif", "value": "Active" },
+      { "label": "Pasif", "value": "Passive" }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "scope",
+      "label": "Kapsam",
+      "type": "select",
+      "span": 4,
+      "options": [
+        { "label": "Tümü", "value": "all" },
+        { "label": "Onboarding", "value": "Onboarding" },
+        { "label": "Remittance", "value": "Remittance" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "triggerOrder", "title": "Sıra", "dataIndex": "triggerOrder", "sortable": true, "width": 90, "render": "renderMono" },
+    { "key": "title", "title": "Kural Başlığı", "dataIndex": "title", "sortable": true, "minWidth": 230 },
+    { "key": "scope", "title": "Kapsam", "dataIndex": "scope", "sortable": true, "width": 130, "render": "renderScope" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" },
+    { "key": "priority", "title": "Öncelik", "dataIndex": "priority", "sortable": true, "width": 120, "render": "renderPriority" },
+    { "key": "truePositive", "title": "TP", "dataIndex": "truePositive", "sortable": true, "width": 90, "render": "renderMono" },
+    { "key": "falsePositive", "title": "FP", "dataIndex": "falsePositive", "sortable": true, "width": 90, "render": "renderMono" },
+    { "key": "casesOpened", "title": "Açılan Vaka", "dataIndex": "casesOpened", "sortable": true, "width": 110, "render": "renderMono" },
+    { "key": "avgCaseReviewMinutes", "title": "Ort. Süre", "dataIndex": "avgCaseReviewMinutes", "sortable": true, "width": 130, "render": "renderAvgDuration" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Kural" }
+  }
+}

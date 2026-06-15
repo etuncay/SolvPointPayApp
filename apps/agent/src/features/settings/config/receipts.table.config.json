@@ -1,0 +1,14 @@
+{
+  "title": "Dekontlarım",
+  "rowKey": "transactionId",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "transactionNo", "title": "İşlem No", "dataIndex": "transactionNo", "mono": true, "width": 150 },
+    { "key": "date", "title": "Tarih", "dataIndex": "date", "width": 150 },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "format": "currency", "align": "right", "mono": true, "width": 120 },
+    { "key": "currency", "title": "PB", "dataIndex": "currency", "width": 70, "align": "center" },
+    { "key": "actions", "title": "", "dataIndex": "transactionId", "render": "renderReceiptDownload", "width": 120, "align": "right", "excludeFromExport": true }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "fields": [
+    {
+      "name": "requesterOwner",
+      "type": "CustomComponent",
+      "component": "FeedbackOwnerSegment",
+      "label": "Talep Sahibi",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_fb_err_owner" }]
+    },
+    {
+      "name": "customerNo",
+      "type": "CustomComponent",
+      "component": "FeedbackCustomerLookup",
+      "label": "Müşteri No",
+      "col": 2,
+      "shouldRender": "values.requesterOwner === 'Customer'",
+      "rules": [{ "required": true, "message": "ag_fb_err_customer_required" }]
+    },
+    {
+      "type": "Row",
+      "fields": [
+        {
+          "name": "subject",
+          "type": "Input",
+          "label": "Konu",
+          "col": 2,
+          "placeholder": "Talebin kısa konusu",
+          "rules": [{ "required": true, "message": "ag_fb_err_subject" }]
+        },
+        {
+          "name": "complaintType",
+          "type": "Select",
+          "label": "Talep Tipi",
+          "col": 2,
+          "options": [],
+          "rules": [{ "required": true, "message": "ag_fb_err_type" }]
+        }
+      ]
+    },
+    {
+      "name": "detail",
+      "type": "TextArea",
+      "label": "Talep Detayı",
+      "col": 4,
+      "rows": 4,
+      "placeholder": "Talebi detaylandırın (TCKN / kart no yazılamaz)",
+      "rules": [
+        { "required": true, "message": "ag_fb_err_detail" },
+        {
+          "expression": "!/\\b\\d{11}\\b/.test(String(values.detail ?? '')) && !/\\b(?:\\d[ -]*?){13,19}\\b/.test(String(values.detail ?? '').replace(/\\s/g, ''))",
+          "expressionMessage": "ag_fb_err_pii"
+        }
+      ]
+    },
+    {
+      "name": "notes",
+      "type": "TextArea",
+      "label": "Notlar",
+      "col": 4,
+      "rows": 3,
+      "placeholder": "Temsilci yorumları (opsiyonel)",
+      "rules": [
+        {
+          "expression": "!String(values.notes ?? '').trim() || (!/\\b\\d{11}\\b/.test(String(values.notes)) && !/\\b(?:\\d[ -]*?){13,19}\\b/.test(String(values.notes).replace(/\\s/g, '')))",
+          "expressionMessage": "ag_fb_err_pii"
+        }
+      ]
+    },
+    {
+      "name": "attachments",
+      "type": "CustomComponent",
+      "component": "FeedbackAttachments",
+      "label": "Ekli Dosyalar",
+      "col": 4
+    }
+  ],
+  "buttonToolbar": {
+    "position": "bottom",
+    "buttons": [
+      { "key": "addFile", "label": "Dosya Ekle", "variant": "secondary" },
+      { "key": "clear", "label": "Temizle", "variant": "ghost" },
+      { "key": "submit", "label": "Gönder", "variant": "primary" }
+    ]
+  }
+}

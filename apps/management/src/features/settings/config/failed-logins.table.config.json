@@ -1,0 +1,12 @@
+{
+  "title": "Başarısız Girişler",
+  "rowKey": "when",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "columns": [
+    { "key": "ip", "title": "IP", "dataIndex": "ip" },
+    { "key": "loc", "title": "Konum", "dataIndex": "loc" },
+    { "key": "when", "title": "Zaman", "dataIndex": "when" },
+    { "key": "ua", "title": "Cihaz", "dataIndex": "ua" }
+  ]
+}

@@ -1,0 +1,168 @@
+/* Hesap hareketleri */
+.activity-wallets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+@media (min-width: 900px) {
+  .activity-wallets {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.activity-wallet-selected {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+}
+
+.activity-filter-card {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+}
+
+.activity-filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.activity-search {
+  flex: 1 1 260px;
+}
+
+.activity-search .input {
+  padding-left: 40px;
+}
+
+.activity-seg {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-2);
+  padding: 4px;
+  border-radius: 11px;
+}
+
+.activity-seg-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  transition: 0.15s;
+}
+
+.activity-seg-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.activity-advanced {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.activity-tx-table .tbl tbody tr {
+  cursor: pointer;
+}
+
+/* İşlem detay modalı */
+.tx-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.tx-detail-header-main {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+
+.tx-detail-type {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+.tx-detail-id {
+  font-size: 12.5px;
+  color: var(--faint);
+  margin-top: 2px;
+}
+
+.tx-detail-hero {
+  text-align: center;
+  padding: 8px 0 18px;
+}
+
+.tx-detail-amount {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 34px;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.tx-detail-amount--in {
+  color: var(--pos);
+}
+
+.tx-detail-status {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.tx-detail-panel {
+  background: var(--surface-2);
+  border-radius: 14px;
+  padding: 6px 18px;
+  border: 1px solid var(--line);
+}
+
+.tx-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.tx-detail-row:last-child {
+  border-bottom: none;
+}
+
+.tx-detail-k {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.tx-detail-v {
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+}
+
+.tx-detail-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tx-detail-footer .btn-block {
+  flex: 1;
+  justify-content: center;
+}

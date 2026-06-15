@@ -1,0 +1,40 @@
+import type { FxMarginHistory } from '@/features/operational-processes/fx-management/domain/types';
+
+export const FX_MARGIN_HISTORY_SEED: FxMarginHistory[] = [
+  {
+    id: 'fxmh-001',
+    at: '2026-05-20 10:00:00',
+    currency: 'USD',
+    workHours: 'Inside',
+    buyFixedMargin: 0.05,
+    buyVariableMarginPct: 1,
+    sellFixedMargin: 0.1,
+    sellVariableMarginPct: 0.5,
+    roundingDecimals: 4,
+    approvalRef: 'APR-000042',
+  },
+  {
+    id: 'fxmh-002',
+    at: '2026-05-18 14:20:00',
+    currency: 'EUR',
+    workHours: 'Inside',
+    buyFixedMargin: 0.03,
+    buyVariableMarginPct: 0.8,
+    sellFixedMargin: 0.08,
+    sellVariableMarginPct: 0.4,
+    roundingDecimals: 4,
+    approvalRef: 'APR-000038',
+  },
+  {
+    id: 'fxmh-003',
+    at: '2026-05-15 09:00:00',
+    currency: 'USD',
+    workHours: 'Outside',
+    buyFixedMargin: 0.07,
+    buyVariableMarginPct: 1.1,
+    sellFixedMargin: 0.12,
+    sellVariableMarginPct: 0.6,
+    roundingDecimals: 4,
+    approvalRef: 'APR-000031',
+  },
+];

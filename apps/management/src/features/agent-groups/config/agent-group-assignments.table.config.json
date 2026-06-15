@@ -1,0 +1,42 @@
+{
+  "title": "Grup Temsilcileri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Temsilci kodu veya ad ara…",
+    "keys": ["agentCode", "agentName", "city", "district"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "status",
+      "label": "Statü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" },
+        { "label": "Tümü", "value": "any" }
+      ]
+    }
+  ],
+  "toolbar": {
+    "export": {},
+    "new": { "label": "Temsilci Ata" }
+  },
+  "columns": [
+    { "key": "agentCode", "title": "Kod", "dataIndex": "agentCode", "sortable": true, "mono": true, "width": 100 },
+    { "key": "agentName", "title": "Ad", "dataIndex": "agentName", "sortable": true, "minWidth": 160 },
+    { "key": "city", "title": "İl", "dataIndex": "city", "sortable": true, "width": 120 },
+    { "key": "district", "title": "İlçe", "dataIndex": "district", "sortable": true, "width": 120, "render": "renderDistrict" },
+    { "key": "avgFeePerTx", "title": "Ort. Ücret", "dataIndex": "avgFeePerTx", "sortable": true, "align": "right", "mono": true, "width": 110, "render": "renderAvgFee" },
+    { "key": "avgTxCount", "title": "Ort. İşlem", "dataIndex": "avgTxCount", "sortable": true, "align": "right", "mono": true, "width": 110, "render": "renderAvgTx" },
+    { "key": "currentGroupName", "title": "Mevcut Grup", "dataIndex": "currentGroupName", "sortable": true, "width": 140 },
+    { "key": "assignedAt", "title": "Atama", "dataIndex": "assignedAt", "sortable": true, "mono": true, "width": 120, "render": "renderAssignedAt" },
+    { "key": "status", "title": "Statü", "dataIndex": "status", "sortable": true, "width": 100, "render": "renderStatus" },
+    { "key": "actions", "title": "", "dataIndex": "id", "width": 72, "render": "renderActions" }
+  ]
+}

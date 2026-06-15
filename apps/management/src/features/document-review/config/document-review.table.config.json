@@ -1,0 +1,126 @@
+{
+  "title": "Belge İnceleme",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Ad, unvan veya belge türü ara…",
+    "keys": ["customerName", "documentType"]
+  },
+  "hideColumnFilters": true,
+  "advancedFiltersLayout": {
+    "defaultSpan": 3,
+    "rows": [
+      {
+        "filters": [
+          { "key": "customerNo" },
+          { "key": "category" },
+          { "key": "documentType" },
+          { "key": "approvalStatus" }
+        ]
+      }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "customerNo",
+      "label": "Müşteri No",
+      "type": "text",
+      "span": 3,
+      "placeholder": "MUS-099901"
+    },
+    {
+      "key": "category",
+      "label": "Belge Kategorisi",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Kimlik", "value": "Identity" },
+        { "label": "Adres Kanıtı", "value": "ProofOfAddress" },
+        { "label": "Gelir / Fon Kanıtı", "value": "ProofOfFunds" },
+        { "label": "Tüzel Kişi", "value": "LegalEntity" },
+        { "label": "İşlem Kanıtı", "value": "ProofOfTransaction" },
+        { "label": "Sözleşme", "value": "Agreement" },
+        { "label": "Personel / İK", "value": "EmployeeHR" }
+      ]
+    },
+    {
+      "key": "documentType",
+      "label": "Belge Türü",
+      "type": "select",
+      "span": 3,
+      "options": []
+    },
+    {
+      "key": "approvalStatus",
+      "label": "İncelenme Durumu",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Beklemede", "value": "Pending" },
+        { "label": "Onaylandı", "value": "Approved" },
+        { "label": "Reddedildi", "value": "Rejected" }
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "key": "customerNo",
+      "title": "Müşteri No",
+      "dataIndex": "customerNo",
+      "mono": true,
+      "width": 130
+    },
+    {
+      "key": "customerName",
+      "title": "Ad / Unvan",
+      "dataIndex": "customerName",
+      "minWidth": 180
+    },
+    {
+      "key": "nationality",
+      "title": "Uyruk",
+      "dataIndex": "nationality",
+      "mono": true,
+      "width": 80
+    },
+    {
+      "key": "suspiciousFlag",
+      "title": "Şüpheli",
+      "dataIndex": "suspiciousFlag",
+      "width": 90,
+      "align": "center",
+      "render": "renderSuspicious"
+    },
+    {
+      "key": "createdAt",
+      "title": "Oluşturma Tarihi",
+      "dataIndex": "createdAt",
+      "format": "datetime",
+      "mono": true,
+      "width": 160
+    },
+    {
+      "key": "category",
+      "title": "Belge Kategorisi",
+      "dataIndex": "category",
+      "width": 150,
+      "render": "renderCategory"
+    },
+    {
+      "key": "documentType",
+      "title": "Belge Türü",
+      "dataIndex": "documentType",
+      "minWidth": 160
+    },
+    {
+      "key": "approvalStatus",
+      "title": "İncelenme Durumu",
+      "dataIndex": "approvalStatus",
+      "width": 140,
+      "render": "renderApprovalStatus"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.turbo/
+.vite/
+
+# Build outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.DotSettings.user
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs & diagnostics
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.cursor/logs/*.log
+.cursor/logs/.active-context.json
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*.swo
+
+# Test & coverage
+coverage/
+TestResults/
+
+# Vite / frontend build outputs
+apps/*/dist/

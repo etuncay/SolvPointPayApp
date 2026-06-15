@@ -1,0 +1,14 @@
+{
+  "title": "Belgeler",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "category", "title": "Kategori", "dataIndex": "category" },
+    { "key": "type", "title": "Tür", "dataIndex": "type" },
+    { "key": "validityLabel", "title": "Geçerlilik", "dataIndex": "validityLabel", "render": "renderDocValidity" },
+    { "key": "approvalStatus", "title": "Onay", "dataIndex": "approvalStatus" },
+    { "key": "fileName", "title": "Dosya", "dataIndex": "fileName", "mono": true }
+  ]
+}

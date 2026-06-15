@@ -1,0 +1,23 @@
+{
+  "title": "Müşteri Bilgileri",
+  "rowKey": "customerId",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 1, "pageSizeOptions": [1] },
+  "columns": [
+    { "key": "customerNo", "title": "Müşteri No", "dataIndex": "customerNo", "mono": true, "width": 120 },
+    { "key": "fullName", "title": "Ad Soyad / Unvan", "dataIndex": "fullName", "minWidth": 160 },
+    { "key": "idNo", "title": "Kimlik No", "dataIndex": "idNo", "mono": true, "width": 130 },
+    { "key": "kycLevel", "title": "KYC", "dataIndex": "kycLevel", "render": "renderKyc", "width": 90 },
+    { "key": "riskSegment", "title": "Risk", "dataIndex": "riskSegment", "render": "renderRisk", "width": 90 },
+    { "key": "primaryPhone", "title": "Telefon", "dataIndex": "primaryPhone", "width": 140 },
+    { "key": "primaryEmail", "title": "E-posta", "dataIndex": "primaryEmail", "minWidth": 180 },
+    { "key": "city", "title": "Şehir", "dataIndex": "city", "width": 100 },
+    { "key": "district", "title": "İlçe", "dataIndex": "district", "width": 100 },
+    { "key": "membershipDate", "title": "Üyelik", "dataIndex": "membershipDate", "format": "date", "width": 110 },
+    { "key": "campaign", "title": "Kampanya", "dataIndex": "campaign", "width": 130 },
+    { "key": "campaignEndDate", "title": "Kampanya Bitiş", "dataIndex": "campaignEndDate", "format": "date", "width": 120 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderStatus", "width": 110 },
+    { "key": "statusReason", "title": "Durum Nedeni", "dataIndex": "statusReason", "width": 140 }
+  ]
+}

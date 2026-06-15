@@ -1,0 +1,141 @@
+{
+  "title": "Temsilci Ücretleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Grup kodu, işlem türü veya para birimi ara…",
+    "keys": ["groupCode", "transactionType", "currency"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "groupCode",
+      "label": "Grup",
+      "type": "select",
+      "span": 3,
+      "options": [{ "label": "Tümü", "value": "any" }]
+    },
+    {
+      "key": "transactionType",
+      "label": "İşlem türü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Kişiye Transfer", "value": "WalletToPerson" },
+        { "label": "Yurt Dışına Transfer", "value": "InternationalTransfer" },
+        { "label": "Banka Hesabına Transfer", "value": "WalletToBankAccount" },
+        { "label": "Bakiye Yükleme", "value": "WalletTopUp" }
+      ]
+    },
+    {
+      "key": "currency",
+      "label": "Para birimi",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "TRY", "value": "TRY" },
+        { "label": "USD", "value": "USD" },
+        { "label": "EUR", "value": "EUR" }
+      ]
+    },
+    {
+      "key": "status",
+      "label": "Statü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" },
+        { "label": "Tümü", "value": "any" }
+      ]
+    }
+  ],
+  "toolbar": {
+    "export": {},
+    "new": { "label": "Yeni Tarife" }
+  },
+  "columns": [
+    { "key": "groupCode", "title": "Grup Kodu", "dataIndex": "groupCode", "sortable": true, "mono": true, "width": 120 },
+    {
+      "key": "transactionType",
+      "title": "İşlem türü",
+      "dataIndex": "transactionType",
+      "sortable": true,
+      "width": 180,
+      "render": "renderTransactionType"
+    },
+    { "key": "currency", "title": "Para birimi", "dataIndex": "currency", "sortable": true, "mono": true, "width": 90 },
+    {
+      "key": "lowerLimit",
+      "title": "Alt limit",
+      "dataIndex": "lowerLimit",
+      "sortable": true,
+      "align": "right",
+      "mono": true,
+      "width": 110,
+      "render": "renderMoney"
+    },
+    {
+      "key": "fixedFee",
+      "title": "Sabit ücret",
+      "dataIndex": "fixedFee",
+      "sortable": true,
+      "align": "right",
+      "mono": true,
+      "width": 110,
+      "render": "renderMoney"
+    },
+    {
+      "key": "variableFeePct",
+      "title": "Değişken %",
+      "dataIndex": "variableFeePct",
+      "sortable": true,
+      "align": "right",
+      "mono": true,
+      "width": 100,
+      "render": "renderVariablePct"
+    },
+    {
+      "key": "startDate",
+      "title": "Başlangıç",
+      "dataIndex": "startDate",
+      "sortable": true,
+      "mono": true,
+      "width": 110,
+      "render": "renderOptionalDate"
+    },
+    {
+      "key": "endDate",
+      "title": "Bitiş",
+      "dataIndex": "endDate",
+      "sortable": true,
+      "mono": true,
+      "width": 110,
+      "render": "renderOptionalDate"
+    },
+    { "key": "changedBy", "title": "Değiştiren", "dataIndex": "changedBy", "width": 130 },
+    {
+      "key": "changedAt",
+      "title": "Değiştirilme",
+      "dataIndex": "changedAt",
+      "sortable": true,
+      "mono": true,
+      "width": 150,
+      "render": "renderChangedAt"
+    },
+    {
+      "key": "status",
+      "title": "Statü",
+      "dataIndex": "status",
+      "sortable": true,
+      "width": 100,
+      "render": "renderStatus"
+    },
+    { "key": "actions", "title": "", "dataIndex": "id", "width": 72, "render": "renderActions" }
+  ]
+}

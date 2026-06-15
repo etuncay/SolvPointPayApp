@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+@import './styles/base.css';
+@import './styles/login.css';
+@import './styles/home.css';
+@import './styles/activity.css';
+@import './styles/topup.css';
+@import './styles/recipients.css';
+@import './styles/transfer.css';
+@import './styles/receive.css';
+@import './styles/complaint.css';
+@import './styles/settings.css';
+
+@theme {
+  --color-brand: var(--brand);
+  --color-brand-700: var(--brand-700);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-bg: var(--bg);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+}

@@ -1,0 +1,43 @@
+@import '@fontsource/geist/400.css';
+@import '@fontsource/geist/500.css';
+@import '@fontsource/geist/600.css';
+@import '@fontsource/geist/700.css';
+@import '@fontsource/geist-mono/400.css';
+@import '@fontsource/geist-mono/500.css';
+@import '@epay/ui/styles.css';
+
+/* 7.3 — skor geçmişi renk kodları */
+.score-history-row--low td {
+  background: color-mix(in oklch, var(--ok-fg) 8%, transparent);
+}
+.score-history-row--medium td {
+  background: color-mix(in oklch, var(--warn-fg) 10%, transparent);
+}
+.score-history-row--high td {
+  background: color-mix(in oklch, var(--danger-fg) 8%, transparent);
+}
+.score-history-row--critical td {
+  background: color-mix(in oklch, oklch(0.42 0.17 25) 12%, transparent);
+}
+.score-history-bar-track {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.score-history-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+.score-history-bar-fill.score-history-row--low {
+  background: var(--ok-fg);
+}
+.score-history-bar-fill.score-history-row--medium {
+  background: var(--warn-fg);
+}
+.score-history-bar-fill.score-history-row--high {
+  background: var(--danger-fg);
+}
+.score-history-bar-fill.score-history-row--critical {
+  background: oklch(0.42 0.17 25);
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Roller",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Rol adı veya açıklama ara…",
+    "keys": ["name", "description"]
+  },
+  "hideColumnFilters": true,
+  "tabs": [
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" },
+    { "key": "Active", "title": "Aktif", "filters": { "status": "Active" }, "countKey": "activeCount" },
+    { "key": "Passive", "title": "Pasif", "filters": { "status": "Passive" }, "countKey": "passiveCount" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Rol" }
+  },
+  "columns": [
+    { "key": "name", "title": "Rol Adı", "dataIndex": "name", "sortable": true, "minWidth": 170 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "sortable": true, "minWidth": 220 },
+    { "key": "status", "title": "Status", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" },
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "sortable": true, "width": 130, "render": "renderCreatedAt" },
+    { "key": "updatedAt", "title": "Son Güncelleme", "dataIndex": "updatedAt", "sortable": true, "width": 140, "render": "renderUpdatedAt" }
+  ]
+}

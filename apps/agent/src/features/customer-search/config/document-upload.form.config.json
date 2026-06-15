@@ -1,0 +1,53 @@
+{
+  "fields": [
+    {
+      "name": "category",
+      "type": "Select",
+      "label": "Kategori",
+      "col": 4,
+      "defaultValue": "Identity",
+      "options": [
+        { "label": "Kimlik", "value": "Identity" },
+        { "label": "Adres kanıtı", "value": "ProofOfAddress" },
+        { "label": "Gelir kanıtı", "value": "ProofOfFunds" }
+      ]
+    },
+    {
+      "name": "type",
+      "type": "Select",
+      "label": "Belge türü",
+      "col": 4,
+      "defaultValue": "IdentityCard",
+      "options": [
+        { "label": "Kimlik kartı", "value": "IdentityCard" },
+        { "label": "Pasaport", "value": "Passport" }
+      ]
+    },
+    {
+      "name": "validFrom",
+      "type": "DatePicker",
+      "label": "Geçerlilik başlangıç",
+      "col": 2
+    },
+    {
+      "name": "validTo",
+      "type": "DatePicker",
+      "label": "Geçerlilik bitiş",
+      "col": 2
+    },
+    {
+      "name": "fileName",
+      "type": "Upload",
+      "label": "Dosya",
+      "col": 4,
+      "accept": "image/*,application/pdf",
+      "rules": [{ "required": true, "message": "Dosya seçin" }]
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "cancel", "label": "İptal", "variant": "ghost" },
+      { "key": "submit", "label": "Yükle", "variant": "primary" }
+    ]
+  }
+}

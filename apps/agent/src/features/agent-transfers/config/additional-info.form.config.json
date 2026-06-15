@@ -1,0 +1,68 @@
+{
+  "fields": [
+    {
+      "name": "nationality",
+      "type": "Select",
+      "label": "Kimlik Ülkesi/Uyruğu",
+      "col": 4,
+      "defaultValue": "TUR",
+      "shouldRender": "values._isCorporate !== true",
+      "options": [
+        { "label": "Türkiye", "value": "TUR" },
+        { "label": "Almanya", "value": "DEU" },
+        { "label": "Suriye", "value": "SYR" },
+        { "label": "ABD", "value": "USA" },
+        { "label": "İngiltere", "value": "GBR" },
+        { "label": "Fransa", "value": "FRA" },
+        { "label": "Hollanda", "value": "NLD" },
+        { "label": "Diğer", "value": "OTHER" }
+      ]
+    },
+    {
+      "name": "idType",
+      "type": "Select",
+      "label": "Kimlik tipi",
+      "col": 4,
+      "defaultValue": "IdentityCard",
+      "shouldRender": "values._isCorporate !== true",
+      "options": [
+        { "label": "Kimlik kartı", "value": "IdentityCard" },
+        { "label": "Pasaport", "value": "Passport" }
+      ]
+    },
+    {
+      "name": "birthDate",
+      "type": "DatePicker",
+      "label": "Doğum tarihi",
+      "col": 4,
+      "shouldRender": "values._isCorporate !== true"
+    },
+    {
+      "name": "companyTitle",
+      "type": "Input",
+      "label": "Ünvan",
+      "col": 4,
+      "shouldRender": "values._isCorporate === true"
+    },
+    {
+      "name": "taxOffice",
+      "type": "Input",
+      "label": "Vergi dairesi",
+      "col": 4,
+      "shouldRender": "values._isCorporate === true"
+    },
+    {
+      "name": "tradeRegistryNo",
+      "type": "Input",
+      "label": "Ticaret sicil no",
+      "col": 4,
+      "shouldRender": "values._isCorporate === true"
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "cancel", "label": "İptal", "variant": "ghost" },
+      { "key": "submit", "label": "Kaydet", "variant": "primary" }
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "title": "Temsilciler",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Temsilci no, ad, e-posta, telefon, VKN…",
+    "keys": ["id", "name", "email", "phone", "vkn"]
+  },
+  "hideColumnFilters": true,
+  "toolbar": { "export": {}, "new": {} },
+  "tabs": [
+    { "key": "active", "title": "Aktif", "filters": { "status": "active" }, "countKey": "activeCount" },
+    { "key": "inactive", "title": "Pasif", "filters": { "status": "inactive" }, "countKey": "inactiveCount" },
+    { "key": "blocked", "title": "Bloke", "filters": { "status": "blocked" }, "countKey": "blockedCount" },
+    { "key": "closed", "title": "Kapalı", "filters": { "status": "closed" }, "countKey": "closedCount" },
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" }
+  ],
+  "advancedFilters": [
+    { "key": "group", "label": "Grup", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }] },
+    {
+      "key": "settlement",
+      "label": "Mutabakat",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Anlık", "value": "realtime" },
+        { "label": "Günlük", "value": "daily" },
+        { "label": "Haftalık", "value": "weekly" },
+        { "label": "Aylık", "value": "monthly" }
+      ]
+    },
+    {
+      "key": "balance",
+      "label": "Bakiye",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Negatif", "value": "neg" },
+        { "label": "Düşük", "value": "low" },
+        { "label": "Normal", "value": "normal" }
+      ]
+    },
+    { "key": "createdFrom", "label": "Oluşturma (baş)", "type": "date", "span": 3 },
+    { "key": "createdTo", "label": "Oluşturma (bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "id", "title": "Temsilci No", "dataIndex": "id", "sortable": true, "width": 90, "render": "renderId" },
+    { "key": "name", "title": "Ad", "dataIndex": "name", "sortable": true, "minWidth": 220, "render": "renderName" },
+    { "key": "contact", "title": "İletişim", "dataIndex": "email", "sortable": false, "minWidth": 200, "render": "renderContact" },
+    { "key": "vkn", "title": "VKN", "dataIndex": "vkn", "sortable": true, "width": 140, "render": "renderMono" },
+    { "key": "group", "title": "Grup", "dataIndex": "group", "sortable": true, "width": 140, "render": "renderGroup" },
+    { "key": "balance", "title": "Bakiye", "dataIndex": "balance", "sortable": false, "width": 170, "render": "renderBalance" },
+    { "key": "settlement", "title": "Mutabakat", "dataIndex": "settlement", "sortable": true, "width": 130, "render": "renderSettlement" },
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "sortable": true, "width": 130, "render": "renderDateSoft" },
+    { "key": "lastTxAt", "title": "Son İşlem", "dataIndex": "lastTxAt", "sortable": true, "width": 130, "render": "renderLastTx" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 130, "render": "renderStatus" }
+  ]
+}

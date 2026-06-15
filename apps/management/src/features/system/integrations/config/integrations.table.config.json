@@ -1,0 +1,51 @@
+{
+  "title": "Entegrasyonlar",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Entegrasyon veya sistem adı ara…",
+    "keys": ["name", "systemName", "code"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "type",
+      "label": "Tür",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tüm türler", "value": "any" },
+        { "label": "Accounting", "value": "Accounting" },
+        { "label": "Btrans", "value": "Btrans" },
+        { "label": "FxRate", "value": "FxRate" },
+        { "label": "Banking", "value": "Banking" },
+        { "label": "Kyc", "value": "Kyc" },
+        { "label": "Sms", "value": "Sms" },
+        { "label": "Email", "value": "Email" }
+      ]
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tüm durumlar", "value": "any" },
+        { "label": "Active", "value": "Active" },
+        { "label": "Inactive", "value": "Inactive" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "name", "title": "Entegrasyon Adı", "dataIndex": "name", "sortable": true, "minWidth": 180 },
+    { "key": "integrationType", "title": "Tür", "dataIndex": "integrationType", "sortable": true, "width": 130, "render": "renderType" },
+    { "key": "systemName", "title": "Sistem Adı", "dataIndex": "systemName", "sortable": true, "minWidth": 170 },
+    { "key": "status", "title": "Status", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Entegrasyon" }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "panels": [
+    {
+      "key": "sender",
+      "title": "Gönderen",
+      "fields": [
+        { "name": "sender_name", "type": "Input", "label": "Ad", "readOnly": true, "col": 2 },
+        { "name": "sender_customerNo", "type": "Input", "label": "Müşteri No", "readOnly": true, "col": 2 },
+        { "name": "sender_walletNo", "type": "Input", "label": "Cüzdan", "readOnly": true, "col": 2 },
+        { "name": "sender_phone", "type": "Input", "label": "Telefon", "readOnly": true, "col": 2 },
+        { "name": "sender_iban", "type": "Input", "label": "IBAN", "readOnly": true, "col": 2, "shouldRender": "values._showSenderIban" },
+        { "name": "sender_city", "type": "Input", "label": "Şehir", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "receiver",
+      "title": "Alıcı",
+      "fields": [
+        { "name": "receiver_name", "type": "Input", "label": "Ad", "readOnly": true, "col": 2 },
+        { "name": "receiver_customerNo", "type": "Input", "label": "Müşteri No", "readOnly": true, "col": 2 },
+        { "name": "receiver_walletNo", "type": "Input", "label": "Cüzdan", "readOnly": true, "col": 2 },
+        { "name": "receiver_phone", "type": "Input", "label": "Telefon", "readOnly": true, "col": 2 },
+        { "name": "receiver_iban", "type": "Input", "label": "IBAN", "readOnly": true, "col": 2, "shouldRender": "values._showReceiverIban" },
+        { "name": "receiver_city", "type": "Input", "label": "Şehir", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "reference",
+      "title": "Referans",
+      "fields": [
+        { "name": "referenceNo", "type": "Input", "label": "Referans No", "readOnly": true, "col": 2 },
+        { "name": "foreignReferenceNo", "type": "Input", "label": "Yabancı referans", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "amounts",
+      "title": "Tutarlar",
+      "fields": [
+        { "name": "principalAmount", "type": "Input", "label": "Ana tutar", "readOnly": true, "col": 2 },
+        { "name": "targetAmount", "type": "Input", "label": "Hedef tutar", "readOnly": true, "col": 2, "shouldRender": "values._showFx" },
+        { "name": "fxRate", "type": "Input", "label": "Kur", "readOnly": true, "col": 2, "shouldRender": "values._showFx" },
+        { "name": "feeFixed", "type": "Input", "label": "Sabit ücret", "readOnly": true, "col": 2 },
+        { "name": "feeVariable", "type": "Input", "label": "Değişken ücret", "readOnly": true, "col": 2 },
+        { "name": "totalPaid", "type": "Input", "label": "Toplam", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "details",
+      "title": "Detaylar",
+      "fields": [
+        { "name": "createdAt", "type": "Input", "label": "Oluşturulma", "readOnly": true, "col": 2 },
+        { "name": "withdrawalDate", "type": "Input", "label": "Çekim tarihi", "readOnly": true, "col": 2 },
+        { "name": "transactionType", "type": "Input", "label": "İşlem tipi", "readOnly": true, "col": 2 },
+        { "name": "paymentPurpose", "type": "Input", "label": "Ödeme amacı", "readOnly": true, "col": 2 },
+        { "name": "status", "type": "Input", "label": "Durum", "readOnly": true, "col": 2 },
+        { "name": "description", "type": "Input", "label": "Açıklama", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "sender-auth",
+      "title": "Gönderen yetkili",
+      "shouldRender": "values._hasSenderAuth",
+      "fields": [
+        { "name": "senderAuth_name", "type": "Input", "label": "Ad", "readOnly": true, "col": 2 },
+        { "name": "senderAuth_title", "type": "Input", "label": "Ünvan", "readOnly": true, "col": 2 },
+        { "name": "senderAuth_phone", "type": "Input", "label": "Telefon", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "receiver-auth",
+      "title": "Alıcı yetkili",
+      "shouldRender": "values._hasReceiverAuth",
+      "fields": [
+        { "name": "receiverAuth_name", "type": "Input", "label": "Ad", "readOnly": true, "col": 2 },
+        { "name": "receiverAuth_title", "type": "Input", "label": "Ünvan", "readOnly": true, "col": 2 },
+        { "name": "receiverAuth_phone", "type": "Input", "label": "Telefon", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "agents",
+      "title": "Temsilci",
+      "shouldRender": "values._hasAgents",
+      "fields": [
+        { "name": "agentRole", "type": "Input", "label": "Rol", "readOnly": true, "col": 2 },
+        { "name": "agentName", "type": "Input", "label": "Temsilci", "readOnly": true, "col": 2 }
+      ]
+    },
+    {
+      "key": "security",
+      "title": "Güvenlik",
+      "fields": [
+        {
+          "name": "security",
+          "type": "CustomComponent",
+          "component": "ConfirmationSecurity",
+          "col": 4
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Temsilci Grupları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Grup kodu, ad veya açıklama ara…",
+    "keys": ["groupCode", "name", "description"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "status",
+      "label": "Statü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" }
+      ]
+    }
+  ],
+  "toolbar": {
+    "export": {},
+    "new": { "label": "Yeni Grup" }
+  },
+  "columns": [
+    { "key": "groupCode", "title": "Grup Kodu", "dataIndex": "groupCode", "sortable": true, "mono": true, "width": 130 },
+    { "key": "name", "title": "Ad", "dataIndex": "name", "sortable": true, "minWidth": 160 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "sortable": true, "minWidth": 200, "render": "renderDescription" },
+    { "key": "agentCount", "title": "Temsilci", "dataIndex": "agentCount", "sortable": true, "align": "right", "mono": true, "width": 100 },
+    { "key": "avgFeePerTx", "title": "Ort. Ücret", "dataIndex": "avgFeePerTx", "sortable": true, "align": "right", "mono": true, "width": 110, "render": "renderAvgFee" },
+    { "key": "avgTxCountPerAgent", "title": "Ort. İşlem", "dataIndex": "avgTxCountPerAgent", "sortable": true, "align": "right", "mono": true, "width": 110, "render": "renderAvgTx" },
+    { "key": "status", "title": "Statü", "dataIndex": "status", "sortable": true, "width": 100, "render": "renderStatus" },
+    { "key": "actions", "title": "", "dataIndex": "id", "width": 120, "render": "renderActions" }
+  ]
+}

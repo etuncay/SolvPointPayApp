@@ -1,0 +1,17 @@
+{
+  "title": "Limit geçmişi",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [20, 50] },
+  "columns": [
+    { "key": "startDate", "title": "Başlangıç", "dataIndex": "startDate", "mono": true, "width": 130 },
+    { "key": "endDate", "title": "Bitiş", "dataIndex": "endDate", "mono": true, "width": 130 },
+    { "key": "limitGroup", "title": "Grup", "dataIndex": "limitGroup", "render": "renderLimitGroup", "width": 150 },
+    { "key": "limitType", "title": "Tip", "dataIndex": "limitType", "render": "renderLimitType", "width": 150 },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "render": "renderLimitAmount", "align": "right", "mono": true, "width": 140 },
+    { "key": "changedBy", "title": "Değiştiren", "dataIndex": "changedBy", "width": 160 },
+    { "key": "approvedBy", "title": "Onaylayan", "dataIndex": "approvedBy", "width": 160 }
+  ]
+}
+

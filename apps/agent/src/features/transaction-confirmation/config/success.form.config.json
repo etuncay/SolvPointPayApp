@@ -1,0 +1,10 @@
+{
+  "fields": [
+    {
+      "name": "successPanel",
+      "type": "CustomComponent",
+      "component": "TransactionSuccessPanel",
+      "col": 4
+    }
+  ]
+}

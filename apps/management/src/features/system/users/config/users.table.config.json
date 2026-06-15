@@ -1,0 +1,38 @@
+{
+  "title": "Kullanıcılar",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Ad, e-posta veya telefon ara…",
+    "keys": ["fullName", "email", "phone"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "roleId",
+      "label": "Rol",
+      "type": "select",
+      "span": 4,
+      "options": [
+        { "label": "Tüm roller", "value": "any" },
+        { "label": "Rol atanmamış", "value": "none" }
+      ]
+    }
+  ],
+  "tabs": [
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" },
+    { "key": "Active", "title": "Aktif", "filters": { "status": "Active" }, "countKey": "activeCount" },
+    { "key": "Inactive", "title": "Pasif", "filters": { "status": "Inactive" }, "countKey": "inactiveCount" }
+  ],
+  "columns": [
+    { "key": "fullName", "title": "Ad-Soyad", "dataIndex": "fullName", "sortable": true, "minWidth": 170 },
+    { "key": "email", "title": "E-posta", "dataIndex": "email", "sortable": true, "minWidth": 180 },
+    { "key": "phone", "title": "Telefon", "dataIndex": "phone", "sortable": true, "mono": true, "width": 150 },
+    { "key": "roleName", "title": "Rol", "dataIndex": "roleName", "sortable": true, "minWidth": 150 },
+    { "key": "createdAt", "title": "Oluşturma Tarihi", "dataIndex": "createdAt", "sortable": true, "width": 140, "render": "renderCreatedAt" },
+    { "key": "status", "title": "Status", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" }
+  ]
+}

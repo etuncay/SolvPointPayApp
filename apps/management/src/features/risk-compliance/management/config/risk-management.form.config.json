@@ -1,0 +1,37 @@
+{
+  "navLayout": "top",
+  "panels": [
+    {
+      "key": "reference",
+      "title": "Referans Listeleri",
+      "no": "1",
+      "fields": [
+        { "name": "referenceLists", "type": "CustomComponent", "component": "ReferenceListsPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "groups",
+      "title": "Vaka Grupları",
+      "no": "2",
+      "fields": [
+        { "name": "caseGroups", "type": "CustomComponent", "component": "CaseGroupsPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "routing",
+      "title": "Yönlendirme Kuralları",
+      "no": "3",
+      "fields": [
+        { "name": "routingRules", "type": "CustomComponent", "component": "RoutingRulesPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "params",
+      "title": "Motor Parametreleri",
+      "no": "4",
+      "fields": [
+        { "name": "engineParams", "type": "CustomComponent", "component": "EngineParamsPanel", "col": 4 }
+      ]
+    }
+  ]
+}

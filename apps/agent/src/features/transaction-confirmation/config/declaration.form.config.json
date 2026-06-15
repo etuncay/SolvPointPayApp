@@ -1,0 +1,41 @@
+{
+  "fields": [
+    {
+      "name": "relation",
+      "type": "Input",
+      "label": "İlişki",
+      "col": 4,
+      "rules": [{ "required": true, "message": "İlişki zorunludur" }]
+    },
+    {
+      "name": "reason",
+      "type": "Select",
+      "label": "Gerekçe",
+      "col": 4,
+      "defaultValue": "Family",
+      "options": [
+        { "label": "Aile", "value": "Family" },
+        { "label": "Ticari", "value": "Commercial" },
+        { "label": "Hediye", "value": "Gift" },
+        { "label": "Diğer", "value": "Other" },
+        { "label": "Bilinmiyor", "value": "Unknown" }
+      ],
+      "rules": [{ "required": true }]
+    },
+    {
+      "name": "note",
+      "type": "TextArea",
+      "label": "Açıklama",
+      "col": 4,
+      "rows": 3,
+      "shouldRender": "values.reason === \"Other\" || values.reason === \"Unknown\"",
+      "requiredRules": "values.reason === \"Other\" || values.reason === \"Unknown\""
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "cancel", "label": "İptal", "variant": "ghost" },
+      { "key": "confirm", "label": "Onayla", "variant": "primary" }
+    ]
+  }
+}

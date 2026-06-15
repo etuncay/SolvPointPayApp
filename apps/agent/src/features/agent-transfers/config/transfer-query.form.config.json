@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "name": "query",
+      "type": "Input",
+      "label": "Gönderen sorgu",
+      "col": 4,
+      "placeholder": "Müşteri no veya kimlik no",
+      "rules": [{ "required": true, "message": "Sorgu değeri girin" }]
+    },
+    {
+      "name": "examples",
+      "type": "CustomComponent",
+      "component": "TransferQueryExamples",
+      "col": 4
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "search", "label": "Sorgula", "variant": "primary", "icon": "search" },
+      { "key": "clear", "label": "Temizle", "variant": "secondary", "shouldRender": "values._showClear" }
+    ]
+  }
+}

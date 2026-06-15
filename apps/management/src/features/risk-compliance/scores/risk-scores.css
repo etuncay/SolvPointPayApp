@@ -1,0 +1,313 @@
+/* Risk skorları — künye, kırılım, geçmiş */
+
+.rsc-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.rsc-panels-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.4fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .rsc-panels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Arama */
+.rsc-search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  padding: 16px 18px;
+}
+
+.rsc-search-form .form-grid {
+  flex: 1;
+  min-width: min(100%, 420px);
+}
+
+.rsc-search-hint {
+  padding: 0 18px 14px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  border-top: 1px solid var(--line);
+  margin-top: 0;
+  padding-top: 12px;
+}
+
+/* Künye hero */
+.rsc-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .rsc-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rsc-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+}
+
+.rsc-identity-item label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 4px;
+}
+
+.rsc-identity-item span {
+  font-size: 13.5px;
+  color: var(--fg);
+}
+
+.rsc-identity-item span.mono {
+  font-family: var(--font-mono);
+}
+
+.rsc-identity-item.is-wide {
+  grid-column: 1 / -1;
+}
+
+.rsc-hero-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 148px;
+  padding: 16px 20px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklch, var(--bg-sunken), var(--bg-elev) 40%) 0%,
+    var(--bg-elev) 100%
+  );
+}
+
+.rsc-score-ring {
+  --score-pct: 50;
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(
+    var(--ring-color, var(--accent)) calc(var(--score-pct) * 1%),
+    color-mix(in oklch, var(--line), var(--bg-sunken) 60%) 0
+  );
+}
+
+.rsc-score-ring::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: var(--bg-elev);
+}
+
+.rsc-score-ring-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.rsc-score-value {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+.rsc-score-max {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.rsc-hero-score .risk-seg {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rsc-calculated-at {
+  font-size: 11px;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.rsc-override-note {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  color: var(--warn-fg);
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in oklch, var(--warn), var(--line) 60%);
+}
+
+/* Tablolar — taban stiller itable sınıfından gelir */
+.rsc-table-wrap {
+  overflow-x: auto;
+}
+
+.rsc-table tbody tr.is-total td {
+  background: var(--bg-sunken);
+  font-weight: 600;
+}
+
+.rsc-contrib-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-fg);
+  background: color-mix(in oklch, var(--accent-soft), var(--accent) 10%);
+  border: 1px solid color-mix(in oklch, var(--accent), var(--line) 40%);
+}
+
+.rsc-breakdown-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--accent-soft), var(--line) 50%);
+  overflow: hidden;
+  margin-top: 6px;
+  max-width: 160px;
+}
+
+.rsc-breakdown-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* Geçmiş — satır arka planını kaldır, sol kenar vurgusu kullan */
+.rsc-history-row td {
+  background: transparent !important;
+}
+
+.rsc-history-row td:first-child {
+  box-shadow: inset 3px 0 0 transparent;
+}
+
+.rsc-history-row.score-history-row--low td:first-child {
+  box-shadow: inset 3px 0 0 var(--ok-fg);
+}
+
+.rsc-history-row.score-history-row--medium td:first-child {
+  box-shadow: inset 3px 0 0 var(--warn-fg);
+}
+
+.rsc-history-row.score-history-row--high td:first-child {
+  box-shadow: inset 3px 0 0 var(--danger-fg);
+}
+
+.rsc-history-row.score-history-row--critical td:first-child {
+  box-shadow: inset 3px 0 0 oklch(0.42 0.17 25);
+}
+
+.rsc-history-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--bg-sunken);
+}
+
+.rsc-history-visual {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.rsc-history-visual .score-history-bar-track {
+  flex: 1;
+  min-width: 80px;
+  height: 8px;
+}
+
+.rsc-history-visual .score-history-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* Manuel değişiklik */
+.rsc-pending-banner {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  color: var(--warn-fg);
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in oklch, var(--warn), var(--line) 60%);
+}
+
+.rsc-change-form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .rsc-change-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rsc-empty-state {
+  margin-top: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md);
+  color: var(--fg-muted);
+  font-size: 13px;
+}
+
+.rsc-not-found {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  color: var(--danger-fg);
+  background: var(--danger-soft);
+  border: 1px solid color-mix(in oklch, var(--danger), var(--line) 55%);
+}

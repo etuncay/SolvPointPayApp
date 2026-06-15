@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/session-detect-stack.sh"
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": ".cursor/hooks/log-task-start.sh"
+      },
+      {
+        "command": ".cursor/hooks/route-work.sh",
+        "matcher": ".*"
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": ".cursor/hooks/track-context-read.sh",
+        "matcher": "Read|TabRead"
+      }
+    ],
+    "stop": [
+      {
+        "command": ".cursor/hooks/log-task-end.sh"
+      }
+    ]
+  }
+}

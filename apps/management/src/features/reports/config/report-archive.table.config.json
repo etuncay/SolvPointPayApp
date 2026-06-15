@@ -1,0 +1,15 @@
+{
+  "title": "Arşiv",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 8, "pageSizeOptions": [8, 15, 30] },
+  "columns": [
+    { "key": "reportCode", "title": "Rapor", "dataIndex": "reportCode", "render": "renderReportCode", "width": 220 },
+    { "key": "generatedAt", "title": "Tarih", "dataIndex": "generatedAt", "render": "renderGeneratedAt", "width": 170, "mono": true },
+    { "key": "rowCount", "title": "Satır", "dataIndex": "rowCount", "render": "renderRowCount", "width": 90, "mono": true },
+    { "key": "correlationId", "title": "Correlation", "dataIndex": "correlationId", "mono": true },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderActions", "width": 90, "align": "right", "excludeFromExport": true }
+  ]
+}
+

@@ -1,0 +1,91 @@
+/* Kimlik / belge tarama kutuları — docs/EPayAgent referans */
+.id-scan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 560px) {
+  .id-scan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.id-scan-box {
+  border: 2px dashed var(--line-strong, #cbd5e1);
+  border-radius: 10px;
+  padding: 18px 14px;
+  text-align: center;
+  color: var(--fg-muted, #64748b);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.id-scan-box:hover {
+  border-color: var(--accent, #0d9488);
+  background: color-mix(in oklch, var(--accent, #0d9488) 6%, transparent);
+}
+
+.id-scan-box--active {
+  border-color: var(--accent, #0d9488);
+  background: color-mix(in oklch, var(--accent, #0d9488) 10%, #fff);
+}
+
+.id-scan-box--done {
+  border-style: solid;
+  border-color: var(--ok, #16a34a);
+  background: var(--ok-soft, #f0fdf4);
+  color: var(--ok-fg, #166534);
+  cursor: default;
+}
+
+.id-scan-box--done:hover {
+  background: var(--ok-soft, #f0fdf4);
+  border-color: var(--ok, #16a34a);
+}
+
+.id-scan-box .id-scan-label {
+  font-weight: 600;
+  color: var(--fg, #0f172a);
+  font-size: 13px;
+}
+
+.id-scan-box--done .id-scan-label {
+  color: var(--ok-fg, #166534);
+}
+
+.id-scan-thumb {
+  width: 56px;
+  height: 36px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--bg-sunken, #f1f5f9),
+    var(--bg-sunken, #f1f5f9) 5px,
+    var(--bg-hover, #e2e8f0) 5px,
+    var(--bg-hover, #e2e8f0) 10px
+  );
+  margin-bottom: 2px;
+}
+
+.id-scan-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line, #e5e7eb);
+}
+
+@media (max-width: 720px) {
+  .id-scan-meta {
+    grid-template-columns: 1fr;
+  }
+}

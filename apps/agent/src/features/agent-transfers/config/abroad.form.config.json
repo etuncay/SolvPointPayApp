@@ -1,0 +1,130 @@
+{
+  "fields": [
+    {
+      "name": "fullName",
+      "type": "Input",
+      "label": "Gönderen",
+      "col": 4,
+      "readOnly": true,
+      "shouldRender": "values._hasSender === true"
+    },
+    {
+      "name": "authorizedPersonIdNo",
+      "type": "Input",
+      "label": "Yetkili Kişi Kimlik No",
+      "col": 2,
+      "shouldRender": "values._corporate === true"
+    },
+    {
+      "name": "receiverName",
+      "type": "Input",
+      "label": "Alıcı Ad Soyad",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_tr_err_receiver_name" }]
+    },
+    {
+      "name": "country",
+      "type": "Select",
+      "label": "Ülke",
+      "col": 2,
+      "options": [
+        { "label": "Almanya", "value": "DE" },
+        { "label": "ABD", "value": "US" },
+        { "label": "İngiltere", "value": "GB" },
+        { "label": "Suriye", "value": "SY" },
+        { "label": "İran", "value": "IR" }
+      ],
+      "rules": [{ "required": true, "message": "ag_tr_err_country" }]
+    },
+    {
+      "name": "receiverPhone",
+      "type": "Input",
+      "label": "Alıcı Telefon",
+      "col": 2
+    },
+    {
+      "name": "receiverEmail",
+      "type": "Input",
+      "label": "Alıcı E-posta",
+      "col": 2
+    },
+    {
+      "name": "currency",
+      "type": "Select",
+      "label": "Kaynak PB",
+      "col": 2,
+      "options": [{ "label": "TRY", "value": "TRY" }],
+      "defaultValue": "TRY"
+    },
+    {
+      "name": "targetCurrency",
+      "type": "Select",
+      "label": "Hedef PB",
+      "col": 2,
+      "options": [
+        { "label": "USD", "value": "USD" },
+        { "label": "EUR", "value": "EUR" },
+        { "label": "GBP", "value": "GBP" }
+      ],
+      "defaultValue": "EUR"
+    },
+    {
+      "name": "amount",
+      "type": "InputNumber",
+      "label": "Tutar (kaynak)",
+      "col": 2,
+      "min": 0,
+      "rules": [{ "required": true, "message": "ag_tr_err_amount" }]
+    },
+    {
+      "name": "fxRate",
+      "type": "Input",
+      "label": "Kur",
+      "col": 2,
+      "readOnly": true
+    },
+    {
+      "name": "targetAmount",
+      "type": "Input",
+      "label": "Net tutar (hedef)",
+      "col": 2,
+      "readOnly": true
+    },
+    {
+      "name": "paymentPurpose",
+      "type": "Select",
+      "label": "Ödeme Türü",
+      "col": 2,
+      "options": [],
+      "rules": [{ "required": true, "message": "ag_tr_err_payment_purpose" }]
+    },
+    {
+      "name": "description",
+      "type": "TextArea",
+      "label": "Açıklama",
+      "col": 4,
+      "rows": 2
+    },
+    {
+      "name": "clientReference",
+      "type": "Input",
+      "label": "İşlem Referans No",
+      "col": 2,
+      "rules": [{ "required": true, "message": "ag_tr_err_reference" }]
+    },
+    {
+      "name": "isSuspicious",
+      "type": "Switch",
+      "label": "Şüpheli İşlem",
+      "col": 2,
+      "defaultValue": false
+    }
+  ],
+  "buttonToolbar": {
+    "position": "bottom",
+    "buttons": [
+      { "key": "continue", "label": "Devam Et", "variant": "primary" },
+      { "key": "cancel", "label": "İptal", "variant": "ghost" }
+    ]
+  }
+}

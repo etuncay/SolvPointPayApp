@@ -1,0 +1,136 @@
+# AskQuestion field catalog — read during intake only (not every session)
+# IDs match intake-canonical-options.md. Conditional rules in required_when.
+
+version: 1
+fields_path: .cursor/config/project.intake-fields.yaml
+
+fields:
+  # --- Round 1: blockers ---
+  - id: work_type
+    round: 1
+    required: true
+    ask_label: What kind of work is this?
+
+  - id: architecture
+    round: 1
+    required: true
+    ask_label: How is the project structured?
+    options:
+      - id: fullstack-separated
+        label: Full stack — separate frontend + backend
+      - id: frontend-only
+        label: Frontend only
+      - id: backend-only
+        label: Backend / API only
+      - id: monolith
+        label: Monolith (e.g. Next.js full-stack, Rails)
+      - id: mobile-bff
+        label: Mobile app + backend API
+
+  - id: scope
+    round: 1
+    required: true
+
+  - id: data_source
+    round: 1
+    required: true
+
+  - id: deliverable
+    round: 1
+    required: true
+
+  # --- Round 1b: languages (when architecture needs them) ---
+  - id: frontend.language
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, frontend-only, monolith, mobile-bff]
+    maps_to: language
+    ask_label: Frontend language
+
+  - id: frontend.framework
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, frontend-only, monolith, mobile-bff]
+    ask_label: Frontend framework
+    filter_by: frontend.language
+
+  - id: frontend.platform
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, frontend-only, monolith, mobile-bff]
+    ask_label: Frontend platform
+
+  - id: backend.language
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, backend-only, mobile-bff]
+    ask_label: Backend language
+
+  - id: backend.framework
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, backend-only, mobile-bff]
+    ask_label: Backend framework
+
+  - id: backend.api_style
+    round: 1
+    required_when:
+      architecture: [fullstack-separated, backend-only, mobile-bff]
+    ask_label: API style
+    options:
+      - id: rest
+        label: REST / OpenAPI
+      - id: graphql
+        label: GraphQL
+      - id: grpc
+        label: gRPC
+      - id: minimal
+        label: Minimal / RPC-style
+
+  - id: backend.database
+    round: 1
+    required_when:
+      data_source: [build-backend, real-db-seed]
+    ask_label: Database
+
+  # --- Round 2: UI (frontend enabled) ---
+  - id: ui_approach
+    round: 2
+    required_when:
+      architecture: [fullstack-separated, frontend-only, monolith, mobile-bff]
+
+  - id: component_library
+    round: 2
+
+  - id: css_stack
+    round: 2
+
+  - id: aesthetic
+    round: 2
+
+  - id: theme
+    round: 2
+
+  - id: interaction
+    round: 2
+
+  - id: a11y
+    round: 2
+
+  # --- Round 3: ops / cross-cutting ---
+  - id: auth
+    round: 3
+
+  - id: i18n
+    round: 3
+
+  - id: verification
+    round: 3
+
+  - id: ci_cd
+    round: 3
+
+  - id: monorepo.tool
+    round: 3
+    required_when:
+      scope: [multi-module, full-app-mvp, full-app-v1]

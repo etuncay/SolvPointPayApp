@@ -1,0 +1,13 @@
+{
+  "title": "İletişim Kanalları",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "channel", "title": "Kanal", "dataIndex": "channel", "render": "renderContactChannel", "width": 100 },
+    { "key": "value", "title": "Değer", "dataIndex": "value", "render": "renderContactValue", "mono": true },
+    { "key": "verified", "title": "Durum", "dataIndex": "verified", "render": "renderContactStatus", "width": 110 },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderContactActions", "width": 100, "align": "right", "excludeFromExport": true }
+  ]
+}

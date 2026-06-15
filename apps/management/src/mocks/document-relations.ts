@@ -1,0 +1,33 @@
+import type { DocumentRelation } from '@/features/dms/domain/types';
+
+/** dms.document_relation — mock ilişkiler */
+export const DOCUMENT_RELATIONS_SEED: DocumentRelation[] = [
+  { documentId: 'DOC-001', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-002', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-003', relationType: 'Agent', relatedId: 'AG-1001' },
+  { documentId: 'DOC-003', relationType: 'Transaction', relatedId: 'REF-880001' },
+  { documentId: 'DOC-004', relationType: 'Employee', relatedId: 'EMP-501' },
+  { documentId: 'DOC-005', relationType: 'Transaction', relatedId: 'TX-10001' },
+  { documentId: 'DOC-006', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-006', relationType: 'Transaction', relatedId: 'TX-10001' },
+  { documentId: 'DOC-DETAIL-001', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-DETAIL-001', relationType: 'Transaction', relatedId: 'TX-2024-001' },
+  { documentId: 'DOC-DETAIL-002', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-DETAIL-003', relationType: 'Customer', relatedId: '10055' },
+  { documentId: 'DOC-DETAIL-004', relationType: 'Employee', relatedId: 'EMP-900' },
+  { documentId: 'DOC-DETAIL-004', relationType: 'Complaint', relatedId: 'CASE-6001' },
+  { documentId: 'DOC-007', relationType: 'Customer', relatedId: '10055' },
+  { documentId: 'DOC-008', relationType: 'Customer', relatedId: '099903' },
+  { documentId: 'DOC-009', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-010', relationType: 'Customer', relatedId: '10055' },
+  { documentId: 'DOC-011', relationType: 'Customer', relatedId: '099903' },
+  { documentId: 'DOC-012', relationType: 'Customer', relatedId: '099903' },
+  { documentId: 'DOC-013', relationType: 'Transaction', relatedId: 'REF-880001' },
+  { documentId: 'DOC-014', relationType: 'Transaction', relatedId: 'REF-2024-001' },
+  { documentId: 'DOC-015', relationType: 'Customer', relatedId: '10055' },
+  { documentId: 'DOC-016', relationType: 'Employee', relatedId: 'EMP-220' },
+  { documentId: 'DOC-017', relationType: 'Customer', relatedId: '10042' },
+  { documentId: 'DOC-018', relationType: 'Customer', relatedId: '099903' },
+  { documentId: 'DOC-019', relationType: 'Agent', relatedId: 'AG-1001' },
+  { documentId: 'DOC-020', relationType: 'Transaction', relatedId: 'REF-880010' },
+];

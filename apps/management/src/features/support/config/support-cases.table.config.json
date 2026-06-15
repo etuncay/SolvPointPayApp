@@ -1,0 +1,50 @@
+{
+  "title": "Destek Talepleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Talep no, konu veya sorumlu ara…",
+    "keys": ["caseNo", "subject", "ownerDisplayName"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Açık", "value": "open" },
+      { "label": "Çözülen", "value": "resolved" },
+      { "label": "Reddedilen", "value": "rejected" },
+      { "label": "Yeniden Açılan", "value": "reOpened" },
+      { "label": "Tümü", "value": "all" }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "assignedToMe", "label": "Bana Atananlar", "type": "switch", "span": 3 },
+    { "key": "complaintType", "label": "Talep Tipi", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }, { "label": "General", "value": "General" }, { "label": "Technical", "value": "Technical" }, { "label": "Billing", "value": "Billing" }, { "label": "Reconciliation", "value": "Reconciliation" }, { "label": "ReconciliationDiscrepancy", "value": "ReconciliationDiscrepancy" }] },
+    { "key": "ownerUserId", "label": "Sorumlu", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }] },
+    { "key": "urgency", "label": "Aciliyet", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }, { "label": "Düşük", "value": "Low" }, { "label": "Orta", "value": "Medium" }, { "label": "Yüksek", "value": "High" }, { "label": "Kritik", "value": "Critical" }] },
+    { "key": "criticality", "label": "Kritiklik", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }, { "label": "Düşük", "value": "Low" }, { "label": "Orta", "value": "Medium" }, { "label": "Yüksek", "value": "High" }, { "label": "Kritik", "value": "Critical" }] },
+    { "key": "createdFrom", "label": "Açılış Tarihi (Baş)", "type": "date", "span": 3 },
+    { "key": "createdTo", "label": "Açılış Tarihi (Bitiş)", "type": "date", "span": 3 },
+    { "key": "updatedFrom", "label": "Güncelleme Tarihi (Baş)", "type": "date", "span": 3 },
+    { "key": "updatedTo", "label": "Güncelleme Tarihi (Bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "caseNo", "title": "Talep No", "dataIndex": "caseNo", "sortable": true, "width": 130, "render": "renderCaseNo" },
+    { "key": "subject", "title": "Konu", "dataIndex": "subject", "sortable": true, "minWidth": 230 },
+    { "key": "complaintType", "title": "Tip", "dataIndex": "complaintType", "sortable": true, "width": 170, "render": "renderComplaintType" },
+    { "key": "ownerDisplayName", "title": "Sorumlu", "dataIndex": "ownerDisplayName", "sortable": true, "width": 150 },
+    { "key": "urgency", "title": "Aciliyet", "dataIndex": "urgency", "sortable": true, "width": 120, "render": "renderUrgency" },
+    { "key": "criticality", "title": "Kritiklik", "dataIndex": "criticality", "sortable": true, "width": 120, "render": "renderCriticality" },
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "sortable": true, "width": 140, "render": "renderDate" },
+    { "key": "updatedAt", "title": "Güncelleme", "dataIndex": "updatedAt", "sortable": true, "width": 140, "render": "renderDate" },
+    { "key": "caseAgeDays", "title": "Yaş", "dataIndex": "caseAgeDays", "sortable": true, "width": 100, "render": "renderCaseAge" },
+    { "key": "caseStatus", "title": "Durum", "dataIndex": "caseStatus", "sortable": true, "width": 140, "render": "renderCaseStatus" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Talep" }
+  }
+}

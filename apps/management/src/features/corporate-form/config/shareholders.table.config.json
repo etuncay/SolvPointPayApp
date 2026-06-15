@@ -1,0 +1,17 @@
+{
+  "title": "Ortaklar",
+  "rowKey": "id",
+  "hideColumnFilters": true,
+  "hideTitleBar": true,
+  "columns": [
+    { "key": "refNo", "title": "Ref", "dataIndex": "refNo", "mono": true, "width": 100 },
+    { "key": "partyType", "title": "Tür", "dataIndex": "partyType", "width": 100 },
+    { "key": "name", "title": "Ad", "dataIndex": "name", "minWidth": 140 },
+    { "key": "directShare", "title": "Doğrudan %", "dataIndex": "directShare", "width": 90, "align": "right", "mono": true },
+    { "key": "indirectShare", "title": "Dolaylı %", "dataIndex": "indirectShare", "width": 90, "align": "right", "mono": true },
+    { "key": "isUbo", "title": "UBO", "dataIndex": "isUbo", "width": 60, "align": "center" },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 120 },
+    { "key": "startDate", "title": "Başlangıç", "dataIndex": "startDate", "width": 120, "format": "date" },
+    { "key": "endDate", "title": "Bitiş", "dataIndex": "endDate", "width": 120, "format": "date" }
+  ]
+}

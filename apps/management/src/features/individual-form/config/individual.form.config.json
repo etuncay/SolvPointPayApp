@@ -1,0 +1,300 @@
+{
+  "navLayout": "top",
+  "header": {
+    "titleComponent": "CustomerHeaderTitle",
+    "statusComponent": "CustomerHeaderStatus",
+    "showDraftExpr": "values._isNew === true && values._canDraft === true",
+    "draftLabelKey": "if_save_draft",
+    "saveLabelExpr": "values._isNew === true ? 'if_save_verify' : 'if_save'",
+    "cancelLabelKey": "if_cancel",
+    "actions": [
+      { "key": "activities", "labelKey": "if_activities", "variant": "ghost", "icon": "history", "position": "leading", "visible": "values._isNew !== true" },
+      { "key": "unblock", "labelKey": "if_unblock", "variant": "ghost", "visible": "values._isNew !== true && values.status === 'blocked' && values._canUnblock === true" },
+      { "key": "block", "labelKey": "if_block", "variant": "danger", "icon": "ban", "visible": "values._isNew !== true && values.status === 'active' && values._canBlock === true" },
+      { "key": "upload", "labelKey": "if_upload_doc", "icon": "upload", "visible": "values._isView !== true" },
+      { "key": "viewdocs", "labelKey": "if_view_docs", "variant": "ghost", "icon": "file", "visible": "values._hasCustomerId === true" }
+    ]
+  },
+  "panels": [
+    {
+      "key": "kimlik",
+      "title": "Kimlik Bilgileri",
+      "no": "·",
+      "icon": "user",
+      "fields": [
+        {
+          "name": "kimlikRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "fullName", "type": "Input", "label": "Adı ve Soyadı", "col": 2, "placeholder": "Ad Soyad", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Ad soyad zorunludur" }] },
+            { "name": "idNo", "type": "Input", "label": "TCKN", "className": "mono", "placeholder": "11 hane", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Kimlik numarası zorunludur" }] },
+            { "name": "idType", "type": "Select", "label": "Kimlik Tipi", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Kimlik tipi seçiniz" }], "options": [
+              { "label": "TC Kimlik", "value": "TCKN" },
+              { "label": "Pasaport", "value": "PASSPORT" },
+              { "label": "Oturum İzni", "value": "RES_PERMIT" }
+            ] }
+          ]
+        },
+        {
+          "name": "kimlikRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "idCountry", "type": "Select", "label": "Uyruğu", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Uyruk seçiniz" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" },
+              { "label": "🇩🇪 Almanya", "value": "DEU" },
+              { "label": "🇦🇹 Avusturya", "value": "AUT" },
+              { "label": "🇳🇱 Hollanda", "value": "NLD" },
+              { "label": "🇺🇸 ABD", "value": "USA" }
+            ] },
+            { "name": "birthDate", "type": "DatePicker", "label": "Doğum Tarihi", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Doğum tarihi zorunludur" }] },
+            { "name": "customerType", "type": "Select", "label": "Müşteri Tipi", "rules": [{ "required": true, "message": "Müşteri tipi seçiniz" }], "options": [
+              { "label": "Bireysel", "value": "individual" },
+              { "label": "Aday", "value": "prospective" }
+            ] }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "musteri",
+      "title": "Müşteri Bilgileri",
+      "no": "1",
+      "icon": "user",
+      "visible": "values._isNew !== true",
+      "fields": [
+        {
+          "name": "musteriRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "customerNo", "type": "Input", "label": "Müşteri No", "readOnly": true, "className": "mono" },
+            { "name": "campaign", "type": "Select", "label": "Kampanya", "options": [] },
+            { "name": "campaignEndDate", "type": "DatePicker", "label": "Kampanya Sonlanma", "readOnly": true }
+          ]
+        },
+        {
+          "name": "musteriRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "kycLevel", "type": "Input", "label": "KYC Seviyesi", "readOnly": true },
+            { "name": "riskDisplay", "type": "CustomComponent", "component": "IndvRiskDisplay", "label": "Risk Skoru" },
+            { "name": "statusDisplay", "type": "CustomComponent", "component": "IndvStatusDisplay", "label": "Status" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "erisim",
+      "title": "Erişim Bilgileri",
+      "no": "2",
+      "icon": "key",
+      "visible": "values._isNew !== true",
+      "fields": [
+        {
+          "name": "erisimRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "lastLogin", "type": "Input", "label": "Son Login", "readOnly": true, "className": "mono" },
+            { "name": "failedAttempts", "type": "Input", "label": "Başarısız Teşebbüs", "readOnly": true, "className": "mono" },
+            { "name": "device", "type": "Input", "label": "Cihaz", "readOnly": true },
+            { "name": "ipLocation", "type": "Input", "label": "IP / Lokasyon", "readOnly": true, "className": "mono" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "nufus",
+      "title": "Nüfus Bilgileri",
+      "no": "5",
+      "icon": "building",
+      "fields": [
+        {
+          "name": "nufusRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "birthPlace", "type": "Input", "label": "Doğum Yeri", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Doğum yeri zorunludur" }] },
+            { "name": "maritalStatus", "type": "Select", "label": "Medeni Durum", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Medeni durum seçiniz" }], "options": [
+              { "label": "Bekâr", "value": "single" },
+              { "label": "Evli", "value": "married" },
+              { "label": "Boşanmış", "value": "divorced" },
+              { "label": "Dul", "value": "widowed" }
+            ] },
+            { "name": "gender", "type": "Select", "label": "Cinsiyet", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Cinsiyet seçiniz" }], "options": [
+              { "label": "Kadın", "value": "female" },
+              { "label": "Erkek", "value": "male" }
+            ] }
+          ]
+        },
+        {
+          "name": "nufusRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "serialNo", "type": "Input", "label": "Seri / Doküman No", "className": "mono", "placeholder": "A12 N12345", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Seri no zorunludur" }] },
+            { "name": "issueDate", "type": "DatePicker", "label": "Veriliş Tarihi", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Veriliş tarihi zorunludur" }] },
+            { "name": "issuingAuthority", "type": "Input", "label": "Veren Makam", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Veren makam zorunludur" }] }
+          ]
+        },
+        {
+          "name": "nufusRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "validityDate", "type": "DatePicker", "label": "Geçerlilik Tarihi", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Geçerlilik tarihi zorunludur" }] },
+            { "name": "motherName", "type": "Input", "label": "Anne Adı", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Anne adı zorunludur" }] },
+            { "name": "fatherName", "type": "Input", "label": "Baba Adı", "enableRules": "values._kpsLocked !== true", "rules": [{ "required": true, "message": "Baba adı zorunludur" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "detay",
+      "title": "Detay Bilgiler",
+      "no": "6",
+      "icon": "user",
+      "fields": [
+        {
+          "name": "detayRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "maidenName", "type": "Input", "label": "Evlenmeden Önceki Soyadı", "shouldRender": "values.gender === 'female' && values.maritalStatus === 'married'" },
+            { "name": "taxCountry", "type": "Select", "label": "Vergi Ülkesi", "rules": [{ "required": true, "message": "Vergi ülkesi seçiniz" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" },
+              { "label": "🇩🇪 Almanya", "value": "DEU" },
+              { "label": "🇺🇸 ABD", "value": "USA" }
+            ] },
+            { "name": "education", "type": "Select", "label": "Eğitim Durumu", "rules": [{ "required": true, "message": "Eğitim durumu seçiniz" }], "options": [
+              { "label": "İlkokul", "value": "primary" },
+              { "label": "Lise", "value": "highschool" },
+              { "label": "Lisans", "value": "bachelors" },
+              { "label": "Yüksek Lisans", "value": "masters" },
+              { "label": "Doktora / PhD", "value": "phd" }
+            ] }
+          ]
+        },
+        {
+          "name": "detayRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "employment", "type": "Select", "label": "Çalışma Durumu", "rules": [{ "required": true, "message": "Çalışma durumu seçiniz" }], "options": [
+              { "label": "Ücretli", "value": "salaried" },
+              { "label": "Serbest Meslek", "value": "self" },
+              { "label": "Öğrenci", "value": "student" },
+              { "label": "Emekli", "value": "retired" },
+              { "label": "Çalışmıyor", "value": "unemployed" }
+            ] },
+            { "name": "occupation", "type": "Input", "label": "Mesleği", "rules": [{ "required": true, "message": "Meslek zorunludur" }] },
+            { "name": "employer", "type": "Input", "label": "Çalıştığı Kurum" }
+          ]
+        },
+        {
+          "name": "detayRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "language", "type": "Select", "label": "Dil Tercihi", "rules": [{ "required": true, "message": "Dil seçiniz" }], "options": [
+              { "label": "🇹🇷 Türkçe", "value": "tr" },
+              { "label": "🇬🇧 English", "value": "en" },
+              { "label": "🇩🇪 Deutsch", "value": "de" }
+            ] }
+          ]
+        },
+        { "name": "notes", "type": "TextArea", "label": "Notlar", "col": 4, "rows": 2 }
+      ]
+    },
+    {
+      "key": "yabanci",
+      "title": "Yabancı Müşteri",
+      "no": "7",
+      "icon": "globe",
+      "visible": "values._isForeign === true",
+      "fields": [
+        {
+          "name": "yabanciRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "visaType", "type": "Select", "label": "Vize Tipi", "rules": [{ "required": true, "message": "Vize tipi seçiniz" }], "options": [
+              { "label": "Kısa Dönem", "value": "ShortTerm" },
+              { "label": "Uzun Dönem", "value": "LongTerm" }
+            ] },
+            { "name": "visaEndDate", "type": "DatePicker", "label": "Vize Bitiş Tarihi", "rules": [{ "required": true, "message": "Vize bitiş tarihi zorunludur" }] },
+            { "name": "residencePermit", "type": "Input", "label": "Oturum İzni" }
+          ]
+        },
+        {
+          "name": "yabanciRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "birthCountry", "type": "Select", "label": "Doğum Ülkesi", "rules": [{ "required": true, "message": "Doğum ülkesi seçiniz" }], "options": [
+              { "label": "🇩🇪 Almanya", "value": "DEU" },
+              { "label": "🇹🇷 Türkiye", "value": "TUR" }
+            ] },
+            { "name": "residentCountry", "type": "Select", "label": "Yerleşik Ülke", "rules": [{ "required": true, "message": "Yerleşik ülke seçiniz" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" },
+              { "label": "🇩🇪 Almanya", "value": "DEU" }
+            ] }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "banka",
+      "title": "Banka Hesapları",
+      "no": "3",
+      "icon": "wallet",
+      "fields": [
+        { "name": "banks", "type": "CustomComponent", "component": "IndvBankAccountsEditor", "label": "Banka Hesapları", "col": 4 }
+      ]
+    },
+    {
+      "key": "finansal",
+      "title": "Finansal Bilgiler",
+      "no": "4",
+      "icon": "wallet",
+      "visible": "values._isNew !== true && values._isProspect !== true",
+      "fields": [
+        { "name": "wallets", "type": "CustomComponent", "component": "IndvWalletsTable", "label": "Cüzdanlar", "col": 4 }
+      ]
+    },
+    {
+      "key": "adres",
+      "title": "Adresler",
+      "no": "8",
+      "icon": "mail",
+      "fields": [
+        { "name": "addresses", "type": "CustomComponent", "component": "IndvAddressesEditor", "label": "Adresler", "col": 4 }
+      ]
+    },
+    {
+      "key": "iletisim",
+      "title": "İletişim",
+      "no": "9",
+      "icon": "mail",
+      "fields": [
+        { "name": "contacts", "type": "CustomComponent", "component": "IndvContactsEditor", "label": "İletişim Kanalları", "col": 4 }
+      ]
+    },
+    {
+      "key": "limit",
+      "title": "İşlem Limitleri",
+      "no": "10",
+      "visible": "values._isNew !== true && values._isProspect !== true",
+      "fields": [
+        {
+          "name": "limitRow",
+          "type": "Row",
+          "fields": [
+            { "name": "limits.perTx", "type": "InputNumber", "label": "İşlem Limiti", "className": "mono", "min": 0 },
+            { "name": "limits.daily", "type": "InputNumber", "label": "Günlük", "className": "mono", "min": 0 },
+            { "name": "limits.monthly", "type": "InputNumber", "label": "Aylık", "className": "mono", "min": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "belgeler",
+      "title": "Belgeler",
+      "no": "+",
+      "icon": "file",
+      "fields": [
+        { "name": "documents", "type": "CustomComponent", "component": "IndvDocumentsTable", "label": "Belgeler", "col": 4 }
+      ]
+    }
+  ]
+}

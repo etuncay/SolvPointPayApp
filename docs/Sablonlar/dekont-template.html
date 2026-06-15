@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  EPAY / PGpara — PARA TRANSFERİ DEKONT ŞABLONU (Money Transfer Receipt Template)
+  ----------------------------------------------------------------------------
+  Kaynak: Screens_v04.md "Dekont" bölümü + gerçek PGpara dekont örneği.
+  Spec / alan eşlemesi: dekont-sablonu.md
+
+  KULLANIM:
+  - {{...}}        : Veri alanı (rendering motoru işlem verisinden doldurur).
+  - {{t.xxx}}      : Yerelleştirilebilir etiket (TR / EN / AR — müşterinin dil
+                     tercihine göre doldurulur). Çeviri tablosu: dekont-sablonu.md
+  - <!-- OPSİYONEL --> ile işaretli bloklar, ilgili veri varsa render edilir;
+    yoksa tamamen gizlenir (Screens_v04: "Alanlar zorunlu değil opsiyoneldir").
+  - Arapça (AR) için <html dir="rtl"> uygulanır.
+  - Dekont, işlem numarası ile ilişkili olarak üretilir ve PDF'e dönüştürülür.
+  ============================================================================
+-->
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+<meta charset="UTF-8">
+<title>{{t.payment_receipt}} - {{receipt_no}}</title>
+<style>
+  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Arial", "Helvetica", sans-serif;
+    font-size: 10.5px; color: #000; margin: 0; background: #fff;
+  }
+  .receipt { width: 186mm; margin: 0 auto; }
+  table { width: 100%; border-collapse: collapse; }
+  td, th { border: 1px solid #000; padding: 3px 6px; vertical-align: top; }
+  .no-border td, .no-border th { border: none; }
+  .label { font-weight: bold; white-space: nowrap; width: 32%; }
+  .section-title {
+    text-align: center; font-weight: bold; font-size: 12px;
+    background: #f0f0f0; padding: 4px; border: 1px solid #000;
+  }
+  .doc-title {
+    text-align: center; font-weight: bold; font-size: 15px;
+    letter-spacing: 1px; padding: 5px; border: 1px solid #000; border-top: none;
+  }
+  .header { display: flex; border: 1px solid #000; }
+  .header > div { padding: 6px 8px; }
+  .header .h-company { width: 38%; border-right: 1px solid #000; }
+  .header .h-logo { width: 30%; text-align: center; display: flex;
+    align-items: center; justify-content: center; }
+  .header .h-tax { width: 32%; border-left: 1px solid #000; }
+  .h-company .name { font-weight: bold; font-size: 11px; }
+  .logo-text { font-weight: bold; font-size: 22px; color: #5a3a8e; }
+  .half { width: 50%; }
+  .legal-block { display: flex; border: 1px solid #000; border-top: none; }
+  .legal-text { width: 64%; padding: 6px 8px; font-size: 7.5px;
+    line-height: 1.25; text-align: justify; border-right: 1px solid #000; }
+  .legal-text .lh { font-weight: bold; font-size: 8.5px; display: block;
+    margin-bottom: 2px; }
+  .qr-box { width: 18%; display: flex; align-items: center;
+    justify-content: center; border-right: 1px solid #000; padding: 4px; }
+  .qr-box img { max-width: 100%; }
+  .sign-box { width: 18%; padding: 6px 8px; }
+  .sign-box .sl { font-weight: bold; }
+  .sign-area { height: 70px; }
+  .mt { margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="receipt">
+
+  <!-- ===================== ÜST BİLGİ / HEADER ===================== -->
+  <div class="header">
+    <div class="h-company">
+      <div class="name">{{company_name}}</div>
+      <div>{{company_email}}</div>
+      <div>{{company_website}}</div>
+    </div>
+    <div class="h-logo">
+      <!-- Logo görseli; yoksa marka adı metni gösterilir -->
+      <img src="{{company_logo_url}}" alt="{{company_brand}}"
+           onerror="this.outerHTML='<span class=&quot;logo-text&quot;>{{company_brand}}</span>'">
+    </div>
+    <div class="h-tax">
+      <div>{{tax_office_name}} / {{tax_no}}</div>
+      <div>{{company_address}}</div>
+      <div>{{company_phone}}</div>
+    </div>
+  </div>
+
+  <!-- ===================== BAŞLIK / TITLE ===================== -->
+  <div class="doc-title">{{t.payment_receipt}}</div>
+
+  <!-- ===================== META SATIRLARI ===================== -->
+  <table>
+    <tr>
+      <td class="label">{{t.date_time}}</td><td>{{date_time}}</td>
+      <td class="label">{{t.receipt_no}}</td><td>{{receipt_no}}</td>
+      <td class="label">{{t.partner_ref_no}}</td><td>{{partner_ref_no}}</td>
+    </tr>
+    <tr>
+      <td class="label">{{t.sending_point}}</td>
+      <td colspan="5">{{sending_point_name}}</td>
+    </tr>
+  </table>
+
+  <!-- =============== ALICI & GÖNDEREN BİLGİLERİ =============== -->
+  <table class="mt">
+    <tr>
+      <td class="half section-title">{{t.receiver_information}}</td>
+      <td class="half section-title">{{t.sender_information}}</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <!-- ALICI -->
+      <td class="label">{{t.full_name}}</td><td>{{receiver_full_name}}</td>
+      <!-- GÖNDEREN -->
+      <td class="label">{{t.full_name}}</td><td>{{sender_full_name}}</td>
+    </tr>
+    <tr>
+      <td class="label">{{t.identity_no}}</td><td>{{receiver_identity_no}}</td>
+      <td class="label">{{t.tel}}</td><td>{{sender_tel}}</td>
+    </tr>
+    <tr>
+      <td class="label">{{t.tel}}</td><td>{{receiver_tel}}</td>
+      <td class="label">{{t.relation}}</td><td>{{sender_relation}}</td>
+    </tr>
+    <tr>
+      <td class="label">{{t.address}}</td><td>{{receiver_address}}</td>
+      <td class="label">{{t.reason}}</td><td>{{sender_reason}}</td>
+    </tr>
+  </table>
+
+  <!-- ===================== ÖDEME BİLGİLERİ ===================== -->
+  <table class="mt">
+    <tr><td class="section-title">{{t.payment_information}}</td></tr>
+  </table>
+  <table>
+    <tr><td class="label">{{t.country}}</td><td>{{payment_country}}</td></tr>
+    <tr><td class="label">{{t.city}}</td><td>{{payment_city}}</td></tr>
+    <tr>
+      <td class="label">{{t.payment_amount}}</td>
+      <td>{{payment_amount}} ( {{payment_amount_words}} )</td>
+    </tr>
+    <tr><td class="label">{{t.currency}}</td><td>{{payment_currency}}</td></tr>
+  </table>
+
+  <!-- ============================================================
+       OPSİYONEL: İŞLEM VE TUTARLAR (ücret / kur / net tutar)
+       Screens_v04 "Dekont" bölümündeki ek alanlar. Yalnızca ilgili
+       veri varsa render edilir (ör. ücretli veya döviz/çapraz işlem).
+       ============================================================ -->
+  <!-- {{#if has_transaction_details}} -->
+  <table class="mt">
+    <tr><td class="section-title" colspan="2">{{t.transaction_details}}</td></tr>
+  </table>
+  <table>
+    <tr><td class="label">{{t.transaction_type}}</td><td>{{transaction_type}}</td></tr>
+    <tr><td class="label">{{t.payment_purpose}}</td><td>{{payment_purpose}}</td></tr>
+    <tr><td class="label">{{t.iban}}</td><td>{{iban}}</td></tr>
+    <tr><td class="label">{{t.sent_amount}}</td><td>{{sent_amount}} {{source_currency}}</td></tr>
+    <tr><td class="label">{{t.fixed_fee}}</td><td>{{fixed_fee}}</td></tr>
+    <tr><td class="label">{{t.proportional_fee}}</td><td>{{proportional_fee}}</td></tr>
+    <tr><td class="label">{{t.total_fee}}</td><td>{{total_fee}}</td></tr>
+    <tr><td class="label">{{t.total_paid}}</td><td>{{total_paid}}</td></tr>
+    <tr><td class="label">{{t.exchange_rate}}</td><td>{{exchange_rate}}</td></tr>
+    <tr><td class="label">{{t.target_currency}}</td><td>{{target_currency}}</td></tr>
+    <tr><td class="label">{{t.net_amount}}</td><td>{{net_amount}}</td></tr>
+    <tr><td class="label">{{t.description}}</td><td>{{transaction_description}}</td></tr>
+  </table>
+  <!-- {{/if}} -->
+
+  <!-- ============= YASAL METİN + QR KOD + İMZA ============= -->
+  <div class="legal-block">
+    <div class="legal-text">
+      <span class="lh">{{t.legal_heading}}</span>
+      <!-- Yasal metin versiyonlu/parametriktir; Uyum-Hukuk biriminin
+           yönettiği metin deposundan müşterinin diline göre gelir. -->
+      {{legal_text}}
+    </div>
+    <div class="qr-box">
+      <!-- QR, işlem anında geçerli sözleşme/politika metninin
+           VERSİYONLU ve DEĞİŞMEZ URL'sini işaret eder. -->
+      <img src="{{qr_code_url}}" alt="QR">
+    </div>
+    <div class="sign-box">
+      <div class="sl">{{t.signature}}</div>
+      <div class="sign-area">{{signature}}</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

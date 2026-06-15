@@ -1,0 +1,101 @@
+{
+  "title": "Hesap Hareketleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 15,
+    "pageSizeOptions": [10, 15, 25, 50, 100]
+  },
+  "search": {
+    "placeholder": "İşlem no, referans, karşı taraf ara…",
+    "keys": ["transactionNo", "referenceNo", "counterpartyName", "counterpartyNo"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "direction",
+      "label": "Yön",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Para Girişi", "value": "Inflow" },
+        { "label": "Para Çıkışı", "value": "Outflow" }
+      ]
+    },
+    {
+      "key": "transactionType",
+      "label": "İşlem Türü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Kişiye Transfer", "value": "WalletToPerson" },
+        { "label": "Banka Hesabına", "value": "WalletToBankAccount" },
+        { "label": "Cüzdan Yükleme", "value": "WalletTopUp" },
+        { "label": "Cüzdandan Para Çekme", "value": "WalletWithdrawal" },
+        { "label": "Para Yatırma", "value": "WalletDeposit" },
+        { "label": "Dahili Transfer", "value": "InternalTransfer" },
+        { "label": "Uluslararası Transfer", "value": "InternationalTransfer" }
+      ]
+    },
+    {
+      "key": "walletId",
+      "label": "Cüzdan",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "CZ-0009001 · Avans TRY", "value": "9001" },
+        { "label": "CZ-0009002 · Avans USD", "value": "9002" },
+        { "label": "CZ-0009003 · Komisyon TRY", "value": "9003" },
+        { "label": "CZ-0009004 · Komisyon EUR", "value": "9004" }
+      ]
+    },
+    {
+      "key": "counterparty",
+      "label": "Karşı Taraf",
+      "type": "text",
+      "placeholder": "Ad / No ara…",
+      "span": 3
+    },
+    {
+      "key": "dateFrom",
+      "label": "Tarih (başlangıç)",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "dateTo",
+      "label": "Tarih (bitiş)",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "amountMin",
+      "label": "Min Tutar",
+      "type": "text",
+      "placeholder": "0",
+      "span": 3
+    },
+    {
+      "key": "amountMax",
+      "label": "Max Tutar",
+      "type": "text",
+      "placeholder": "—",
+      "span": 3
+    }
+  ],
+  "columns": [
+    { "key": "transactionNo", "title": "İşlem No", "dataIndex": "transactionNo", "sortable": true, "mono": true, "width": 130 },
+    { "key": "createdAt", "title": "Tarih", "dataIndex": "createdAt", "format": "date", "sortable": true, "width": 120 },
+    { "key": "direction", "title": "Yön", "dataIndex": "direction", "render": "renderDirection", "width": 130 },
+    { "key": "walletNo", "title": "Cüzdan", "dataIndex": "walletNo", "mono": true, "width": 130 },
+    { "key": "counterpartyNo", "title": "Karşı Taraf No", "dataIndex": "counterpartyNo", "mono": true, "width": 130 },
+    { "key": "counterpartyName", "title": "Karşı Taraf", "dataIndex": "counterpartyName", "minWidth": 150 },
+    { "key": "counterpartyAccount", "title": "Karşı Taraf Hesabı", "dataIndex": "counterpartyAccount", "mono": true, "minWidth": 180 },
+    { "key": "referenceNo", "title": "Referans No", "dataIndex": "referenceNo", "mono": true, "width": 130 },
+    { "key": "transactionType", "title": "İşlem Türü", "dataIndex": "transactionType", "render": "renderTxType", "minWidth": 160 },
+    { "key": "currency", "title": "Para Birimi", "dataIndex": "currency", "width": 90, "align": "center" },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "format": "currency", "align": "right", "sortable": true, "mono": true, "width": 130 },
+    { "key": "postBalance", "title": "Son Bakiye", "dataIndex": "postBalance", "format": "currency", "align": "right", "mono": true, "width": 130 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderStatus", "width": 130 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 140 }
+  ]
+}

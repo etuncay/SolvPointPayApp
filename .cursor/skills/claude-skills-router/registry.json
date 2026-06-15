@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "sourceRoot": ".cursor/skills",
+  "entries": [
+    {
+      "id": "prompt-refinement",
+      "priority": 105,
+      "match": "prompt geliştir|refine prompt|netleştir|prompt coach|geliştirilmiş prompt",
+      "skillPath": ".cursor/skills/prompt-refinement/SKILL.md"
+    },
+    {
+      "id": "project-intake",
+      "priority": 100,
+      "match": "greenfield|proje başlat|agent oluştur|yeni proje|sıfırdan|from scratch",
+      "skillPath": ".cursor/skills/project-intake/SKILL.md"
+    },
+    {
+      "id": "module-scaffolder",
+      "priority": 95,
+      "match": "yeni modül|yeni ekran|ekran oluştur|modül oluştur|scaffold|feature ekle|feature oluştur|sayfası yap|listesi ekle|yeni feature|new module|new screen",
+      "skillPath": ".cursor/skills/module-scaffolder/SKILL.md"
+    },
+    {
+      "id": "focused-fix",
+      "priority": 90,
+      "match": "make .* work|fix (the )?.* feature|broken|debug.*end-to-end|focus on|modül bozuk|uçtan uca|kırık|çalışmıyor",
+      "skillPath": ".cursor/skills/focused-fix/SKILL.md"
+    },
+    {
+      "id": "implementation-plan",
+      "priority": 90,
+      "match": "plan oluştur|uygulama plan|implementation plan|plan yap",
+      "skillPath": ".cursor/skills/implementation-plan/SKILL.md"
+    },
+    {
+      "id": "screen-test-protocol",
+      "priority": 88,
+      "match": "ekran testi|ekran test|screen test|test dökümanı|test dokumani|test docs|smoke test|user_test|uçtan uca test|e2e ekran",
+      "skillPath": ".cursor/skills/screen-test-protocol/SKILL.md"
+    },
+    {
+      "id": "design-intake",
+      "priority": 85,
+      "match": "tasarım|mockup|prototype|wireframe|ui oluştur|redesign|güzel yap|design",
+      "skillPath": ".cursor/skills/design-intake/SKILL.md"
+    },
+    {
+      "id": "api-design-reviewer",
+      "priority": 80,
+      "match": "api design|openapi|swagger|endpoint|rest api|versioning|breaking change|kontrat|sözleşme",
+      "skillPath": ".cursor/skills/api-design-reviewer/SKILL.md"
+    },
+    {
+      "id": "dependency-auditor",
+      "priority": 80,
+      "match": "cve|vulnerability|dependency audit|license conflict|transitive|npm audit|pnpm audit|paket güvenlik|bağımlılık|lisans",
+      "skillPath": ".cursor/skills/dependency-auditor/SKILL.md"
+    },
+    {
+      "id": "ci-cd-pipeline-builder",
+      "priority": 75,
+      "match": "ci/cd|pipeline|github actions|gitlab ci|deploy workflow|release pipeline|build pipeline|workflow yml",
+      "skillPath": ".cursor/skills/ci-cd-pipeline-builder/SKILL.md"
+    },
+    {
+      "id": "codebase-onboarding",
+      "priority": 70,
+      "match": "onboarding|codebase overview|architecture overview|repo nasıl çalışıyor|sistemi anlat|projeyi tanı",
+      "skillPath": ".cursor/skills/codebase-onboarding/SKILL.md"
+    },
+    {
+      "id": "database-schema-designer",
+      "priority": 70,
+      "match": "erd|entity relationship|schema design|normalize|foreign key|schema migration|veritabanı migration|veritabanı şema|ilişki|normalizasyon",
+      "skillPath": ".cursor/skills/database-schema-designer/SKILL.md"
+    },
+    {
+      "id": "senior-secops",
+      "priority": 70,
+      "match": "security scan|threat model|pentest|vuln management|hardening|secure baseline|güvenlik taraması|tehdit modeli|zafiyet",
+      "skillPath": ".cursor/skills/senior-secops/SKILL.md"
+    }
+  ]
+}

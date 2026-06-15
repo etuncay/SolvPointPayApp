@@ -1,0 +1,30 @@
+{
+  "fields": [
+    {
+      "name": "channelRow",
+      "type": "Row",
+      "fields": [
+        {
+          "name": "channel",
+          "type": "Select",
+          "label": "Kanal",
+          "col": 2,
+          "defaultValue": "email",
+          "options": [
+            { "label": "E-posta", "value": "email" },
+            { "label": "Telefon", "value": "phone" }
+          ],
+          "rules": [{ "required": true }]
+        },
+        {
+          "name": "value",
+          "type": "Input",
+          "label": "Değer",
+          "col": 2,
+          "placeholder": "ad@firma.com",
+          "rules": [{ "required": true, "message": "Değer zorunludur" }]
+        }
+      ]
+    }
+  ]
+}

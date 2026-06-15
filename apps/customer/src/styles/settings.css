@@ -1,0 +1,259 @@
+/* Ayarlar — çok bölümlü hesap sayfası */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.settings-nav {
+  padding: 8px;
+  position: sticky;
+  top: 92px;
+}
+
+.settings-nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+
+.settings-nav-btn:hover {
+  background: var(--bg-2);
+}
+
+.settings-nav-btn.is-active {
+  background: var(--brand-soft);
+  color: var(--brand-700);
+}
+
+.settings-card {
+  margin-bottom: 18px;
+}
+
+.settings-card-head {
+  margin-bottom: 18px;
+}
+
+.settings-card-desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.settings-profile-summary {
+  margin-bottom: 18px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.settings-profile-summary .avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  font-size: 24px;
+}
+
+.settings-profile-name {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.settings-profile-meta {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-top: 3px;
+}
+
+.settings-kyc-pill {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-pref-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-pref-row:last-child {
+  border-bottom: none;
+}
+
+.settings-pref-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--brand-soft);
+  color: var(--brand-600);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.settings-pref-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-pref-title {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 14.5px;
+}
+
+.settings-pref-desc {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+
+.settings-toggle {
+  width: 46px;
+  height: 27px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.18s;
+  background: var(--line-strong);
+}
+
+.settings-toggle.is-on {
+  background: var(--brand);
+}
+
+.settings-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.18s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.settings-toggle.is-on .settings-toggle-knob {
+  left: 22px;
+}
+
+.settings-segment {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-2);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.settings-segment-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+}
+
+.settings-segment-btn.is-active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-failed-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-failed-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--neg-soft);
+  color: var(--neg);
+  display: grid;
+  place-items: center;
+}
+
+.settings-actions-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.settings-security-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+}
+
+.settings-notif-threshold {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-notif-threshold .input-affix {
+  width: 130px;
+}
+
+.settings-notif-threshold .input {
+  padding: 8px 10px 8px 28px;
+}
+
+.settings-receipts-table .tbl th:last-child,
+.settings-receipts-table .tbl td:last-child {
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-nav {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .settings-nav-btn {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 140px;
+  }
+}

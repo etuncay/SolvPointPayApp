@@ -1,0 +1,40 @@
+{
+  "title": "Banka Mutabakatı",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Referans veya banka ara…",
+    "keys": ["referenceNo", "bank", "caseNo"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Matched", "value": "Matched" },
+      { "label": "Unmatched", "value": "Unmatched" },
+      { "label": "PendingReview", "value": "PendingReview" },
+      { "label": "Adjusted", "value": "Adjusted" }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "bank", "label": "Banka", "type": "select", "span": 4, "options": [{ "label": "Tümü", "value": "all" }] },
+    { "key": "reconciliationFrom", "label": "Mutabakat (Baş)", "type": "date", "span": 3 },
+    { "key": "reconciliationTo", "label": "Mutabakat (Bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "bank", "title": "Banka", "dataIndex": "bank", "sortable": true, "width": 150, "render": "renderWithWarn" },
+    { "key": "transactionDate", "title": "İşlem Tarihi", "dataIndex": "transactionDate", "sortable": true, "width": 140, "render": "renderMonoWithWarn" },
+    { "key": "transactionType", "title": "İşlem Tipi", "dataIndex": "transactionType", "sortable": true, "width": 140, "render": "renderTxTypeWithWarn" },
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "sortable": true, "width": 140, "render": "renderMonoWithWarn" },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "sortable": true, "width": 130, "render": "renderAmountWithWarn" },
+    { "key": "bankAmount", "title": "Banka Tutarı", "dataIndex": "bankAmount", "sortable": true, "width": 130, "render": "renderBankAmountWithWarn" },
+    { "key": "reconciliationDate", "title": "Mutabakat Tarihi", "dataIndex": "reconciliationDate", "sortable": true, "width": 140, "render": "renderSoftMonoWithWarn" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 130, "render": "renderStatusWithWarn" },
+    { "key": "caseNo", "title": "Talep", "dataIndex": "caseNo", "sortable": true, "width": 120, "render": "renderCaseWithWarn" }
+  ]
+}

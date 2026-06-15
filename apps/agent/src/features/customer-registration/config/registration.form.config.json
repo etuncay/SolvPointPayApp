@@ -1,0 +1,232 @@
+{
+  "navLayout": "top",
+  "tabs": [
+    {
+      "key": "customer-info",
+      "title": "Müşteri Bilgileri",
+      "fields": [
+        {
+          "name": "identityRow",
+          "type": "Row",
+          "fields": [
+            { "name": "firstName", "type": "Input", "label": "Ad", "col": 2, "placeholder": "Adı", "rules": [{ "required": true, "message": "Ad zorunludur" }] },
+            { "name": "lastName", "type": "Input", "label": "Soyad", "col": 2, "placeholder": "Soyadı", "rules": [{ "required": true, "message": "Soyad zorunludur" }] }
+          ]
+        },
+        {
+          "name": "nationality",
+          "type": "Select",
+          "label": "Uyruk",
+          "col": 2,
+          "defaultValue": "TUR",
+          "enableRules": "values._pendingLock !== true",
+          "options": [
+            { "label": "Türkiye", "value": "TUR" },
+            { "label": "Almanya", "value": "DEU" },
+            { "label": "Birleşik Krallık", "value": "GBR" },
+            { "label": "Suriye", "value": "SYR" },
+            { "label": "ABD", "value": "USA" }
+          ],
+          "rules": [{ "required": true, "message": "Uyruk seçiniz" }]
+        },
+        {
+          "name": "idTypeRow",
+          "type": "Row",
+          "fields": [
+            {
+              "name": "idType",
+              "type": "Select",
+              "label": "Kimlik Tipi",
+              "col": 2,
+              "defaultValue": "TCKN",
+              "enableRules": "values.nationality !== \"TUR\"",
+              "hint": "TUR uyruğunda Kimlik Tipi TC Kimlik No olarak kilitlidir.",
+              "options": [
+                { "label": "TC Kimlik No", "value": "TCKN" },
+                { "label": "Pasaport", "value": "PASSPORT" },
+                { "label": "İkamet İzni", "value": "RES_PERMIT" }
+              ],
+              "rules": [{ "required": true, "message": "Kimlik tipi seçiniz" }]
+            },
+            { "name": "idNo", "type": "Input", "label": "Kimlik No", "col": 2, "placeholder": "Kimlik / pasaport no", "rules": [{ "required": true, "message": "Kimlik no zorunludur" }, { "minLength": 5, "message": "En az 5 karakter" }] }
+          ]
+        },
+        { "name": "birthDate", "type": "DatePicker", "label": "Doğum Tarihi", "col": 2, "rules": [{ "required": true, "message": "Doğum tarihi zorunludur" }] },
+        { "name": "isSuspicious", "type": "Switch", "label": "Şüpheli İşlem", "col": 2, "placeholder": "Şüpheli olarak işaretle", "defaultValue": false },
+        { "name": "documents", "type": "CustomComponent", "component": "DocumentUploads", "label": "Belge Yükle (Kimlik ön/arka zorunlu)", "col": 4 }
+      ]
+    },
+    {
+      "key": "civil-registry",
+      "title": "Nüfus Bilgileri",
+      "locked": "!(values.documents && values.documents.identityFront && values.documents.identityBack)",
+      "lockedMessage": "Kimlik belgesi (ön/arka) yüklenmeden bu sekmeye geçilemez.",
+      "fields": [
+        { "name": "birthPlace", "type": "Input", "label": "Doğum Yeri", "col": 2, "enableRules": "values._ocrLocked !== true", "rules": [{ "required": true, "message": "Doğum yeri zorunludur" }] },
+        {
+          "name": "maritalStatus",
+          "type": "Select",
+          "label": "Medeni Durum",
+          "col": 2,
+          "enableRules": "values._ocrLocked !== true",
+          "options": [
+            { "label": "Bekâr", "value": "single" },
+            { "label": "Evli", "value": "married" },
+            { "label": "Boşanmış", "value": "divorced" },
+            { "label": "Dul", "value": "widowed" }
+          ],
+          "rules": [{ "required": true, "message": "Medeni durum seçiniz" }]
+        },
+        {
+          "name": "civilRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "serialNo", "type": "Input", "label": "Seri No", "col": 2, "enableRules": "values._ocrLocked !== true" },
+            { "name": "issueDate", "type": "DatePicker", "label": "Veriliş Tarihi", "col": 2, "enableRules": "values._ocrLocked !== true" }
+          ]
+        },
+        {
+          "name": "civilRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "issuingAuthority", "type": "Input", "label": "Veren Makam", "col": 2, "enableRules": "values._ocrLocked !== true" },
+            { "name": "validityDate", "type": "DatePicker", "label": "Geçerlilik Tarihi", "col": 2, "enableRules": "values._ocrLocked !== true" }
+          ]
+        },
+        {
+          "name": "civilRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "motherName", "type": "Input", "label": "Anne Adı", "col": 2, "enableRules": "values._ocrLocked !== true", "rules": [{ "required": true, "message": "Anne adı zorunludur" }] },
+            { "name": "fatherName", "type": "Input", "label": "Baba Adı", "col": 2, "enableRules": "values._ocrLocked !== true", "rules": [{ "required": true, "message": "Baba adı zorunludur" }] }
+          ]
+        },
+        {
+          "name": "gender",
+          "type": "RadioGroup",
+          "label": "Cinsiyet",
+          "col": 4,
+          "enableRules": "values._ocrLocked !== true",
+          "options": [
+            { "label": "Erkek", "value": "male" },
+            { "label": "Kadın", "value": "female" }
+          ],
+          "rules": [{ "required": true, "message": "Cinsiyet seçiniz" }]
+        },
+        { "name": "detailDivider", "type": "Divider", "shouldRender": "values._knownCustomer !== true" },
+        {
+          "name": "detailRow1",
+          "type": "Row",
+          "shouldRender": "values._knownCustomer !== true",
+          "fields": [
+            { "name": "maidenName", "type": "Input", "label": "Evlenmeden Önceki Soyadı", "col": 2 },
+            { "name": "taxCountry", "type": "Input", "label": "Vergi Ülkesi", "col": 2, "defaultValue": "TUR" }
+          ]
+        },
+        {
+          "name": "detailRow2",
+          "type": "Row",
+          "shouldRender": "values._knownCustomer !== true",
+          "fields": [
+            {
+              "name": "educationLevel",
+              "type": "Select",
+              "label": "Eğitim Durumu",
+              "col": 2,
+              "options": [
+                { "label": "İlköğretim", "value": "primary" },
+                { "label": "Lise", "value": "highschool" },
+                { "label": "Üniversite", "value": "university" },
+                { "label": "Lisansüstü", "value": "postgrad" }
+              ]
+            },
+            {
+              "name": "employmentStatus",
+              "type": "Select",
+              "label": "Çalışma Durumu",
+              "col": 2,
+              "options": [
+                { "label": "Ücretli", "value": "employed" },
+                { "label": "Serbest Meslek", "value": "self_employed" },
+                { "label": "İşsiz", "value": "unemployed" },
+                { "label": "Öğrenci", "value": "student" },
+                { "label": "Emekli", "value": "retired" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "detailRow3",
+          "type": "Row",
+          "shouldRender": "values._knownCustomer !== true",
+          "fields": [
+            { "name": "occupation", "type": "Input", "label": "Mesleği", "col": 2 },
+            { "name": "employer", "type": "Input", "label": "Çalıştığı Kurum", "col": 2 }
+          ]
+        },
+        {
+          "name": "language",
+          "type": "Select",
+          "label": "Dil Tercihi",
+          "col": 2,
+          "defaultValue": "tr",
+          "shouldRender": "values._knownCustomer !== true",
+          "options": [
+            { "label": "Türkçe", "value": "tr" },
+            { "label": "İngilizce", "value": "en" },
+            { "label": "Arapça", "value": "ar" }
+          ]
+        },
+        { "name": "notes", "type": "TextArea", "label": "Notlar", "col": 4, "rows": 2, "shouldRender": "values._knownCustomer !== true" },
+        { "name": "foreignDivider", "type": "Divider", "shouldRender": "values.nationality !== \"TUR\"" },
+        {
+          "name": "foreignRow1",
+          "type": "Row",
+          "shouldRender": "values.nationality !== \"TUR\"",
+          "fields": [
+            { "name": "visaType", "type": "Select", "label": "Vize Tipi", "col": 2, "options": [
+              { "label": "Turistik", "value": "tourist" },
+              { "label": "Çalışma", "value": "work" },
+              { "label": "Öğrenci", "value": "student" },
+              { "label": "Oturum", "value": "residence" }
+            ] },
+            { "name": "visaExpiry", "type": "DatePicker", "label": "Vize Bitiş Tarihi", "col": 2 }
+          ]
+        },
+        {
+          "name": "foreignRow2",
+          "type": "Row",
+          "shouldRender": "values.nationality !== \"TUR\"",
+          "fields": [
+            { "name": "residencePermitNo", "type": "Input", "label": "Oturum İzni No", "col": 2 },
+            { "name": "residencePermitExpiry", "type": "DatePicker", "label": "Oturum İzni Bitiş Tarihi", "col": 2 }
+          ]
+        },
+        {
+          "name": "foreignRow3",
+          "type": "Row",
+          "shouldRender": "values.nationality !== \"TUR\"",
+          "fields": [
+            { "name": "birthCountry", "type": "Input", "label": "Doğum Ülkesi", "col": 2 },
+            { "name": "residenceCountry", "type": "Input", "label": "Yerleşik Olduğu Ülke", "col": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "contact",
+      "title": "İletişim Bilgileri",
+      "fields": [
+        { "name": "addresses", "type": "CustomComponent", "component": "AddressRepeater", "label": "Adresler", "col": 4, "enableRules": "values._pendingLock !== true" },
+        { "name": "contacts", "type": "CustomComponent", "component": "ContactRepeater", "label": "İletişim Kanalları", "col": 4, "enableRules": "values._pendingLock !== true" }
+      ]
+    },
+    {
+      "key": "documents",
+      "title": "Yüklü Belgeler",
+      "fields": [
+        { "name": "documents", "type": "CustomComponent", "component": "DocumentList", "label": "Müşteri Belgeleri", "col": 4, "readOnly": true }
+      ]
+    }
+  ]
+}

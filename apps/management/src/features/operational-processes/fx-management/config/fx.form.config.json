@@ -1,0 +1,37 @@
+{
+  "navLayout": "top",
+  "panels": [
+    {
+      "key": "margins",
+      "title": "Marj Ayarları",
+      "no": "1",
+      "fields": [
+        { "name": "marginSettings", "type": "CustomComponent", "component": "MarginSettingsPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "rates",
+      "title": "Güncel Kurlar",
+      "no": "2",
+      "fields": [
+        { "name": "rateInfo", "type": "CustomComponent", "component": "RateInfoPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "margin_hist",
+      "title": "Marj Geçmişi",
+      "no": "3",
+      "fields": [
+        { "name": "marginHistory", "type": "CustomComponent", "component": "MarginHistoryPanel", "col": 4 }
+      ]
+    },
+    {
+      "key": "rate_hist",
+      "title": "Kur Geçmişi",
+      "no": "4",
+      "fields": [
+        { "name": "rateHistory", "type": "CustomComponent", "component": "RateHistoryPanel", "col": 4 }
+      ]
+    }
+  ]
+}

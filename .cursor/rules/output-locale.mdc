@@ -1,0 +1,10 @@
+---
+description: Locale rules merged into core.mdc. Full reference on demand.
+alwaysApply: false
+---
+
+# Output locale (stub)
+
+**Canonical:** [core.mdc](core.mdc) — locale table inline.
+
+Full reference: [output-locale.md](../plans/_shared/output-locale.md) and [project.defaults.yaml](../config/project.defaults.yaml) `locale.*`.

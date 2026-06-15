@@ -1,0 +1,68 @@
+{
+  "title": "İşlem Hareketleri",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [20, 50, 100]
+  },
+  "search": {
+    "placeholder": "İşlem no, referans, gönderen, alıcı, IBAN…",
+    "keys": ["transactionNo", "referenceNo", "senderName", "receiverName", "iban"]
+  },
+  "hideColumnFilters": true,
+  "tabs": [
+    { "key": "all", "title": "Tümü", "countKey": "countAll" },
+    { "key": "Completed", "title": "Tamamlandı", "filters": { "status": "Completed" }, "countKey": "countCompleted" },
+    { "key": "Pending", "title": "Bekliyor", "filters": { "status": "Pending" }, "countKey": "countPending" },
+    { "key": "Sent", "title": "Gönderildi", "filters": { "status": "Sent" }, "countKey": "countSent" },
+    { "key": "OnHold", "title": "Beklemede", "filters": { "status": "OnHold" }, "countKey": "countOnHold" },
+    { "key": "Rejected", "title": "Reddedildi", "filters": { "status": "Rejected" }, "countKey": "countRejected" }
+  ],
+  "advancedFilters": [
+    { "key": "transactionNo", "label": "İşlem Numarası", "type": "text", "placeholder": "TX-…", "span": 3 },
+    {
+      "key": "transactionType",
+      "label": "İşlem Türü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "6.1 Kendi Cüzdanına", "value": "WalletTopUp" },
+        { "label": "6.2 Banka Hesabına", "value": "WalletToBankAccount" },
+        { "label": "6.3 Kişiye", "value": "WalletToPerson" },
+        { "label": "6.4 Yurt Dışına", "value": "InternationalTransfer" },
+        { "label": "5 Para Çekme", "value": "WalletWithdrawal" }
+      ]
+    },
+    {
+      "key": "agentRole",
+      "label": "Temsilci Rolü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Gönderen Temsilcisi", "value": "SenderAgent" },
+        { "label": "Alıcı Temsilcisi", "value": "ReceiverAgent" }
+      ]
+    },
+    { "key": "dateFrom", "label": "Tarih (başlangıç)", "type": "date", "span": 3 },
+    { "key": "dateTo", "label": "Tarih (bitiş)", "type": "date", "span": 3 },
+    { "key": "amountMin", "label": "Min Tutar", "type": "text", "placeholder": "0", "span": 3 },
+    { "key": "amountMax", "label": "Max Tutar", "type": "text", "placeholder": "—", "span": 3 },
+    { "key": "sender", "label": "Gönderen", "type": "text", "placeholder": "Ad / Unvan ara…", "span": 3 },
+    { "key": "receiver", "label": "Alıcı", "type": "text", "placeholder": "Ad / Unvan ara…", "span": 3 }
+  ],
+  "columns": [
+    { "key": "transactionNo", "title": "İşlem No", "dataIndex": "transactionNo", "sortable": true, "mono": true, "width": 130 },
+    { "key": "createdAt", "title": "Tarih", "dataIndex": "createdAt", "render": "renderDate", "sortable": true, "width": 168 },
+    { "key": "senderName", "title": "Gönderen", "dataIndex": "senderName", "render": "renderSender", "minWidth": 168 },
+    { "key": "receiverName", "title": "Alıcı", "dataIndex": "receiverName", "render": "renderReceiver", "minWidth": 168 },
+    { "key": "iban", "title": "IBAN", "dataIndex": "iban", "render": "renderIban", "minWidth": 160 },
+    { "key": "transactionType", "title": "İşlem Türü", "dataIndex": "transactionType", "render": "renderTxType", "minWidth": 150 },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "render": "renderAmount", "align": "right", "sortable": true, "width": 130 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 120 },
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "mono": true, "width": 120 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderStatus", "width": 130 },
+    { "key": "agentRole", "title": "Rol", "dataIndex": "agentRole", "render": "renderAgentRole", "width": 120 },
+    { "key": "totalRevenueTry", "title": "Gelir", "dataIndex": "totalRevenueTry", "render": "renderRevenue", "align": "right", "width": 88 }
+  ]
+}

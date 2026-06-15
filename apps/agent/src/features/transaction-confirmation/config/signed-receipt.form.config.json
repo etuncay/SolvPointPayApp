@@ -1,0 +1,21 @@
+{
+  "fields": [
+    {
+      "name": "printAction",
+      "type": "CustomComponent",
+      "component": "SignedReceiptPrint",
+      "col": 4
+    },
+    {
+      "name": "signedFile",
+      "type": "Upload",
+      "label": "İmzalı dekont",
+      "col": 4,
+      "accept": ".pdf,.jpg,.jpeg,.png",
+      "rules": [{ "required": true, "message": "Dosya seçin" }]
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [{ "key": "submit", "label": "Yükle", "variant": "primary", "icon": "check" }]
+  }
+}

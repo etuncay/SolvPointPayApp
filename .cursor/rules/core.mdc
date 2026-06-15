@@ -1,0 +1,27 @@
+---
+description: Always-on discipline, locale, and lazy intake pointer. Token-conscious single rule.
+alwaysApply: true
+---
+
+# Core agent rules
+
+## Discipline
+
+Think before coding; state assumptions. Minimum code; surgical diffs; match existing style. Verify fixes; UI per [verification.md](../plans/_shared/verification.md) when brief requires. Git: no commit/push unless asked. Plan mode: plan read-only until approved.
+
+## Locale
+
+| Artifact | Language |
+|----------|----------|
+| Chat | config `locale.chat` in [project.defaults.yaml](../config/project.defaults.yaml); user prompt overrides |
+| Plans / briefs | config `locale.plan` (default English) |
+| AskQuestion labels | config `locale.ask_question_labels` |
+| Code + JSON keys | English |
+
+## Prompt refinement (lazy)
+
+Vague greenfield/plan/design/scaffold prompts → read [prompt-refinement/SKILL.md](../skills/prompt-refinement/SKILL.md) when hook routes `[route:prompt-refinement]`. Present structured prompt, get approval, then continue. Skip for implement-plan, fix/refactor, `skip refinement`, or `skip intake`. Config: `intake.prompt_refinement` in [project.defaults.yaml](../config/project.defaults.yaml).
+
+## Intake (lazy)
+
+Greenfield/plan/design/scaffold without brief → read [project-intake/SKILL.md](../skills/project-intake/SKILL.md) when hook routes `[route:…]`. Skip for implement-plan, fix/refactor, or `skip intake`. Config on intake: [project.defaults.yaml](../config/project.defaults.yaml), [project.intake-fields.yaml](../config/project.intake-fields.yaml).

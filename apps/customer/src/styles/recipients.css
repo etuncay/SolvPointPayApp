@@ -1,0 +1,85 @@
+/* Kayıtlı kişiler */
+.recipients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.recipient-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.recipient-card-head {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+
+.recipient-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font-display);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.recipient-avatar--domestic {
+  background: var(--brand-700);
+}
+
+.recipient-avatar--intl {
+  background: var(--info);
+}
+
+.recipient-card-title {
+  font-weight: 700;
+  font-size: 15.5px;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.recipient-card-name {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.recipient-country-tag {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.recipient-contact-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.recipient-contact-line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.recipient-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.recipient-card-actions .btn-primary {
+  flex: 1;
+  padding: 10px 14px;
+}

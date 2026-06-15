@@ -1,0 +1,14 @@
+{
+  "title": "Kullanıcılar",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "name", "title": "Ad Soyad", "dataIndex": "name", "width": 160 },
+    { "key": "email", "title": "E-posta", "dataIndex": "email", "mono": true, "width": 200 },
+    { "key": "role", "title": "Rol", "dataIndex": "role", "width": 140 },
+    { "key": "dailyLimit", "title": "Günlük Limit", "dataIndex": "dailyLimit", "render": "renderUserLimit", "width": 150 },
+    { "key": "active", "title": "Durum", "dataIndex": "active", "render": "renderUserStatus", "width": 100 }
+  ]
+}

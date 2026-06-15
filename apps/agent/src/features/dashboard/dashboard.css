@@ -1,0 +1,72 @@
+/* Agent Ana Sayfa — günlük işlem grafikleri (recharts yerine hafif CSS bar). */
+.agch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.agch-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  margin: 4px 0 10px;
+}
+.agch-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.agch-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.agch-dot--ok {
+  background: var(--ok);
+}
+.agch-dot--bad {
+  background: var(--danger);
+}
+
+.agch-plot {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 150px;
+  padding-top: 8px;
+}
+.agch-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+.agch-bars {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+}
+.agch-bar {
+  width: 38%;
+  min-height: 3px;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.2s ease;
+}
+.agch-bar--ok {
+  background: var(--ok);
+}
+.agch-bar--bad {
+  background: var(--danger);
+}
+.agch-x {
+  font-size: 10.5px;
+  color: var(--fg-muted);
+}

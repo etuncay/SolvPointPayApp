@@ -1,0 +1,112 @@
+.topup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.topup-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.topup-step {
+  padding: 16px 18px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.topup-step-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+  flex-shrink: 0;
+}
+
+.topup-step-title {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.topup-step-desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.topup-instruction-card {
+  background: linear-gradient(150deg, var(--brand-700), var(--brand-500));
+  color: #fff;
+  border: none;
+}
+
+.topup-instruction-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.topup-instruction-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+}
+
+.topup-instruction-row {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.topup-instruction-row:last-of-type {
+  border-bottom: none;
+}
+
+.topup-instruction-label {
+  font-size: 11.5px;
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+.topup-instruction-value {
+  font-weight: 700;
+  margin-top: 3px;
+  font-size: 14.5px;
+}
+
+.topup-copy-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border: none;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.topup-instruction-footer {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 16px;
+  line-height: 1.55;
+}
+
+@media (max-width: 768px) {
+  .topup-grid {
+    grid-template-columns: 1fr;
+  }
+}

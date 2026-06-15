@@ -1,0 +1,71 @@
+{
+  "title": "Firma Banka Hesapları",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "IBAN, banka adı, şube veya hesap no ara…",
+    "keys": ["iban", "bankName", "branchCode", "accountNo"]
+  },
+  "hideColumnFilters": true,
+  "advancedFiltersLayout": {
+    "defaultSpan": 3,
+    "rows": [
+      {
+        "filters": [{ "key": "accountType" }, { "key": "currency" }, { "key": "status" }]
+      }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "accountType",
+      "label": "Hesap türü",
+      "type": "select",
+      "span": 3,
+      "options": [{ "label": "Tümü", "value": "any" }]
+    },
+    {
+      "key": "currency",
+      "label": "Para birimi",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "TRY", "value": "TRY" },
+        { "label": "USD", "value": "USD" },
+        { "label": "EUR", "value": "EUR" }
+      ]
+    },
+    {
+      "key": "status",
+      "label": "Statü",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Inactive" }
+      ]
+    }
+  ],
+  "toolbar": {
+    "new": { "label": "Hesap Ekle" },
+    "export": {}
+  },
+  "columns": [
+    { "key": "bankName", "title": "Banka", "dataIndex": "bankName", "sortable": true, "minWidth": 180 },
+    { "key": "accountType", "title": "Tür", "dataIndex": "accountType", "sortable": true, "width": 140, "render": "renderAccountType" },
+    { "key": "iban", "title": "IBAN", "dataIndex": "iban", "sortable": true, "mono": true, "minWidth": 220 },
+    { "key": "currency", "title": "PB", "dataIndex": "currency", "sortable": true, "mono": true, "width": 80 },
+    { "key": "balance", "title": "Bakiye", "dataIndex": "balance", "sortable": true, "align": "right", "mono": true, "width": 150, "render": "renderBalance" },
+    { "key": "branchCode", "title": "Şube", "dataIndex": "branchCode", "sortable": true, "mono": true, "width": 90 },
+    { "key": "accountNo", "title": "Hesap", "dataIndex": "accountNo", "sortable": true, "mono": true, "width": 110 },
+    { "key": "suffix", "title": "Ek", "dataIndex": "suffix", "sortable": true, "mono": true, "width": 70, "render": "renderSuffix" },
+    { "key": "lastUpdatedAt", "title": "Güncelleme", "dataIndex": "lastUpdatedAt", "sortable": true, "mono": true, "width": 160, "render": "renderUpdatedAt" },
+    { "key": "status", "title": "Statü", "dataIndex": "status", "sortable": true, "width": 110, "render": "renderStatus" },
+    { "key": "actions", "title": "", "dataIndex": "id", "width": 120, "render": "renderActions" }
+  ]
+}
+

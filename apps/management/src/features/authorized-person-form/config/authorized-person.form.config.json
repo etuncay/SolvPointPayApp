@@ -1,0 +1,210 @@
+{
+  "navLayout": "top",
+  "panels": [
+    {
+      "key": "kimlik",
+      "title": "Kimlik Bilgileri",
+      "no": "·",
+      "icon": "user",
+      "fields": [
+        {
+          "name": "kimlikRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "fullName", "type": "Input", "label": "Adı ve Soyadı", "col": 2, "placeholder": "Ad Soyad", "rules": [{ "required": true, "message": "Ad soyad zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "idNo", "type": "Input", "label": "TCKN", "col": 1, "placeholder": "11 hane", "className": "mono", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Kimlik no zorunludur" }] }
+          ]
+        },
+        {
+          "name": "kimlikRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "idType", "type": "Select", "label": "Kimlik Tipi", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Kimlik tipi zorunludur" }], "options": [
+              { "label": "TC Kimlik", "value": "TCKN" },
+              { "label": "Pasaport", "value": "PASSPORT" },
+              { "label": "Oturum İzni", "value": "RES_PERMIT" }
+            ] },
+            { "name": "idCountry", "type": "Select", "label": "Uyruğu", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "Uyruk zorunludur" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" },
+              { "label": "🇩🇪 Almanya", "value": "DEU" },
+              { "label": "🇦🇹 Avusturya", "value": "AUT" }
+            ] },
+            { "name": "birthDate", "type": "DatePicker", "label": "Doğum Tarihi", "rules": [{ "required": true, "message": "Doğum tarihi zorunludur" }], "enableRules": "values._kpsLocked !== true", "hint": "Yetkili kişi en az 18 yaşında olmalıdır" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "kisisel",
+      "title": "Kişisel Bilgiler",
+      "no": "1",
+      "icon": "user",
+      "visible": "values._isNew !== true",
+      "fields": [
+        {
+          "name": "kisiselRow",
+          "type": "Row",
+          "fields": [
+            { "name": "personNo", "type": "Input", "label": "Kişi No", "readOnly": true, "className": "mono" },
+            { "name": "kycLevel", "type": "Input", "label": "KYC Seviyesi", "readOnly": true },
+            { "name": "riskScore", "type": "Input", "label": "Risk Skoru", "readOnly": true, "className": "mono" },
+            { "name": "statusDisplay", "type": "Input", "label": "Status", "readOnly": true }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "erisim",
+      "title": "Erişim Bilgileri",
+      "no": "2",
+      "icon": "key",
+      "visible": "values._isNew !== true",
+      "fields": [
+        { "name": "accessInfo", "type": "CustomComponent", "component": "APAccessDisplay", "label": "Erişim Bilgileri", "col": 4 }
+      ]
+    },
+    {
+      "key": "nufus",
+      "title": "Nüfus Bilgileri",
+      "no": "3",
+      "icon": "building",
+      "fields": [
+        {
+          "name": "nufusRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "birthPlace", "type": "Input", "label": "Doğum Yeri", "rules": [{ "required": true, "message": "Doğum yeri zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "maritalStatus", "type": "Select", "label": "Medeni Durum", "rules": [{ "required": true, "message": "Medeni durum zorunludur" }], "enableRules": "values._kpsLocked !== true", "options": [
+              { "label": "Bekâr", "value": "single" },
+              { "label": "Evli", "value": "married" },
+              { "label": "Boşanmış", "value": "divorced" },
+              { "label": "Dul", "value": "widowed" }
+            ] },
+            { "name": "gender", "type": "Select", "label": "Cinsiyet", "rules": [{ "required": true, "message": "Cinsiyet zorunludur" }], "enableRules": "values._kpsLocked !== true", "options": [
+              { "label": "Kadın", "value": "female" },
+              { "label": "Erkek", "value": "male" }
+            ] }
+          ]
+        },
+        {
+          "name": "nufusRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "serialNo", "type": "Input", "label": "Seri / Doküman No", "className": "mono", "rules": [{ "required": true, "message": "Seri no zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "issueDate", "type": "DatePicker", "label": "Veriliş Tarihi", "rules": [{ "required": true, "message": "Veriliş tarihi zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "issuingAuthority", "type": "Input", "label": "Veren Makam", "rules": [{ "required": true, "message": "Veren makam zorunludur" }], "enableRules": "values._kpsLocked !== true" }
+          ]
+        },
+        {
+          "name": "nufusRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "validityDate", "type": "DatePicker", "label": "Geçerlilik Tarihi", "rules": [{ "required": true, "message": "Geçerlilik tarihi zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "motherName", "type": "Input", "label": "Anne Adı", "rules": [{ "required": true, "message": "Anne adı zorunludur" }], "enableRules": "values._kpsLocked !== true" },
+            { "name": "fatherName", "type": "Input", "label": "Baba Adı", "rules": [{ "required": true, "message": "Baba adı zorunludur" }], "enableRules": "values._kpsLocked !== true" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "detay",
+      "title": "Detay Bilgiler",
+      "no": "4",
+      "icon": "user",
+      "fields": [
+        {
+          "name": "detayRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "maidenName", "type": "Input", "label": "Evlenmeden Önceki Soyadı", "shouldRender": "values.gender === 'female' && values.maritalStatus === 'married'", "rules": [{ "required": true, "message": "Kızlık soyadı zorunludur" }] },
+            { "name": "taxCountry", "type": "Select", "label": "Vergi Ülkesi", "rules": [{ "required": true, "message": "Vergi ülkesi zorunludur" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" },
+              { "label": "🇩🇪 Almanya", "value": "DEU" }
+            ] },
+            { "name": "education", "type": "Select", "label": "Eğitim Durumu", "rules": [{ "required": true, "message": "Eğitim durumu zorunludur" }], "options": [
+              { "label": "Lisans", "value": "bachelors" },
+              { "label": "Lise", "value": "highschool" }
+            ] }
+          ]
+        },
+        {
+          "name": "detayRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "employment", "type": "Select", "label": "Çalışma Durumu", "rules": [{ "required": true, "message": "Çalışma durumu zorunludur" }], "options": [
+              { "label": "Ücretli", "value": "salaried" },
+              { "label": "Serbest", "value": "self" }
+            ] },
+            { "name": "occupation", "type": "Input", "label": "Mesleği", "rules": [{ "required": true, "message": "Meslek zorunludur" }] },
+            { "name": "employer", "type": "Input", "label": "Çalıştığı Kurum" }
+          ]
+        },
+        {
+          "name": "detayRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "language", "type": "Select", "label": "Dil Tercihi", "rules": [{ "required": true, "message": "Dil seçiniz" }], "options": [
+              { "label": "🇹🇷 Türkçe", "value": "tr" },
+              { "label": "🇬🇧 English", "value": "en" }
+            ] }
+          ]
+        },
+        { "name": "notes", "type": "TextArea", "label": "Notlar", "col": 4, "rows": 2 }
+      ]
+    },
+    {
+      "key": "yabanci",
+      "title": "Yabancı Bireysel",
+      "no": "5",
+      "icon": "globe",
+      "visible": "values._isForeign === true",
+      "fields": [
+        {
+          "name": "yabanciRow",
+          "type": "Row",
+          "fields": [
+            { "name": "visaType", "type": "Select", "label": "Vize Tipi", "rules": [{ "required": true, "message": "Vize tipi zorunludur" }], "options": [
+              { "label": "Kısa Dönem", "value": "ShortTerm" },
+              { "label": "Uzun Dönem", "value": "LongTerm" }
+            ] },
+            { "name": "visaEndDate", "type": "DatePicker", "label": "Vize Bitiş", "rules": [{ "required": true, "message": "Vize bitiş zorunludur" }] },
+            { "name": "birthCountry", "type": "Select", "label": "Doğum Ülkesi", "rules": [{ "required": true, "message": "Doğum ülkesi zorunludur" }], "options": [
+              { "label": "🇩🇪 Almanya", "value": "DEU" },
+              { "label": "🇹🇷 Türkiye", "value": "TUR" }
+            ] },
+            { "name": "residentCountry", "type": "Select", "label": "Yerleşik Ülke", "rules": [{ "required": true, "message": "Yerleşik ülke zorunludur" }], "options": [
+              { "label": "🇹🇷 Türkiye", "value": "TUR" }
+            ] }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "adres",
+      "title": "Adresler",
+      "no": "6",
+      "icon": "mail",
+      "fields": [
+        { "name": "addresses", "type": "CustomComponent", "component": "APAddressesEditor", "label": "Adresler", "col": 4 }
+      ]
+    },
+    {
+      "key": "iletisim",
+      "title": "İletişim",
+      "no": "7",
+      "icon": "mail",
+      "fields": [
+        { "name": "contacts", "type": "CustomComponent", "component": "APContactsEditor", "label": "İletişim Kanalları", "col": 4 }
+      ]
+    },
+    {
+      "key": "belgeler",
+      "title": "Belgeler",
+      "no": "+",
+      "icon": "file",
+      "fields": [
+        { "name": "documents", "type": "CustomComponent", "component": "APDocumentsTable", "label": "Belgeler", "col": 4 }
+      ]
+    }
+  ]
+}

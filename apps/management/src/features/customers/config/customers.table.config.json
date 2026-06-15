@@ -1,0 +1,178 @@
+{
+  "title": "Müşteriler",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Müşteri no, ad, e-posta, telefon, TCKN/VKN…",
+    "keys": ["id", "name", "email", "phone", "idNo"]
+  },
+  "hideColumnFilters": true,
+  "selectable": true,
+  "columnToggle": true,
+  "tabs": [
+    { "key": "active", "title": "Aktif", "filters": { "status": "active" }, "countKey": "activeCount" },
+    { "key": "inactive", "title": "Pasif", "filters": { "status": "inactive" }, "countKey": "inactiveCount" },
+    { "key": "blocked", "title": "Bloke", "filters": { "status": "blocked" }, "countKey": "blockedCount" },
+    { "key": "closed", "title": "Kapalı", "filters": { "status": "closed" }, "countKey": "closedCount" },
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" }
+  ],
+  "advancedFilters": [
+    {
+      "key": "type",
+      "label": "Müşteri tipi",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Bireysel", "value": "individual" },
+        { "label": "Tüzel", "value": "corporate" },
+        { "label": "Aday", "value": "prospective" }
+      ]
+    },
+    {
+      "key": "kyc",
+      "label": "KYC durumu",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tier 0", "value": "Tier 0" },
+        { "label": "L1", "value": "L1" },
+        { "label": "L2", "value": "L2" },
+        { "label": "L3", "value": "L3" },
+        { "label": "Pending", "value": "Pending" },
+        { "label": "Approved", "value": "Approved" },
+        { "label": "Returned", "value": "Returned" },
+        { "label": "Rejected", "value": "Rejected" }
+      ]
+    },
+    {
+      "key": "risk",
+      "label": "Risk segmenti",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Düşük", "value": "low" },
+        { "label": "Orta", "value": "med" },
+        { "label": "Yüksek", "value": "high" },
+        { "label": "Kritik", "value": "critical" }
+      ]
+    },
+    {
+      "key": "campaign",
+      "label": "Kampanya",
+      "type": "select",
+      "span": 3
+    },
+    {
+      "key": "createdFrom",
+      "label": "Oluşturma (başlangıç)",
+      "type": "date",
+      "span": 3
+    },
+    {
+      "key": "createdTo",
+      "label": "Oluşturma (bitiş)",
+      "type": "date",
+      "span": 3
+    }
+  ],
+  "toolbar": {
+    "export": { "label": "Excel'e aktar" },
+    "new": { "label": "Yeni Müşteri" }
+  },
+  "bulkActions": [
+    { "key": "bulkExport", "label": "Seçilenleri dışa aktar", "icon": "download" }
+  ],
+  "columns": [
+    {
+      "key": "id",
+      "title": "Müşteri No",
+      "dataIndex": "id",
+      "sortable": true,
+      "mono": true,
+      "width": 110,
+      "render": "renderId"
+    },
+    {
+      "key": "name",
+      "title": "Adı ve Soyadı / Unvanı",
+      "dataIndex": "name",
+      "sortable": true,
+      "minWidth": 220,
+      "render": "renderName"
+    },
+    {
+      "key": "contact",
+      "title": "İletişim",
+      "dataIndex": "email",
+      "minWidth": 180,
+      "render": "renderContact"
+    },
+    {
+      "key": "idNo",
+      "title": "Kimlik No",
+      "dataIndex": "idNo",
+      "minWidth": 150,
+      "render": "renderIdNo"
+    },
+    {
+      "key": "type",
+      "title": "Tip",
+      "dataIndex": "type",
+      "sortable": true,
+      "width": 120,
+      "render": "renderType"
+    },
+    {
+      "key": "campaign",
+      "title": "Kampanya",
+      "dataIndex": "campaign",
+      "sortable": true,
+      "minWidth": 140,
+      "render": "renderCampaign"
+    },
+    {
+      "key": "kyc",
+      "title": "KYC Durumu",
+      "dataIndex": "kyc",
+      "sortable": true,
+      "width": 120,
+      "render": "renderKyc"
+    },
+    {
+      "key": "riskScore",
+      "title": "Risk Skoru",
+      "dataIndex": "riskScore",
+      "sortable": true,
+      "width": 90,
+      "align": "center",
+      "mono": true
+    },
+    {
+      "key": "riskSeg",
+      "title": "Risk Segmenti",
+      "dataIndex": "riskSeg",
+      "sortable": true,
+      "width": 120,
+      "render": "renderRiskSeg"
+    },
+    {
+      "key": "created",
+      "title": "Oluşturma Tarihi",
+      "dataIndex": "createdAt",
+      "sortable": true,
+      "width": 140,
+      "format": "date"
+    },
+    {
+      "key": "status",
+      "title": "Durum",
+      "dataIndex": "status",
+      "sortable": true,
+      "minWidth": 150,
+      "render": "renderStatus"
+    }
+  ]
+}

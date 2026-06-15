@@ -1,0 +1,36 @@
+.receive-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.receive-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.receive-meta-tile {
+  background: var(--bg-2);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.receive-meta-label {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.receive-meta-value {
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .receive-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@epay/domain",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ortak domain sözlüğü (types, enums, referans sabitleri) — UI ve persistence bağımsız",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./transaction": "./src/transaction/index.ts",
+    "./customer": "./src/customer/index.ts",
+    "./wallet": "./src/wallet/index.ts",
+    "./transfer": "./src/transfer/index.ts",
+    "./reference": "./src/reference/index.ts"
+  },
+  "files": ["src"],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@epay/tsconfig": "workspace:*",
+    "typescript": "^5.8.3"
+  }
+}

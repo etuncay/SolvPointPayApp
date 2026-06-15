@@ -1,0 +1,44 @@
+{
+  "title": "Parametreler",
+  "rowKey": "id",
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50, 100] },
+  "toolbar": { "new": { "label": "Yeni Parametre" } },
+  "search": {
+    "placeholder": "Parametre anahtarı veya açıklama ara…",
+    "keys": ["parameterKey", "description"]
+  },
+  "advancedFiltersLayout": {
+    "defaultSpan": 3,
+    "rows": [
+      {
+        "filters": [{ "key": "group" }, { "key": "status" }]
+      }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "group", "label": "Grup", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }] },
+    {
+      "key": "status",
+      "label": "Durum",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "groupName", "title": "Grup", "dataIndex": "groupName", "render": "renderGroup", "width": 180 },
+    { "key": "parameterKey", "title": "Anahtar", "dataIndex": "parameterKey", "mono": true, "width": 220 },
+    { "key": "value", "title": "Değer", "dataIndex": "value", "render": "renderValue", "width": 260 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "render": "renderStatus", "width": 160 },
+    { "key": "changedByName", "title": "Değiştiren", "dataIndex": "changedByName", "width": 180 },
+    { "key": "changedAt", "title": "Değişim", "dataIndex": "changedAt", "mono": true, "render": "renderDate", "width": 180 },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderActions", "width": 120, "align": "right", "excludeFromExport": true }
+  ]
+}
+

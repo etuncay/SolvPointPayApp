@@ -1,0 +1,63 @@
+{
+  "title": "Dijital Cüzdanlar",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Cüzdan no, müşteri, telefon, TCKN…",
+    "keys": ["walletNo", "ownerName", "phone", "idNo", "ownerNo"]
+  },
+  "hideColumnFilters": true,
+  "toolbar": { "export": {} },
+  "tabs": [
+    { "key": "customer", "title": "Müşteri", "filters": { "cat": "customer" }, "countKey": "customerCount" },
+    { "key": "agent", "title": "Temsilci", "filters": { "cat": "agent" }, "countKey": "agentCount" },
+    { "key": "system", "title": "Sistem", "filters": { "cat": "system" }, "countKey": "systemCount" },
+    { "key": "all", "title": "Tümü", "filters": { "cat": "all" }, "countKey": "allCount" }
+  ],
+  "chips": {
+    "key": "ccy",
+    "label": "PB",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "TRY", "value": "TRY" },
+      { "label": "USD", "value": "USD" },
+      { "label": "EUR", "value": "EUR" },
+      { "label": "GBP", "value": "GBP" }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "type", "label": "Tip", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "any" }] },
+    {
+      "key": "state",
+      "label": "Durum",
+      "type": "select",
+      "span": 3,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Tam bloke", "value": "full" },
+        { "label": "Kısmi bloke", "value": "partial" },
+        { "label": "Negatif", "value": "negative" },
+        { "label": "Normal", "value": "normal" }
+      ]
+    },
+    { "key": "createdFrom", "label": "Oluşturma (baş)", "type": "date", "span": 3 },
+    { "key": "createdTo", "label": "Oluşturma (bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "ownerNo", "title": "Sahip No", "dataIndex": "ownerNo", "sortable": true, "width": 110, "render": "renderOwnerNo" },
+    { "key": "walletNo", "title": "Hesap", "dataIndex": "walletNo", "sortable": true, "width": 180, "render": "renderWalletNo" },
+    { "key": "type", "title": "Tip", "dataIndex": "type", "sortable": true, "width": 180, "render": "renderType" },
+    { "key": "ownerName", "title": "Ad", "dataIndex": "ownerName", "sortable": true, "minWidth": 180, "render": "renderOwnerName" },
+    { "key": "phone", "title": "Telefon", "dataIndex": "phone", "sortable": false, "width": 140, "render": "renderPhone" },
+    { "key": "idNo", "title": "Kimlik No", "dataIndex": "idNo", "sortable": false, "width": 160, "render": "renderIdNo" },
+    { "key": "available", "title": "Kullanılabilir", "dataIndex": "available", "sortable": true, "width": 140, "render": "renderAvailable" },
+    { "key": "blocked", "title": "Bloke", "dataIndex": "blocked", "sortable": true, "width": 140, "render": "renderBlocked" },
+    { "key": "ccy", "title": "PB", "dataIndex": "ccy", "sortable": true, "width": 80, "render": "renderMono" },
+    { "key": "txToday", "title": "İşlem Adedi", "dataIndex": "txToday", "sortable": true, "width": 120, "render": "renderTxToday" },
+    { "key": "txAmtToday", "title": "İşlem Tutarı", "dataIndex": "txAmtToday", "sortable": true, "width": 130, "render": "renderTxAmt" },
+    { "key": "createdAt", "title": "Oluşturma", "dataIndex": "createdAt", "sortable": true, "width": 140, "render": "renderSoftMono" }
+  ]
+}

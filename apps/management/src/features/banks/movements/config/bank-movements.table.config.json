@@ -1,0 +1,49 @@
+{
+  "title": "Banka Hesap Hareketleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Referans, isim veya banka ara…",
+    "keys": ["referenceNo", "name", "sourceBank", "targetBank", "bankTransactionNo"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "paymentStatus",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Completed", "value": "Completed" },
+      { "label": "Pending", "value": "Pending" },
+      { "label": "Failed", "value": "Failed" }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "bankTransferMethod", "label": "Yöntem", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "all" }, { "label": "EFT", "value": "EFT" }, { "label": "FAST", "value": "FAST" }, { "label": "SWIFT", "value": "SWIFT" }] },
+    { "key": "currency", "label": "PB", "type": "select", "span": 3, "options": [{ "label": "Tümü", "value": "all" }, { "label": "TRY", "value": "TRY" }, { "label": "USD", "value": "USD" }, { "label": "EUR", "value": "EUR" }, { "label": "GBP", "value": "GBP" }] },
+    { "key": "amountMin", "label": "Min Tutar", "type": "number", "span": 3 },
+    { "key": "amountMax", "label": "Max Tutar", "type": "number", "span": 3 },
+    { "key": "transactionFrom", "label": "İşlem Tarihi (Baş)", "type": "date", "span": 3 },
+    { "key": "transactionTo", "label": "İşlem Tarihi (Bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "sourceBank", "title": "Gönderen Banka", "dataIndex": "sourceBank", "sortable": true, "width": 150 },
+    { "key": "sourceIban", "title": "Gönderen IBAN", "dataIndex": "sourceIban", "sortable": true, "width": 180, "render": "renderMono" },
+    { "key": "targetBank", "title": "Alıcı Banka", "dataIndex": "targetBank", "sortable": true, "width": 150 },
+    { "key": "targetIban", "title": "Alıcı IBAN", "dataIndex": "targetIban", "sortable": true, "width": 180, "render": "renderMono" },
+    { "key": "currency", "title": "PB", "dataIndex": "currency", "sortable": true, "width": 90, "render": "renderMono" },
+    { "key": "amount", "title": "Tutar", "dataIndex": "amount", "sortable": true, "width": 130, "render": "renderAmount" },
+    { "key": "paymentStatus", "title": "Durum", "dataIndex": "paymentStatus", "sortable": true, "width": 130, "render": "renderStatus" },
+    { "key": "bankTransferMethod", "title": "Yöntem", "dataIndex": "bankTransferMethod", "sortable": true, "width": 120, "render": "renderMethod" },
+    { "key": "transactionDate", "title": "İşlem Tarihi", "dataIndex": "transactionDate", "sortable": true, "width": 140, "render": "renderMono" },
+    { "key": "referenceNo", "title": "Referans", "dataIndex": "referenceNo", "sortable": true, "width": 130, "render": "renderMono" },
+    { "key": "bankTransactionNo", "title": "Banka İşlem No", "dataIndex": "bankTransactionNo", "sortable": true, "width": 150, "render": "renderMono" },
+    { "key": "taxNo", "title": "Vergi No", "dataIndex": "taxNo", "sortable": true, "width": 130, "render": "renderMono" },
+    { "key": "createdAt", "title": "Oluşturma Tarihi", "dataIndex": "createdAt", "sortable": true, "width": 150, "render": "renderMono" },
+    { "key": "name", "title": "İsim", "dataIndex": "name", "minWidth": 160 },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 180 },
+    { "key": "errorMessage", "title": "Hata", "dataIndex": "errorMessage", "minWidth": 180, "render": "renderError" }
+  ]
+}

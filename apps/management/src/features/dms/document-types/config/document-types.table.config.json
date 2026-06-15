@@ -1,0 +1,42 @@
+{
+  "title": "Doküman Tipleri",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Tip adı, kodu veya açıklama ara…",
+    "keys": ["name", "documentTypeCode", "description"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "category",
+      "label": "Kategori",
+      "type": "select",
+      "span": 4,
+      "options": [
+        { "label": "Tüm kategoriler", "value": "any" },
+        { "label": "KYC", "value": "Kyc" },
+        { "label": "Finance", "value": "Finance" },
+        { "label": "Operations", "value": "Operations" },
+        { "label": "Support", "value": "Support" },
+        { "label": "Compliance", "value": "Compliance" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "documentCategory", "title": "Kategori", "dataIndex": "documentCategory", "sortable": true, "width": 130, "render": "renderCategory" },
+    { "key": "name", "title": "Doküman Tipi", "dataIndex": "name", "sortable": true, "minWidth": 230, "render": "renderNameWithCode" },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 220 },
+    { "key": "activeRetentionYears", "title": "Aktif Saklama", "dataIndex": "activeRetentionYears", "sortable": true, "width": 120, "render": "renderMono" },
+    { "key": "archiveRetentionYears", "title": "Arşiv Saklama", "dataIndex": "archiveRetentionYears", "sortable": true, "width": 120, "render": "renderMono" },
+    { "key": "maxFileSizeMb", "title": "Maks Boyut", "dataIndex": "maxFileSizeMb", "sortable": true, "width": 140, "render": "renderMaxSize" },
+    { "key": "isPersonalData", "title": "Kişisel Veri", "dataIndex": "isPersonalData", "sortable": true, "width": 120, "render": "renderPersonalData" },
+    { "key": "approvalRequired", "title": "Onay Gerekli", "dataIndex": "approvalRequired", "sortable": true, "width": 120, "render": "renderApprovalRequired" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Tip" }
+  }
+}

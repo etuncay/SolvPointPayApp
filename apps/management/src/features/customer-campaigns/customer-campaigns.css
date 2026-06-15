@@ -1,0 +1,43 @@
+/* Kampanya tablosu — tarih tek satır, metin ellipsis */
+
+.ccm-table .ccm-td-date {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.ccm-table .ccm-date {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.ccm-table .ccm-truncate {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.ccm-table .ccm-td-text--code {
+  max-width: 112px;
+}
+
+.ccm-table .ccm-td-text--name {
+  max-width: 148px;
+}
+
+.ccm-table .ccm-td-text--desc {
+  max-width: 220px;
+}
+
+.ccm-table .ccm-td-text--tx {
+  max-width: 172px;
+}
+
+.ccm-table .ccm-td-text--by {
+  max-width: 128px;
+}
+
+.ccm-table .ccm-truncate.t-mute {
+  color: var(--fg-muted);
+}

@@ -1,0 +1,45 @@
+{
+  "title": "Zamanlanmış İşler",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "İş adı, kodu veya sahip ara…",
+    "keys": ["name", "code", "owner"]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "any" },
+      { "label": "Aktif", "value": "Active" },
+      { "label": "Pasif", "value": "Passive" }
+    ]
+  },
+  "advancedFilters": [
+    {
+      "key": "jobType",
+      "label": "İş Tipi",
+      "type": "select",
+      "span": 4,
+      "options": [
+        { "label": "Tümü", "value": "any" },
+        { "label": "Once", "value": "Once" },
+        { "label": "Recurring", "value": "Recurring" }
+      ]
+    }
+  ],
+  "columns": [
+    { "key": "name", "title": "İş Adı", "dataIndex": "name", "sortable": true, "minWidth": 190 },
+    { "key": "jobType", "title": "Tip", "dataIndex": "jobType", "sortable": true, "width": 120, "render": "renderJobType" },
+    { "key": "owner", "title": "Sahip", "dataIndex": "owner", "sortable": true, "width": 150 },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 120, "render": "renderStatus" },
+    { "key": "updatedAt", "title": "Güncellendi", "dataIndex": "updatedAt", "sortable": true, "width": 170, "render": "renderDate" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni İş" }
+  }
+}

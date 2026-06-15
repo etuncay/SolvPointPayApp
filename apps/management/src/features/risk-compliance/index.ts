@@ -1,0 +1,9 @@
+export { RiskCompliancePage } from './risk-compliance-page';
+export { RiskScoreDefinitionPage } from './score-definition/risk-score-definition-page';
+export { RiskLimitsPage } from './limits/risk-limits-page';
+export { RiskScoresPage } from './scores/risk-scores-page';
+export { FraudRulesPage } from './fraud-rules/fraud-rules-page';
+export { FraudRuleDetailPage } from './fraud-rules/detail/fraud-rule-detail-page';
+export { FraudCasesPage } from './cases/fraud-cases-page';
+export { FraudCaseDetailPage } from './cases/detail/fraud-case-detail-page';
+export { RiskManagementPage } from './management/risk-management-page';

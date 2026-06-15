@@ -1,0 +1,34 @@
+{
+  "title": "Finansal Mutabakat",
+  "rowKey": "id",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "hideColumnFilters": true,
+  "chips": {
+    "key": "status",
+    "label": "Durum",
+    "options": [
+      { "label": "Tümü", "value": "all" },
+      { "label": "Matched", "value": "Matched" },
+      { "label": "PendingReview", "value": "PendingReview" },
+      { "label": "Adjusted", "value": "Adjusted" }
+    ]
+  },
+  "advancedFilters": [
+    { "key": "asOfFrom", "label": "As Of (Baş)", "type": "date", "span": 3 },
+    { "key": "asOfTo", "label": "As Of (Bitiş)", "type": "date", "span": 3 }
+  ],
+  "columns": [
+    { "key": "asOfTimestamp", "title": "As Of", "dataIndex": "asOfTimestamp", "sortable": true, "width": 160, "render": "renderMonoWithWarn" },
+    { "key": "inventoryBalance", "title": "Envanter", "dataIndex": "inventoryBalance", "sortable": true, "width": 130, "render": "renderAmountWithWarn" },
+    { "key": "accountingBalance", "title": "Muhasebe", "dataIndex": "accountingBalance", "sortable": true, "width": 130, "render": "renderAmountWithWarn" },
+    { "key": "bankTotalBalance", "title": "Banka", "dataIndex": "bankTotalBalance", "sortable": true, "width": 130, "render": "renderAmountWithWarn" },
+    { "key": "diffInventoryAccounting", "title": "Inv-Acc", "dataIndex": "diffInventoryAccounting", "sortable": true, "width": 110, "render": "renderDiffWithWarn" },
+    { "key": "diffInventoryBank", "title": "Inv-Bank", "dataIndex": "diffInventoryBank", "sortable": true, "width": 110, "render": "renderDiffWithWarn" },
+    { "key": "status", "title": "Durum", "dataIndex": "status", "sortable": true, "width": 130, "render": "renderStatusWithWarn" },
+    { "key": "description", "title": "Açıklama", "dataIndex": "description", "minWidth": 220, "render": "renderDescriptionWithWarn" },
+    { "key": "actions", "title": "Aksiyon", "dataIndex": "id", "width": 120, "render": "renderAction" }
+  ]
+}

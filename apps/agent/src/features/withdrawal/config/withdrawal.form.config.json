@@ -1,0 +1,68 @@
+{
+  "fields": [
+    {
+      "name": "fullName",
+      "type": "Input",
+      "label": "Ad Soyad / Unvan",
+      "col": 4,
+      "readOnly": true,
+      "shouldRender": "values._hasResult === true"
+    },
+    {
+      "name": "authorizedPersonIdNo",
+      "type": "Input",
+      "label": "Yetkili Kişi Kimlik No",
+      "col": 2,
+      "placeholder": "Yetkili kişinin TCKN",
+      "shouldRender": "values._corporate === true",
+      "rules": [{ "required": true, "message": "ag_wd_err_authorized_required" }]
+    },
+    {
+      "name": "currency",
+      "type": "Select",
+      "label": "Para Birimi",
+      "col": 2,
+      "enableRules": "values._currencyLocked !== true",
+      "options": [],
+      "rules": [{ "required": true, "message": "ag_wd_err_currency_required" }]
+    },
+    {
+      "name": "amount",
+      "type": "InputNumber",
+      "label": "Tutar",
+      "col": 2,
+      "min": 0,
+      "enableRules": "values._amountLocked !== true",
+      "hint": "Transactional cüzdanda tüm bakiye çekilir.",
+      "rules": [{ "required": true, "message": "ag_wd_err_amount_required" }]
+    },
+    {
+      "name": "transactionReferenceNo",
+      "type": "Input",
+      "label": "İşlem Referans No",
+      "col": 2,
+      "placeholder": "İşlem referans no"
+    },
+    {
+      "name": "foreignReferenceNo",
+      "type": "Input",
+      "label": "Yurt Dışı Referans No",
+      "col": 2,
+      "placeholder": "Yurt dışı referans no"
+    },
+    {
+      "name": "isSuspicious",
+      "type": "Switch",
+      "label": "Şüpheli İşlem",
+      "col": 2,
+      "defaultValue": false
+    }
+  ],
+  "buttonToolbar": {
+    "position": "bottom",
+    "buttons": [
+      { "key": "continue", "label": "Devam Et", "variant": "primary", "icon": "arrow-right" },
+      { "key": "cancel", "label": "İptal", "variant": "ghost" }
+    ]
+  }
+}

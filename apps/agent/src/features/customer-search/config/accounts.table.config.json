@@ -1,0 +1,15 @@
+{
+  "title": "Hesap Bilgileri",
+  "rowKey": "walletId",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [10, 20, 50] },
+  "columns": [
+    { "key": "walletNo", "title": "Cüzdan No", "dataIndex": "walletNo", "mono": true, "width": 150 },
+    { "key": "currency", "title": "Para Birimi", "dataIndex": "currency", "width": 100, "align": "center" },
+    { "key": "availableBalance", "title": "Kullanılabilir Bakiye", "dataIndex": "availableBalance", "format": "currency", "align": "right", "mono": true },
+    { "key": "withdrawalLimit", "title": "Çekim Limiti", "dataIndex": "withdrawalLimit", "format": "currency", "align": "right", "mono": true },
+    { "key": "transferLimit", "title": "Transfer Limiti", "dataIndex": "transferLimit", "format": "currency", "align": "right", "mono": true },
+    { "key": "internationalLimit", "title": "Yurt Dışı Limiti", "dataIndex": "internationalLimit", "format": "currency", "align": "right", "mono": true }
+  ]
+}

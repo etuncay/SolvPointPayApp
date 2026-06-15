@@ -1,0 +1,88 @@
+import type { FxRate } from '@/features/operational-processes/fx-management/domain/types';
+
+function seedToday(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(new Date());
+}
+
+const TODAY = seedToday();
+
+export const FX_RATES_SEED: FxRate[] = [
+  {
+    id: 'fxr-usd-today',
+    rateDate: TODAY,
+    currency: 'USD',
+    source: 'TCMB',
+    buyRate: 34.5,
+    sellRate: 34.8,
+    marginedBuyInside: 34.105,
+    marginedSellInside: 35.074,
+    marginedBuyOutside: 34.036,
+    marginedSellOutside: 35.1436,
+    lastUpdated: `${TODAY} 09:30:00`,
+  },
+  {
+    id: 'fxr-eur-today',
+    rateDate: TODAY,
+    currency: 'EUR',
+    source: 'TCMB',
+    buyRate: 37.2,
+    sellRate: 37.55,
+    marginedBuyInside: 36.8252,
+    marginedSellInside: 37.758975,
+    marginedBuyOutside: 36.7508,
+    marginedSellOutside: 37.826525,
+    lastUpdated: `${TODAY} 09:30:00`,
+  },
+  {
+    id: 'fxr-usd-yesterday',
+    rateDate: '2026-05-24',
+    currency: 'USD',
+    source: 'TCMB',
+    buyRate: 34.42,
+    sellRate: 34.72,
+    marginedBuyInside: 34.0258,
+    marginedSellInside: 34.9936,
+    marginedBuyOutside: 33.95704,
+    marginedSellOutside: 35.06304,
+    lastUpdated: '2026-05-24 17:00:00',
+  },
+  {
+    id: 'fxr-eur-yesterday',
+    rateDate: '2026-05-24',
+    currency: 'EUR',
+    source: 'TCMB',
+    buyRate: 37.05,
+    sellRate: 37.4,
+    marginedBuyInside: 36.67655,
+    marginedSellInside: 37.6083,
+    marginedBuyOutside: 36.60245,
+    marginedSellOutside: 37.6757,
+    lastUpdated: '2026-05-24 17:00:00',
+  },
+  {
+    id: 'fxr-usd-manual',
+    rateDate: '2026-05-23',
+    currency: 'USD',
+    source: 'Manual',
+    buyRate: 34.1,
+    sellRate: 34.4,
+    marginedBuyInside: 33.709,
+    marginedSellInside: 35.272,
+    marginedBuyOutside: 33.6408,
+    marginedSellOutside: 35.3408,
+    lastUpdated: '2026-05-23 11:15:00',
+  },
+  {
+    id: 'fxr-eur-manual',
+    rateDate: '2026-05-23',
+    currency: 'EUR',
+    source: 'Manual',
+    buyRate: 36.9,
+    sellRate: 37.2,
+    marginedBuyInside: 36.5279,
+    marginedSellInside: 37.3674,
+    marginedBuyOutside: 36.4541,
+    marginedSellOutside: 37.4346,
+    lastUpdated: '2026-05-23 11:15:00',
+  },
+];

@@ -1,0 +1,5 @@
+# Runtime agent activity logs — folder ships, contents do not
+*.log
+.task-start
+.active-context.json
+last-context-report.txt

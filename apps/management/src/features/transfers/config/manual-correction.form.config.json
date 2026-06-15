@@ -1,0 +1,82 @@
+{
+  "fields": [
+    { "name": "complaintId", "type": "Input", "label": "Şikâyet No", "col": 2, "placeholder": "Opsiyonel" },
+    { "name": "sourceTransactionNo", "type": "Input", "label": "Kaynak İşlem No", "col": 2 },
+
+    {
+      "name": "sourceCustomerId",
+      "type": "Select",
+      "label": "Kaynak müşteri",
+      "col": 2,
+      "optionsFromApi": { "endpoint": "customers" },
+      "rules": [{ "required": true }]
+    },
+    {
+      "name": "sourceWalletId",
+      "type": "Select",
+      "label": "Kaynak cüzdan",
+      "col": 2,
+      "optionsFromApi": { "endpoint": "wallets", "dependsOn": "sourceCustomerId" },
+      "rules": [{ "required": true }]
+    },
+    {
+      "name": "targetCustomerId",
+      "type": "Select",
+      "label": "Hedef müşteri",
+      "col": 2,
+      "optionsFromApi": { "endpoint": "customers" },
+      "rules": [{ "required": true }]
+    },
+    {
+      "name": "targetWalletId",
+      "type": "Select",
+      "label": "Hedef cüzdan",
+      "col": 2,
+      "optionsFromApi": { "endpoint": "wallets", "dependsOn": "targetCustomerId" },
+      "rules": [{ "required": true }]
+    },
+
+    { "name": "requestedAmount", "type": "InputNumber", "label": "Talep tutar", "col": 2, "min": 0, "rules": [{ "required": true, "min": 0.01, "message": "Tutar girin" }] },
+    {
+      "name": "requestedCurrency",
+      "type": "Select",
+      "label": "Talep PB",
+      "col": 2,
+      "defaultValue": "TRY",
+      "options": [
+        { "label": "TRY", "value": "TRY" },
+        { "label": "USD", "value": "USD" },
+        { "label": "EUR", "value": "EUR" },
+        { "label": "GBP", "value": "GBP" }
+      ]
+    },
+
+    {
+      "name": "correctionReason",
+      "type": "Select",
+      "label": "Gerekçe",
+      "col": 2,
+      "optionsFromApi": { "endpoint": "reasons" },
+      "rules": [{ "required": true, "message": "Gerekçe seçin" }]
+    },
+    { "name": "transactionDescription", "type": "TextArea", "label": "İşlem açıklaması", "col": 2, "rows": 3 },
+
+    { "name": "manualDescription", "type": "TextArea", "label": "Manuel açıklama", "col": 4, "rows": 3, "rules": [{ "required": true, "message": "Açıklama zorunludur" }] },
+
+    {
+      "name": "document",
+      "type": "Upload",
+      "label": "Belge",
+      "col": 4,
+      "accept": "image/*,application/pdf"
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [
+      { "key": "lookup", "label": "İşlemi bul", "variant": "secondary" },
+      { "key": "submit", "label": "Onaya gönder", "variant": "primary", "icon": "send" },
+      { "key": "cancel", "label": "Vazgeç", "variant": "ghost" }
+    ]
+  }
+}
+

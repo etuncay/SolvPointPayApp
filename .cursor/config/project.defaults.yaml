@@ -1,0 +1,133 @@
+# Project defaults & intake schema
+# Agents: read on intake/greenfield. AskQuestion fields: project.intake-fields.yaml
+# Override per repo by editing values below (commit to git for team standards).
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# Locale — question labels, chat, plans, code
+# ---------------------------------------------------------------------------
+locale:
+  chat: turkish                    # language for replies to the user
+  plan: english                    # language for .cursor/plans/*.md and briefs
+  ask_question_labels: english     # AskQuestion option labels shown to user
+  code: english                    # identifiers, file names, JSON keys
+  code_comments: english           # business-logic comments in source
+  i18n_default_locale: en          # default UI locale file (e.g. en.json)
+
+# ---------------------------------------------------------------------------
+# Architecture — how the system is split
+# ---------------------------------------------------------------------------
+architecture:
+  default: fullstack-separated     # see options.id in project.intake-fields.yaml
+  # fullstack-separated | frontend-only | backend-only | monolith | mobile-bff
+
+  frontend:
+    enabled: true
+    default_language: typescript
+    default_framework: react
+    default_platform: web-spa
+
+  backend:
+    enabled: true
+    default_language: csharp-dotnet
+    default_framework: aspnet-core
+    default_platform: backend-api
+    default_api_style: rest          # rest | graphql | grpc | minimal
+
+  monorepo:
+    default: true                    # true if single repo with apps/* or packages/*
+    default_tool: pnpm               # pnpm | npm | yarn | bun | dotnet-sln
+
+# ---------------------------------------------------------------------------
+# Standard defaults (used when not inferred and user did not specify)
+# ---------------------------------------------------------------------------
+defaults:
+  work_type: new-feature
+  scope: single-module
+  data_source: mock-api-msw
+  deliverable: plan-then-code
+
+  frontend:
+    ui_approach: component-library
+    component_library: shadcn-radix
+    css_stack: tailwind
+    aesthetic: minimal
+    theme: system
+    interaction: low
+    a11y: baseline-a11y
+
+  backend:
+    auth: jwt-session
+    database: none                   # none | postgres | sqlite | sqlserver | mongo | defer
+    orm: defer                       # ef-core | prisma | drizzle | defer
+
+  shared:
+    i18n: single-en
+    verification: browser-mcp
+    ci_cd: lint-test-only
+    screen_test_docs: auto           # auto | on-request | off — per-screen test md under user_test/<app>/
+
+# ---------------------------------------------------------------------------
+# Intake behavior
+# ---------------------------------------------------------------------------
+intake:
+  config_path: .cursor/config/project.defaults.yaml
+  fields_path: .cursor/config/project.intake-fields.yaml
+  brief_output: .cursor/plans/_briefs/{slug}.brief.md
+  plan_output: .cursor/plans/features/{slug}.plan.md
+
+  resolution_order:
+    - user_prompt
+    - repo_signals
+    - this_config_defaults
+    - ask_question
+
+  max_ask_rounds: 2
+  ask_when_missing: true
+
+  # Prompt refinement — clarify vague prompts before intake/plan (skill: prompt-refinement)
+  # auto: greenfield/plan/design/scaffold + short/vague prompts
+  # on-request: only when user asks to refine ("prompt geliştir", "refine prompt")
+  # off: skip refinement gate entirely
+  prompt_refinement: auto
+  prompt_refinement_min_words: 20
+
+  required_before_plan:
+    - work_type
+    - architecture
+    - scope
+    - data_source
+    - deliverable
+
+  # Tier fields are conditional on architecture (authoritative source:
+  # required_when in project.intake-fields.yaml). frontend.* is skipped for
+  # backend-only; backend.* is skipped for frontend-only.
+  required_before_code:
+    - work_type
+    - architecture
+    - scope
+    - data_source
+    - deliverable
+    - frontend.language     # only when architecture has a frontend tier
+    - frontend.framework    # only when architecture has a frontend tier
+    - backend.language      # only when architecture has a backend tier
+    - backend.framework     # only when architecture has a backend tier
+
+# ---------------------------------------------------------------------------
+# Repo signal hints (agent infer — not user-facing)
+# ---------------------------------------------------------------------------
+repo_signals:
+  package.json: nodejs
+  typescript in package.json: frontend.language=typescript
+  react in package.json: frontend.framework=react
+  next in package.json: frontend.framework=next; frontend.platform=web-ssr
+  vite in package.json: frontend.platform=web-spa
+  vue in package.json: frontend.framework=vue
+  "*.csproj": backend.language=csharp-dotnet
+  pyproject.toml: backend.language=python
+  go.mod: backend.language=go
+  apps/: monorepo.default=true
+  pnpm-workspace.yaml: monorepo.tool=pnpm
+  tailwind.config.*: css_stack=tailwind
+  openapi.yaml: data_source=existing-api

@@ -1,0 +1,21 @@
+{
+  "navLayout": "top",
+  "panels": [
+    {
+      "key": "screens",
+      "title": "Ekranlar",
+      "no": "1",
+      "fields": [
+        { "name": "screensData", "type": "CustomComponent", "component": "ScreensPanelWrapper", "col": 4 }
+      ]
+    },
+    {
+      "key": "fields",
+      "title": "Alanlar",
+      "no": "2",
+      "fields": [
+        { "name": "fieldsData", "type": "CustomComponent", "component": "FieldsPanelWrapper", "col": 4 }
+      ]
+    }
+  ]
+}

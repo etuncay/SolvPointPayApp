@@ -1,0 +1,12 @@
+{
+  "title": "Ücret ve Komisyonlar",
+  "rowKey": "id",
+  "hideColumnFilters": true,
+  "columns": [
+    { "key": "minAmount", "title": "Alt", "dataIndex": "minAmount", "align": "right", "render": "renderMoney" },
+    { "key": "maxAmount", "title": "Üst", "dataIndex": "maxAmount", "align": "right", "render": "renderMax" },
+    { "key": "fixedFee", "title": "Sabit", "dataIndex": "fixedFee", "align": "right", "render": "renderMoney" },
+    { "key": "rate", "title": "Oran %", "dataIndex": "rate", "align": "right", "render": "renderRate" },
+    { "key": "active", "title": "Aktif", "dataIndex": "id", "align": "center", "render": "renderActive" }
+  ]
+}

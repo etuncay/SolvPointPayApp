@@ -1,0 +1,14 @@
+{
+  "fields": [
+    {
+      "name": "titleRow",
+      "type": "Row",
+      "fields": [
+        { "name": "title", "type": "Input", "label": "Başlık", "col": 2, "placeholder": "Merkez Şube", "rules": [{ "required": true, "message": "Başlık zorunludur" }] },
+        { "name": "city", "type": "Input", "label": "İl", "col": 2, "placeholder": "İstanbul", "rules": [{ "required": true, "message": "İl zorunludur" }] }
+      ]
+    },
+    { "name": "line", "type": "Input", "label": "Adres Satırı", "col": 4, "placeholder": "Cadde, sokak, no", "rules": [{ "required": true, "message": "Adres zorunludur" }] },
+    { "name": "country", "type": "Input", "label": "Ülke", "col": 2, "defaultValue": "TUR", "placeholder": "TUR" }
+  ]
+}

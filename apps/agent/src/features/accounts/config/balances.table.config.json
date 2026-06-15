@@ -1,0 +1,18 @@
+{
+  "title": "Bakiyeler",
+  "rowKey": "walletId",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": {
+    "defaultPageSize": 100,
+    "pageSizeOptions": [100]
+  },
+  "columns": [
+    { "key": "walletNo", "title": "Cüzdan No", "dataIndex": "walletNo", "mono": true, "width": 150 },
+    { "key": "accountType", "title": "Hesap Türü", "dataIndex": "accountType", "render": "renderAccountType", "width": 150 },
+    { "key": "currency", "title": "Para Birimi", "dataIndex": "currency", "width": 110, "align": "center" },
+    { "key": "balance", "title": "Bakiye", "dataIndex": "balance", "format": "currency", "align": "right", "mono": true, "sortable": true },
+    { "key": "blocked", "title": "Bloke", "dataIndex": "blocked", "format": "currency", "align": "right", "mono": true },
+    { "key": "available", "title": "Kullanılabilir", "dataIndex": "availableBalance", "format": "currency", "align": "right", "mono": true, "sortable": true }
+  ]
+}

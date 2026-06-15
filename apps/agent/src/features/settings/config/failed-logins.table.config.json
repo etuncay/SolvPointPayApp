@@ -1,0 +1,13 @@
+{
+  "title": "Başarısız girişler",
+  "rowKey": "ip",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 20, "pageSizeOptions": [20, 50] },
+  "columns": [
+    { "key": "ip", "title": "IP", "dataIndex": "ip", "mono": true, "width": 120 },
+    { "key": "loc", "title": "Konum", "dataIndex": "loc", "width": 140 },
+    { "key": "when", "title": "Zaman", "dataIndex": "when", "width": 160 },
+    { "key": "ua", "title": "Tarayıcı", "dataIndex": "ua" }
+  ]
+}

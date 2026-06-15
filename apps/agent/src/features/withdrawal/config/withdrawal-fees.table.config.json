@@ -1,0 +1,14 @@
+{
+  "title": "Ücret ve Komisyonlar",
+  "rowKey": "id",
+  "hideColumnFilters": true,
+  "columns": [
+    { "key": "minAmount", "title": "Alt Sınır", "dataIndex": "minAmount", "align": "right", "render": "renderMoney" },
+    { "key": "maxAmount", "title": "Üst Sınır", "dataIndex": "maxAmount", "align": "right", "render": "renderMax" },
+    { "key": "fixedFee", "title": "Sabit Ücret", "dataIndex": "fixedFee", "align": "right", "render": "renderMoney" },
+    { "key": "rate", "title": "Oransal (%)", "dataIndex": "rate", "align": "right", "render": "renderRate" },
+    { "key": "currency", "title": "Para Birimi", "dataIndex": "currency", "align": "center" },
+    { "key": "campaignEndDate", "title": "Kampanya Bitiş", "dataIndex": "campaignEndDate", "format": "date" },
+    { "key": "active", "title": "Aktif", "dataIndex": "id", "align": "center", "render": "renderActive" }
+  ]
+}

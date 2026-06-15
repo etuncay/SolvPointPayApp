@@ -1,0 +1,13 @@
+{
+  "title": "Adresler",
+  "rowKey": "id",
+  "hideTitleBar": true,
+  "hideColumnFilters": true,
+  "pagination": { "defaultPageSize": 50, "pageSizeOptions": [50] },
+  "columns": [
+    { "key": "title", "title": "Başlık", "dataIndex": "title", "width": 140 },
+    { "key": "line", "title": "Adres", "dataIndex": "line" },
+    { "key": "city", "title": "İl", "dataIndex": "city", "width": 120 },
+    { "key": "actions", "title": "", "dataIndex": "id", "render": "renderAddressRemove", "width": 60, "align": "right", "excludeFromExport": true }
+  ]
+}

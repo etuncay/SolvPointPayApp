@@ -1,0 +1,151 @@
+/* ────────────────────────────────────────────────────────────────
+   EPay BackOffice — Design tokens
+   Cool neutral slate base + teal accent.
+   ──────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces — light */
+  --bg:           oklch(0.985 0.003 240);
+  --bg-elev:     #ffffff;
+  --bg-sunken:   oklch(0.965 0.004 240);
+  --bg-hover:    oklch(0.955 0.005 240);
+  --line:         oklch(0.92 0.005 240);
+  --line-strong:  oklch(0.86 0.006 240);
+
+  /* Text */
+  --fg:           oklch(0.22 0.012 250);
+  --fg-soft:      oklch(0.42 0.010 250);
+  --fg-muted:     oklch(0.58 0.008 250);
+  --fg-faint:     oklch(0.72 0.006 250);
+
+  /* Accent — refined teal */
+  --accent:       oklch(0.58 0.11 195);
+  --accent-soft:  oklch(0.94 0.025 195);
+  --accent-fg:    oklch(0.42 0.10 195);
+  --accent-on:    #ffffff;
+
+  /* Status */
+  --warn:         oklch(0.74 0.14 75);
+  --warn-soft:    oklch(0.95 0.04 80);
+  --warn-fg:      oklch(0.52 0.13 60);
+
+  --danger:       oklch(0.62 0.17 25);
+  --danger-soft:  oklch(0.95 0.03 25);
+  --danger-fg:    oklch(0.48 0.15 25);
+
+  --ok:           oklch(0.62 0.13 155);
+  --ok-soft:      oklch(0.95 0.035 155);
+  --ok-fg:        oklch(0.42 0.11 155);
+
+  --info:         oklch(0.58 0.13 250);
+  --info-soft:    oklch(0.95 0.03 250);
+  --info-fg:      oklch(0.45 0.13 250);
+
+  /* Chart palette (shadcn chart) */
+  --chart-1: oklch(0.62 0.14 195);
+  --chart-2: oklch(0.60 0.15 250);
+  --chart-3: oklch(0.66 0.15 145);
+  --chart-4: oklch(0.74 0.14 75);
+  --chart-5: oklch(0.62 0.17 25);
+
+  /* Shape */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px oklch(0.22 0.012 250 / 0.05),
+               0 0 0 0.5px oklch(0.22 0.012 250 / 0.06);
+  --shadow-md: 0 4px 12px oklch(0.22 0.012 250 / 0.08),
+               0 0 0 0.5px oklch(0.22 0.012 250 / 0.06);
+  --shadow-lg: 0 24px 48px oklch(0.22 0.012 250 / 0.18),
+               0 0 0 0.5px oklch(0.22 0.012 250 / 0.10);
+
+  /* Density */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --row-h: 36px;        /* table row */
+  --card-pad: 18px;     /* widget body padding */
+  --card-gap: 14px;     /* gap between widgets */
+
+  /* Type */
+  --font-ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-size: 13px;
+}
+
+[data-theme="dark"] {
+  --bg:          oklch(0.18 0.012 250);
+  --bg-elev:     oklch(0.22 0.013 250);
+  --bg-sunken:   oklch(0.16 0.012 250);
+  --bg-hover:    oklch(0.26 0.014 250);
+  --line:        oklch(0.30 0.013 250);
+  --line-strong: oklch(0.38 0.014 250);
+
+  --fg:          oklch(0.96 0.005 240);
+  --fg-soft:     oklch(0.80 0.008 240);
+  --fg-muted:    oklch(0.62 0.010 240);
+  --fg-faint:    oklch(0.48 0.012 240);
+
+  --accent:      oklch(0.72 0.12 195);
+  --accent-soft: oklch(0.32 0.06 195);
+  --accent-fg:   oklch(0.82 0.10 195);
+  --accent-on:   oklch(0.16 0.020 195);
+
+  --warn:        oklch(0.78 0.14 75);
+  --warn-soft:   oklch(0.32 0.07 70);
+  --warn-fg:     oklch(0.86 0.10 80);
+
+  --danger:      oklch(0.70 0.17 25);
+  --danger-soft: oklch(0.32 0.08 25);
+  --danger-fg:   oklch(0.82 0.13 25);
+
+  --ok:          oklch(0.72 0.13 155);
+  --ok-soft:     oklch(0.30 0.07 155);
+  --ok-fg:       oklch(0.82 0.10 155);
+
+  --info:        oklch(0.70 0.13 250);
+  --info-soft:   oklch(0.30 0.06 250);
+  --info-fg:     oklch(0.82 0.10 250);
+
+  --chart-1: oklch(0.72 0.12 195);
+  --chart-2: oklch(0.68 0.14 250);
+  --chart-3: oklch(0.74 0.14 145);
+  --chart-4: oklch(0.80 0.13 75);
+  --chart-5: oklch(0.70 0.16 25);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.06);
+  --shadow-md: 0 4px 14px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06);
+  --shadow-lg: 0 24px 48px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(255,255,255,0.10);
+}
+
+[data-density="compact"] {
+  --row-h: 30px;
+  --card-pad: 14px;
+  --card-gap: 10px;
+  --font-size: 12.5px;
+}
+[data-density="comfortable"] {
+  --row-h: 40px;
+  --card-pad: 22px;
+  --card-gap: 18px;
+  --font-size: 13.5px;
+}
+
+[data-text-size='small'] {
+  --font-size: 12px;
+}
+[data-text-size='large'] {
+  --font-size: 14px;
+}
+[data-text-size='xlarge'] {
+  --font-size: 15.5px;
+}

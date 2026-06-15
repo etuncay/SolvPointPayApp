@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "name": "lang",
+      "type": "Select",
+      "label": "Dil",
+      "col": 4,
+      "options": [
+        { "label": "Türkçe", "value": "tr" },
+        { "label": "English", "value": "en" },
+        { "label": "العربية", "value": "ar" }
+      ]
+    },
+    {
+      "name": "theme",
+      "type": "Select",
+      "label": "Tema",
+      "col": 4,
+      "options": [
+        { "label": "Açık", "value": "light" },
+        { "label": "Koyu", "value": "dark" }
+      ]
+    },
+    {
+      "name": "textSize",
+      "type": "Select",
+      "label": "Yazı boyutu",
+      "col": 4,
+      "options": [
+        { "label": "Küçük", "value": "small" },
+        { "label": "Standart", "value": "standard" },
+        { "label": "Büyük", "value": "large" },
+        { "label": "Çok büyük", "value": "xlarge" }
+      ]
+    }
+  ],
+  "buttonToolbar": {
+    "buttons": [{ "key": "save", "label": "Kaydet", "variant": "primary" }]
+  }
+}

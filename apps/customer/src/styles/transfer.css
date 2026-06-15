@@ -1,0 +1,351 @@
+.transfer-domestic-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.transfer-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.transfer-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 92px;
+}
+
+.source-wallet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.source-wallet-option {
+  text-align: left;
+  cursor: pointer;
+  border-radius: 13px;
+  padding: 13px 15px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  font-family: inherit;
+  transition: 0.15s;
+}
+
+.source-wallet-option:hover {
+  border-color: var(--brand-500);
+}
+
+.source-wallet-option.selected {
+  border-color: var(--brand-500);
+  background: var(--brand-softer);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-500) 14%, transparent);
+}
+
+.source-wallet-option-label {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.source-wallet-option-balance {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin-top: 3px;
+  color: var(--ink);
+}
+
+.money-input-lg {
+  padding-left: 36px;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  height: 60px;
+}
+
+.fee-table-card {
+  overflow: hidden;
+}
+
+.fee-table-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.transfer-summary-total .k {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.transfer-summary-total .v {
+  font-size: 17px;
+  color: var(--brand-700);
+}
+
+.transfer-otp-note {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.intl-fx-panel {
+  background: var(--brand-softer);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 18px;
+}
+
+.intl-fx-rate-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.intl-fx-rate-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.intl-fx-net {
+  text-align: right;
+}
+
+.intl-fx-net-label {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.intl-fx-net-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--brand-700);
+}
+
+.intl-fx-refresh-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.intl-status-flow {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10;
+}
+
+@media (max-width: 900px) {
+  .transfer-domestic-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .transfer-aside {
+    position: static;
+  }
+}
+
+/* İşlem onay */
+.confirm-page .container {
+  max-width: 760px;
+}
+
+.confirm-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.confirm-panel {
+  margin-bottom: 18px;
+}
+
+.confirm-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+  margin-bottom: 10px;
+}
+
+.confirm-panel-body {
+  padding: 6px 18px;
+}
+
+.confirm-total-row {
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 12px;
+  border-bottom: none;
+}
+
+.confirm-total-row .k {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.confirm-total-value {
+  font-size: 17px;
+  color: var(--brand-700);
+}
+
+.confirm-otp-card {
+  position: sticky;
+  top: 92px;
+  text-align: center;
+}
+
+.confirm-otp-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  background: var(--brand-soft);
+  color: var(--brand-600);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+}
+
+.confirm-otp-title {
+  font-size: 19px;
+  margin: 0;
+}
+
+.confirm-otp-desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 7px 0 20px;
+  line-height: 1.45;
+}
+
+.confirm-otp-timer {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 16px 0;
+}
+
+.confirm-otp-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.confirm-otp-footnote {
+  font-size: 11.5px;
+  color: var(--faint);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+.confirm-decl-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+  .confirm-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .confirm-otp-card {
+    position: static;
+  }
+}
+
+/* Başarı */
+.success-page .container {
+  max-width: 560px;
+}
+
+.success-card {
+  padding: 40px 34px;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.success-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-300));
+}
+
+.success-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--pos-soft);
+  color: var(--pos);
+  display: grid;
+  place-items: center;
+  margin: 6px auto 18px;
+}
+
+.success-title {
+  font-size: 27px;
+  margin: 0;
+}
+
+.success-lead {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 10px 0 6px;
+  line-height: 1.5;
+}
+
+.success-summary {
+  background: var(--bg-2);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.success-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.success-actions .btn-block {
+  flex: 1;
+  min-width: 140px;
+  justify-content: center;
+}

@@ -1,0 +1,204 @@
+{
+  "navLayout": "top",
+  "panels": [
+    {
+      "key": "kimlik",
+      "title": "Tüzel Kimlik",
+      "no": "·",
+      "icon": "building",
+      "fields": [
+        {
+          "name": "kimlikRow",
+          "type": "Row",
+          "fields": [
+            { "name": "tradeName", "type": "Input", "label": "Ticari Unvan", "col": 2, "placeholder": "Ticari unvan", "rules": [{ "required": true, "message": "Ticari unvan zorunludur" }] },
+            { "name": "taxNo", "type": "Input", "label": "VKN", "col": 1, "placeholder": "10 hane", "className": "mono", "enableRules": "values._isNew === true", "rules": [{ "required": true, "message": "VKN zorunludur" }, { "pattern": "^[1-9]\\d{9}$", "patternMessage": "Geçerli VKN giriniz (10 hane)" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "musteri",
+      "title": "Müşteri Bilgileri",
+      "no": "1",
+      "icon": "building",
+      "visible": "values._isNew !== true",
+      "fields": [
+        {
+          "name": "musteriRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "customerNo", "type": "Input", "label": "Müşteri No", "readOnly": true, "className": "mono" },
+            { "name": "campaign", "type": "Select", "label": "Kampanya", "options": [] },
+            { "name": "campaignEndDate", "type": "DatePicker", "label": "Kampanya Sonlanma", "readOnly": true }
+          ]
+        },
+        {
+          "name": "musteriRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "kycStatus", "type": "Input", "label": "KYC Status", "readOnly": true },
+            { "name": "riskDisplay", "type": "CustomComponent", "component": "RiskScoreDisplay", "label": "Risk Skoru" },
+            { "name": "statusDisplay", "type": "CustomComponent", "component": "StatusDisplay", "label": "Status" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "banka",
+      "title": "Banka Hesapları",
+      "no": "2",
+      "icon": "wallet",
+      "fields": [
+        { "name": "banks", "type": "CustomComponent", "component": "CorpBankAccountsEditor", "label": "Banka Hesapları", "col": 4 }
+      ]
+    },
+    {
+      "key": "finansal",
+      "title": "Finansal Bilgiler",
+      "no": "3",
+      "icon": "wallet",
+      "visible": "values._isNew !== true",
+      "fields": [
+        { "name": "wallets", "type": "CustomComponent", "component": "CorpWalletsTable", "label": "Cüzdanlar", "col": 4 }
+      ]
+    },
+    {
+      "key": "tuzel",
+      "title": "Tüzel Kişi",
+      "no": "4",
+      "icon": "building",
+      "fields": [
+        {
+          "name": "tuzelRow1",
+          "type": "Row",
+          "fields": [
+            { "name": "organizationType", "type": "Select", "label": "Hukuki Statü", "rules": [{ "required": true, "message": "Hukuki statü seçiniz" }], "options": [
+              { "label": "Anonim Şirket", "value": "AnonimCompany" },
+              { "label": "Limited Şirket", "value": "LimitedCompany" },
+              { "label": "Komandit Şirket", "value": "LimitedPartnership" },
+              { "label": "Kollektif Şirket", "value": "CollectiveCompany" },
+              { "label": "Şahıs İşletmesi", "value": "SoleProprietorship" },
+              { "label": "Kooperatif", "value": "Cooperative" },
+              { "label": "Sermaye Şirketi", "value": "CapitalCompany" },
+              { "label": "İDT", "value": "EconomicPublicInstitution" },
+              { "label": "Adi Ortaklık", "value": "OrdinaryPartnership" },
+              { "label": "Apt./Site Yönetimi", "value": "ApartmentSiteManagement" },
+              { "label": "Dernek", "value": "Association" },
+              { "label": "Vakıf", "value": "Foundation" },
+              { "label": "Siyasi Parti", "value": "PoliticalParty" },
+              { "label": "Sendika/Konfederasyon", "value": "UnionConfederation" },
+              { "label": "Yabancı Tüzel Kişi", "value": "ForeignLegalEntity" },
+              { "label": "Tüzel Kişiliği Olmayan", "value": "NonLegalEntityOrganization" },
+              { "label": "Kamu Kurumu", "value": "PublicInstitution" }
+            ] },
+            { "name": "registryNo", "type": "Input", "label": "Sicil No", "className": "mono" },
+            { "name": "mersisNo", "type": "Input", "label": "MERSİS", "className": "mono", "placeholder": "16 hane" }
+          ]
+        },
+        {
+          "name": "tuzelRow2",
+          "type": "Row",
+          "fields": [
+            { "name": "taxOffice", "type": "Select", "label": "Vergi Dairesi", "rules": [{ "required": true, "message": "Vergi dairesi seçiniz" }], "options": [
+              { "label": "—", "value": "" },
+              { "label": "Gaziantep Vergi Dairesi", "value": "Gaziantep Vergi Dairesi" },
+              { "label": "İstanbul VD", "value": "İstanbul VD" },
+              { "label": "Ankara VD", "value": "Ankara VD" }
+            ] },
+            { "name": "activitySubject", "type": "Input", "label": "Faaliyet Konusu", "col": 2, "rules": [{ "required": true, "message": "Faaliyet konusu zorunludur" }, { "minLength": 3, "message": "En az 3 karakter" }] }
+          ]
+        },
+        {
+          "name": "tuzelRow3",
+          "type": "Row",
+          "fields": [
+            { "name": "establishmentDate", "type": "DatePicker", "label": "Kuruluş Tarihi" },
+            { "name": "country", "type": "Select", "label": "Kurulduğu Ülke", "rules": [{ "required": true, "message": "Ülke seçiniz" }], "options": [
+              { "label": "Türkiye", "value": "TUR" }
+            ] }
+          ]
+        },
+        {
+          "name": "tuzelRow4",
+          "type": "Row",
+          "fields": [
+            { "name": "ownershipType", "type": "Select", "label": "Sermaye Yapısı", "rules": [{ "required": true, "message": "Sermaye yapısı seçiniz" }], "options": [
+              { "label": "Yerli", "value": "domestic" },
+              { "label": "Yabancı", "value": "foreign" },
+              { "label": "Karma", "value": "mixed" }
+            ] },
+            { "name": "staffCount", "type": "InputNumber", "label": "Personel Sayısı", "min": 1, "rules": [{ "required": true, "message": "Personel sayısı zorunludur" }] },
+            { "name": "language", "type": "Select", "label": "Dil Tercihi", "rules": [{ "required": true, "message": "Dil seçiniz" }], "options": [
+              { "label": "Türkçe", "value": "tr" },
+              { "label": "English", "value": "en" }
+            ] }
+          ]
+        },
+        { "name": "notes", "type": "TextArea", "label": "Notlar", "col": 4, "rows": 2 }
+      ]
+    },
+    {
+      "key": "ortaklar",
+      "title": "Ortaklar",
+      "no": "5",
+      "icon": "user",
+      "fields": [
+        { "name": "shareholders", "type": "CustomComponent", "component": "CorpShareholdersEditor", "label": "Ortaklar", "col": 4 }
+      ]
+    },
+    {
+      "key": "yetkililer",
+      "title": "Yetkililer",
+      "no": "6",
+      "icon": "user",
+      "fields": [
+        { "name": "authorizedPersons", "type": "CustomComponent", "component": "CorpAuthorizedEditor", "label": "Yetkililer", "col": 4 }
+      ]
+    },
+    {
+      "key": "adres",
+      "title": "Adresler",
+      "no": "7",
+      "icon": "mail",
+      "fields": [
+        { "name": "addresses", "type": "CustomComponent", "component": "CorpAddressesEditor", "label": "Adresler", "col": 4 }
+      ]
+    },
+    {
+      "key": "iletisim",
+      "title": "İletişim",
+      "no": "8",
+      "icon": "mail",
+      "fields": [
+        { "name": "contacts", "type": "CustomComponent", "component": "CorpContactsEditor", "label": "İletişim Kanalları", "col": 4 }
+      ]
+    },
+    {
+      "key": "limit",
+      "title": "İşlem Limitleri",
+      "no": "9",
+      "visible": "values._isNew !== true",
+      "fields": [
+        {
+          "name": "limitRow",
+          "type": "Row",
+          "fields": [
+            { "name": "limits.perTx", "type": "InputNumber", "label": "İşlem Limiti", "className": "mono", "min": 0 },
+            { "name": "limits.daily", "type": "InputNumber", "label": "Günlük", "className": "mono", "min": 0 },
+            { "name": "limits.monthly", "type": "InputNumber", "label": "Aylık", "className": "mono", "min": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "belgeler",
+      "title": "Belgeler",
+      "no": "+",
+      "icon": "file",
+      "fields": [
+        { "name": "documents", "type": "CustomComponent", "component": "CorpDocumentsTable", "label": "Belgeler", "col": 4 }
+      ]
+    }
+  ]
+}

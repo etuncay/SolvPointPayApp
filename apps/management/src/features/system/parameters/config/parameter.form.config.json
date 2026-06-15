@@ -1,0 +1,19 @@
+{
+  "fields": [
+    { "name": "groupName", "type": "Input", "label": "Grup", "col": 2, "readOnly": true },
+    { "name": "parameterKey", "type": "Input", "label": "Anahtar", "col": 2, "readOnly": true },
+    { "name": "valueType", "type": "Input", "label": "Değer tipi", "col": 2, "readOnly": true },
+    { "name": "description", "type": "Input", "label": "Açıklama", "col": 2, "readOnly": true },
+    { "name": "value", "type": "Input", "label": "Değer", "col": 2 },
+    {
+      "name": "status",
+      "type": "Select",
+      "label": "Durum",
+      "col": 2,
+      "options": [
+        { "label": "Aktif", "value": "Active" },
+        { "label": "Pasif", "value": "Passive" }
+      ]
+    }
+  ]
+}

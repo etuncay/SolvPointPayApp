@@ -1,0 +1,42 @@
+---
+description: Visual and code quality standards — applied from brief aesthetic/css_stack fields
+globs: "**/*.{tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Quality standards (generic)
+
+Apply when implementing UI. Read approved brief from `.cursor/plans/_briefs/` or plan **Brief (approved)** section.
+
+## Universal bar
+
+- **Typography:** Distinct display + readable body; avoid default-only system stacks unless brief says `corporate/minimal-system`.
+- **Spacing:** Consistent grid (4/8pt or framework default); no random margins.
+- **Color:** One strong accent; avoid generic purple-gradient-on-white unless brief requests it.
+- **Motion:** One high-impact moment beats scattered micro-interactions (unless brief `interaction: high`).
+- **Accessibility:** Meet brief `a11y` level; minimum touch target 44px on mobile.
+
+## Stack-specific (from brief)
+
+| css_stack | Rules |
+|-----------|-------|
+| `tailwind` | Utility-first; centralize tokens in `tailwind.config` or CSS variables |
+| `bootstrap-css` | Use Bootstrap grid/components; avoid mixing undocumented custom CSS |
+| `css-modules` / `scss` | Co-locate styles; no global leakage |
+| `styled-components` | Theme provider for colors/spacing |
+| `vanilla` | Semantic HTML5; BEM or consistent class naming |
+
+| component_library | Rules |
+|-------------------|-------|
+| `shadcn-radix` | Use installed shadcn primitives; extend via tokens |
+| `mui` / `ant-design` / `chakra` | Follow library theming; no duplicate primitives |
+| `bootstrap-components` | react-bootstrap or Bootstrap 5 components |
+| `none-custom` | Document component inventory in plan |
+
+## Forbidden (unless brief overrides)
+
+- Inter/Roboto-only typography with no design intent
+- Cookie-cutter AI layouts with no brief-aligned aesthetic
+- Hardcoded color strings when a token/theme file exists
+
+Design-only work: follow [design-intake/SKILL.md](../skills/design-intake/SKILL.md).

@@ -1,0 +1,44 @@
+{
+  "title": "Personel Listesi",
+  "rowKey": "employeeId",
+  "pagination": {
+    "defaultPageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "search": {
+    "placeholder": "Ad, unvan, e-posta veya telefon ara…",
+    "keys": ["fullName", "title", "primaryEmail", "primaryPhone"]
+  },
+  "hideColumnFilters": true,
+  "advancedFilters": [
+    {
+      "key": "hireFrom",
+      "label": "İşe Başlama (Başlangıç)",
+      "type": "date",
+      "span": 4
+    },
+    {
+      "key": "hireTo",
+      "label": "İşe Başlama (Bitiş)",
+      "type": "date",
+      "span": 4
+    }
+  ],
+  "tabs": [
+    { "key": "all", "title": "Tümü", "filters": {}, "countKey": "allCount" },
+    { "key": "Active", "title": "Aktif", "filters": { "status": "Active" }, "countKey": "activeCount" },
+    { "key": "OnLeave", "title": "İzinde", "filters": { "status": "OnLeave" }, "countKey": "onLeaveCount" },
+    { "key": "Terminated", "title": "Ayrıldı", "filters": { "status": "Terminated" }, "countKey": "terminatedCount" }
+  ],
+  "toolbar": {
+    "new": { "label": "Yeni Personel" }
+  },
+  "columns": [
+    { "key": "fullName", "title": "Ad-Soyad", "dataIndex": "fullName", "sortable": true, "minWidth": 180 },
+    { "key": "title", "title": "Unvan", "dataIndex": "title", "sortable": true, "minWidth": 160 },
+    { "key": "primaryEmail", "title": "E-posta", "dataIndex": "primaryEmail", "sortable": true, "minWidth": 190 },
+    { "key": "primaryPhone", "title": "Telefon", "dataIndex": "primaryPhone", "sortable": true, "minWidth": 150, "mono": true },
+    { "key": "hireDate", "title": "İşe Başlama", "dataIndex": "hireDate", "sortable": true, "width": 130, "mono": true },
+    { "key": "employmentStatus", "title": "Status", "dataIndex": "employmentStatus", "sortable": true, "width": 120, "render": "renderEmploymentStatus" }
+  ]
+}
