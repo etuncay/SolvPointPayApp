@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { DynamicTable, type TableCustomFunctions } from '@epay/ui';
 import type { CustomerDocumentViewRow } from '../domain/types';
 import { buildDocumentsViewTableConfig } from '../customer-search-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 interface Props {
   open: boolean;
@@ -29,6 +30,7 @@ export function DocumentViewModal({ open, documents, onClose }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
     [documents, i18n.language],
   );
+  const ui = useAgentUiPermissions();
 
   const customFunctions: TableCustomFunctions = useMemo(
     () => ({
@@ -54,7 +56,7 @@ export function DocumentViewModal({ open, documents, onClose }: Props) {
           ) : (
             <DynamicTable
               config={tableConfig}
-              permissions={{}}
+              permissions={ui.table.customers}
               customFunctions={customFunctions}
               locale={i18n.language}
               t={translate}

@@ -79,3 +79,8 @@ isProject: false
 - Cookie-cutter layouts without brief aesthetic
 
 Reuse existing component library from repo when present; extend via tokens, not raw color strings.
+
+## Subagent delegation
+
+- **Before Step 4 (create plan):** Launch `repo-explorer` to find existing theme/token patterns.
+- **Before Step 6 (approval):** Launch `plan-reviewer` on the design plan file.

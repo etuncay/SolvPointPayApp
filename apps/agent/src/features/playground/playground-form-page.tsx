@@ -22,6 +22,7 @@ import {
   updateCustomer,
 } from '@epay/data';
 import { buildPlaygroundFormConfig, playgroundFormApiCall } from './playground-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 function formStatusClass(mode: FormMode): string {
   if (isFormDelete(mode)) return 'danger';
@@ -53,6 +54,7 @@ export function PlaygroundFormPage({ mode }: { mode: FormMode }) {
     t(key, { defaultValue: fb ?? key });
   const [loading, setLoading] = useState(!isFormCreate(mode));
   const [editRow, setEditRow] = useState<Record<string, unknown> | undefined>();
+  const ui = useAgentUiPermissions();
 
   const formConfig = useMemo(
     () => buildPlaygroundFormConfig(translate),
@@ -143,7 +145,7 @@ export function PlaygroundFormPage({ mode }: { mode: FormMode }) {
     <DynamicForm
       config={formConfig}
       mode={mode}
-      permissions={{ create: true, update: true, delete: true }}
+      permissions={ui.form.playground}
       initialValues={formInitialValues}
       customFunctions={customFunctions}
       loading={loading}

@@ -292,8 +292,8 @@ export function useTransferFlow(variant: TransferVariant) {
   );
 
   const finishSubmit = useCallback(
-    (payload: TransferSubmitPayload, receiverScreenName?: string, skipReceiverSanction = false) => {
-      const res = transferService.initiateTransfer(payload, { receiverScreenName, skipReceiverSanction });
+    async (payload: TransferSubmitPayload, receiverScreenName?: string, skipReceiverSanction = false) => {
+      const res = await transferService.initiateTransfer(payload, { receiverScreenName, skipReceiverSanction });
       if (!res.ok) {
         toast.error(t(res.message));
         return;

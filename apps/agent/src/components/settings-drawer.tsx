@@ -31,13 +31,13 @@ import { ContactsTab } from '@/features/settings/components/contacts-tab';
 import { AddressesTab } from '@/features/settings/components/addresses-tab';
 import { UsersTab } from '@/features/settings/components/users-tab';
 import { settingsService } from '@/features/settings/api/settings-service';
-import { IS_AGENT_ADMIN } from '@/features/settings/api/agent-settings-store';
 import {
   buildAppPreferencesFormConfig,
   buildPasswordChangeFormConfig,
   buildWelcomeMessageFormConfig,
 } from '@/features/settings/settings-form-config';
 import { buildFailedLoginsTableConfig } from '@/features/settings/settings-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 const passwordSchema = z
   .object({
@@ -80,6 +80,7 @@ export function SettingsDrawer({
   const [failedLogins, setFailedLogins] = useState<FailedLoginRow[]>([]);
   const [failedLoading, setFailedLoading] = useState(false);
   const [passwordKey, setPasswordKey] = useState(0);
+  const ui = useAgentUiPermissions();
 
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
@@ -150,7 +151,7 @@ export function SettingsDrawer({
     navigate('/login', { replace: true });
   };
 
-  const showUsers = IS_AGENT_ADMIN && settingsService.userCount() > 1;
+  const showUsers = ui.flags.canManageUsers && settingsService.userCount() > 1;
   const tabs: SettingsTab[] = [
     'receipts',
     'password',
@@ -194,7 +195,7 @@ export function SettingsDrawer({
                 key={passwordKey}
                 config={passwordFormConfig}
                 mode={FormMode.Create}
-                permissions={{ create: true }}
+                permissions={ui.form.settingsPassword}
                 initialValues={{ frequency: preferences.passwordChangeFrequency }}
                 t={translate}
                 onButtonClick={(key, values) => {
@@ -208,7 +209,7 @@ export function SettingsDrawer({
             <DynamicForm
               config={welcomeFormConfig}
               mode={FormMode.Update}
-              permissions={{ update: true }}
+              permissions={ui.form.settingsPrefs}
               initialValues={{ welcomeMessage: preferences.welcomeMessage }}
               t={translate}
               onButtonClick={(key, values) => {
@@ -227,7 +228,7 @@ export function SettingsDrawer({
             <DynamicForm
               config={appFormConfig}
               mode={FormMode.Update}
-              permissions={{ update: true }}
+              permissions={ui.form.settingsPrefs}
               initialValues={{ lang, theme, textSize }}
               t={translate}
               onButtonClick={(key, values) => {
@@ -253,7 +254,7 @@ export function SettingsDrawer({
               ) : (
                 <DynamicTable
                   config={failedLoginsConfig}
-                  permissions={{}}
+                  permissions={ui.table.settingsFailedLogins}
                   customFunctions={failedTableFns}
                   locale={i18n.language}
                   t={translate}

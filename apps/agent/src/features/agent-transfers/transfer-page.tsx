@@ -18,6 +18,7 @@ import { isQuoteExpired } from './domain/fx-quote';
 import { useTransferFlow } from './hooks/use-transfer-flow';
 import { variantTitleKey } from './localize-config';
 import type { TransferVariant } from './domain/types';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 interface Props {
   variant: TransferVariant;
@@ -68,13 +69,14 @@ export function TransferPage({ variant }: Props) {
     submit,
     reset,
   } = flow;
+  const ui = useAgentUiPermissions();
 
   const hasSender = sender != null;
   const isCorporate = sender?.customerType === 'corporate';
   const currency = String(draft.currency ?? 'TRY');
   const amount = Number(draft.amount ?? 0);
   const fee = useMemo(() => computeTransferFee(variant, currency, amount), [variant, currency, amount]);
-  const canSubmit = hasSender && isReadyToSubmit(variant, draft, kycBanner);
+  const canSubmit = hasSender && isReadyToSubmit(variant, draft, kycBanner) && ui.flags.canTransfer;
 
   const initialQueryValue = initialQuery.customerNo || initialQuery.idNo;
   const [corporateDocName, setCorporateDocName] = useState('');
@@ -170,7 +172,7 @@ export function TransferPage({ variant }: Props) {
             key={queryKey}
             config={queryFormConfig}
             mode={FormMode.Create}
-            permissions={{ create: false, update: false, delete: false }}
+            permissions={ui.form.search}
             initialValues={{
               query: initialQueryValue,
               _showClear: hasSender || notFound,
@@ -210,7 +212,7 @@ export function TransferPage({ variant }: Props) {
               <DynamicForm
                 config={senderSummaryConfig}
                 mode={FormMode.View}
-                permissions={{ view: true }}
+                permissions={ui.form.transactionView}
                 initialValues={{ senderCard: sender }}
                 customFunctions={queryCustomFns}
                 t={translate}
@@ -266,7 +268,7 @@ export function TransferPage({ variant }: Props) {
                 key={formKey}
                 config={formConfig}
                 mode={FormMode.Create}
-                permissions={{ create: true }}
+                permissions={ui.form.transferSubmit}
                 initialValues={initialValues}
                 customFunctions={customFunctions}
                 loading={loading}
@@ -280,7 +282,7 @@ export function TransferPage({ variant }: Props) {
               <div className="section-h" style={{ marginBottom: 12 }}>{t('ag_tr_panel_fees')}</div>
               <DynamicTable
                 config={feesConfig}
-                permissions={{}}
+                permissions={ui.table.fees}
                 customFunctions={feeFns}
                 locale={i18n.language}
                 t={translate}

@@ -18,7 +18,7 @@ import {
   ThumbsUp,
 } from 'lucide-react';
 import { BREADCRUMB_MAP, MENU_ITEMS, NAV_SECTIONS } from '@/config/navigation';
-import { filterMenuForRole, filterNavSections } from '@/config/filter-menu';
+import { filterMenuForAgent, filterNavSections } from '@/config/filter-menu';
 import {
   resolveActiveNav,
   resolveActiveSub,
@@ -29,10 +29,12 @@ import {
 } from '@/config/nav-resolver';
 import { useRole } from '@/domain/role-context';
 import { useAuth } from '@/domain/auth-context';
+import { useAgentSession } from '@/hooks/use-agent-session';
 import { SettingsProvider, type SettingsTab } from '@/domain/settings-context';
 import { UserPreferencesProvider } from '@/domain/user-preferences';
 import { NOTIFS } from '@/mocks/data';
 import { SettingsDrawer } from '@/components/settings-drawer';
+import { DemoModeBanner } from '@/components/demo-mode-banner';
 import { I18nThemeSync } from '@/providers/i18n-theme-sync';
 import { APP_PRODUCT } from '@/config/app';
 
@@ -47,6 +49,7 @@ const NOTIF_ICONS: Record<string, React.ReactNode> = {
 function LayoutInner() {
   const { t } = useTranslation();
   const { role } = useRole();
+  const session = useAgentSession();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { theme, setTheme, lang, setLang } = useThemeSettings();
@@ -62,7 +65,9 @@ function LayoutInner() {
 
   const activeNav = resolveActiveNav(location.pathname);
   const activeSub = resolveActiveSub(location.pathname);
-  const filteredMenuItems = filterMenuForRole(MENU_ITEMS, role);
+  const filteredMenuItems = session
+    ? filterMenuForAgent(MENU_ITEMS, session.permissions)
+    : MENU_ITEMS;
 
   const translateMenu = (items: NavItem[]): Record<string, NavItem> => {
     const map: Record<string, NavItem> = {};
@@ -171,6 +176,7 @@ function LayoutInner() {
           ],
         }}
       >
+        <DemoModeBanner />
         <Outlet />
       </AppShell>
       <SettingsDrawer

@@ -78,3 +78,7 @@ Rules: one issue at a time; run related test after each fix; log every change; a
 
 - `screen-test-protocol` — UI verification in Phase 5
 - `implementation-plan` — if repair becomes a redesign
+
+## Subagent delegation
+
+- **After Phase 1 (SCOPE), before Phase 3 (DIAGNOSE):** Launch `dependency-tracer` for inbound/outbound import map.

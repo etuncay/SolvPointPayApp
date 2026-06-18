@@ -8,6 +8,13 @@ export const BACK_OFFICE_WALLET_SEED: BackOfficeWallet[] = buildBackOfficeWallet
   agents: TOP_AGENTS,
 });
 
+/** Agent portal — L1 transactional cüzdanlar dahil */
+export const BACK_OFFICE_AGENT_WALLET_SEED: BackOfficeWallet[] = buildBackOfficeWallets({
+  customers: CUSTOMERS,
+  agents: TOP_AGENTS,
+  includeTransactionalWallets: true,
+});
+
 export async function ensureBackOfficeWalletsSeeded(
   db: import('../db/dexie').EPayDataDB,
 ): Promise<void> {

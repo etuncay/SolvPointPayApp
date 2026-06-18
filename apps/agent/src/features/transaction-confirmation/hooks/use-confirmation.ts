@@ -19,7 +19,10 @@ export function useConfirmation(requestApprove: boolean) {
   }, [txId, version]);
 
   const mode = useMemo(
-    () => (view ? resolveConfirmationMode(view.detail.status, requestApprove) : 'Detail'),
+    () =>
+      view
+        ? resolveConfirmationMode(view.detail.status, requestApprove, { storeBacked: view.storeBacked })
+        : 'Detail',
     [view, requestApprove],
   );
 

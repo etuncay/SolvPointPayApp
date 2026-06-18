@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { customerPortalApi, DEMO_CUSTOMER_PASSWORD } from '@epay/data';
+import { getDemoCustomerPassword } from '@epay/data';
 import { useAuth } from '@/app/AuthProvider';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Logo } from '@/components/ui/Logo';
 import { OtpInput } from '@/components/ui/OtpInput';
+import { DemoOtpHint } from '@/components/DemoOtpHint';
 import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon } from '@/components/icons/Icon';
+import { DEMO_CUSTOMER_IDENTITY } from '@/config/auth-keys';
+import { LoginDevDemoNote } from '@/features/auth/LoginDevDemoNote';
+import { DemoModeBanner } from '@/components/DemoModeBanner';
+import { isDemoMode, shouldPrefillLoginDemo } from '@/lib/data-layer';
 import { useTranslation } from 'react-i18next';
 
 const REMEMBER_KEY = 'epay.customer.rememberIdentity';
@@ -66,13 +71,17 @@ function LoginAside() {
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const { login, verifyOtp, pendingOtp } = useAuth();
+  const { login, verifyOtp, pendingOtp, pendingProfile } = useAuth();
   const navigate = useNavigate();
   const [identity, setIdentity] = useState(() => {
-    if (typeof window === 'undefined') return 'CUS-4827193';
-    return localStorage.getItem(REMEMBER_KEY) ?? 'CUS-4827193';
+    if (typeof window === 'undefined') return DEMO_CUSTOMER_IDENTITY;
+    const remembered = localStorage.getItem(REMEMBER_KEY);
+    if (remembered) return remembered;
+    return shouldPrefillLoginDemo() ? DEMO_CUSTOMER_IDENTITY : '';
   });
-  const [password, setPassword] = useState(DEMO_CUSTOMER_PASSWORD);
+  const [password, setPassword] = useState(() =>
+    shouldPrefillLoginDemo() ? getDemoCustomerPassword() : '',
+  );
   const [taxNo, setTaxNo] = useState('');
   const [showCorporate, setShowCorporate] = useState(false);
   const [remember, setRemember] = useState(() => {
@@ -80,24 +89,8 @@ export function LoginPage() {
     return Boolean(localStorage.getItem(REMEMBER_KEY));
   });
   const [otp, setOtp] = useState('');
-  const [maskedPhone, setMaskedPhone] = useState('');
+  const maskedPhone = pendingProfile?.phone ? maskPhone(pendingProfile.phone) : '';
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!pendingOtp) return;
-    let cancelled = false;
-    customerPortalApi
-      .getProfile()
-      .then((p) => {
-        if (!cancelled) setMaskedPhone(maskPhone(p.phone));
-      })
-      .catch(() => {
-        if (!cancelled) setMaskedPhone('');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [pendingOtp]);
 
   async function onLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -116,8 +109,18 @@ export function LoginPage() {
     else navigate('/', { replace: true });
   }
 
+  const fillDemoCredentials = () => {
+    setIdentity(DEMO_CUSTOMER_IDENTITY);
+    setPassword(getDemoCustomerPassword());
+    setError(null);
+  };
+
+  const demoMode = isDemoMode();
+
   return (
-    <div className="login-wrap">
+    <>
+      <DemoModeBanner placement="page-top" />
+      <div className="login-wrap">
       <LoginAside />
       <div className="login-form-panel">
         <div className="login-form-inner">
@@ -133,13 +136,14 @@ export function LoginPage() {
             <>
               <h2 className="login-form-title">{t('login_form_title')}</h2>
               <p className="login-form-subtitle">{t('login_form_subtitle')}</p>
+              <LoginDevDemoNote onPickDemo={fillDemoCredentials} />
               <form onSubmit={onLogin} className="login-form-stack">
                 <Field label={t('login_identity')} required full>
                   <input
                     className="input"
                     value={identity}
                     onChange={(e) => setIdentity(e.target.value)}
-                    placeholder="CUS-4827193"
+                    placeholder={DEMO_CUSTOMER_IDENTITY}
                     autoComplete="username"
                   />
                 </Field>
@@ -197,10 +201,6 @@ export function LoginPage() {
                   {t('login_continue')}{' '}
                   <Icon name="right" style={{ width: 18, height: 18, marginLeft: 4 }} />
                 </Button>
-
-                <p className="login-demo-hint">
-                  Demo: <strong>CUS-4827193</strong> / <strong>{DEMO_CUSTOMER_PASSWORD}</strong>
-                </p>
               </form>
             </>
           ) : (
@@ -212,17 +212,12 @@ export function LoginPage() {
               <p className="login-form-subtitle">
                 {maskedPhone
                   ? t('login_otp_sent_to', { phone: maskedPhone })
-                  : t('login_otp_hint')}
+                  : demoMode
+                    ? t('login_otp_hint_demo')
+                    : t('login_otp_hint_prod')}
               </p>
+              {demoMode ? <DemoOtpHint onUseCode={setOtp} /> : null}
               <OtpInput value={otp} onChange={setOtp} />
-              <button
-                type="button"
-                className="btn btn-quiet"
-                style={{ marginTop: 12 }}
-                onClick={() => setOtp('123456')}
-              >
-                {t('login_demo_otp')}
-              </button>
               <div style={{ marginTop: 26 }}>
                 <Button
                   type="submit"
@@ -240,5 +235,6 @@ export function LoginPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

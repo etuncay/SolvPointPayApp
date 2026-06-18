@@ -1,4 +1,9 @@
 import { describe, expect, it, beforeEach } from 'vitest';
+import {
+  buildSupportCaseRecord,
+  publishSupportCaseToFeed,
+  resetCustomerPortalSupportCaseFeed,
+} from '@epay/data';
 import { getCurrentUser } from '@/features/approval-pool/domain/current-user';
 import { resetSupportCasesStore } from '@/mocks/support-cases-store';
 import { DEFAULT_SUPPORT_CASE_FILTERS, EMPTY_SUPPORT_CASE_FORM } from '../domain/types';
@@ -7,6 +12,7 @@ import { mockSupportCasesAdapter, supportCasesService } from './mock-support-cas
 describe('mock-support-cases-adapter', () => {
   beforeEach(() => {
     resetSupportCasesStore();
+    resetCustomerPortalSupportCaseFeed();
     mockSupportCasesAdapter.resetListAccessLogForTests();
   });
 
@@ -81,5 +87,28 @@ describe('mock-support-cases-adapter', () => {
     const d = supportCasesService.getDetail('ops', user.id, created.id);
     expect(d?.caseStatus).toBe('Resolved_IssueFixed');
     expect(d?.closedAt).not.toBeNull();
+  });
+
+  it('ingests customer portal support case feed into list', () => {
+    const row = buildSupportCaseRecord(
+      {
+        type: 'Complaint',
+        reason: 'Portal şikâyet testi',
+        message: 'Demo uçtan uca talep.',
+        consent: true,
+      },
+      1_700_000_123_456,
+    );
+    publishSupportCaseToFeed(row, 'CUS-4827193');
+
+    const user = getCurrentUser('ops');
+    const rows = supportCasesService.list('ops', user.id, {
+      ...DEFAULT_SUPPORT_CASE_FILTERS,
+      query: row.caseNo,
+    });
+
+    expect(rows.some((r) => r.caseNo === row.caseNo && r.subject === 'Portal şikâyet testi')).toBe(
+      true,
+    );
   });
 });

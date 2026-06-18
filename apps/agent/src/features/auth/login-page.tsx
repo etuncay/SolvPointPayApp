@@ -5,7 +5,9 @@ import { Button, Field, Input, PasswordInput } from '@epay/ui';
 import { useAuth } from '@/domain/auth-context';
 import { DEMO_PASSWORD } from '@epay/data';
 import { AGENT_DEMO_ACCOUNTS } from '@/config/app';
+import { isRegisterEnabled } from '@/lib/backoffice-auth';
 import { AuthLayout, AuthError, authButtonStyle } from './auth-layout';
+import { AuthDemoEnvBanner } from './auth-demo-env-banner';
 import { OtpStep } from './otp-step';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -32,7 +34,7 @@ export function LoginPage() {
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState<{ email?: string; password?: string; form?: string }>({});
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next: typeof errors = {};
     if (!email.trim()) next.email = t('auth_err_required', 'Bu alan zorunludur');
@@ -41,7 +43,7 @@ export function LoginPage() {
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    const r = startLogin(email, password);
+    const r = await startLogin(email, password);
     if (!r.ok) {
       setErrors({
         form:
@@ -58,7 +60,7 @@ export function LoginPage() {
         title={t('auth_otp_title', 'Doğrulama kodu')}
         subtitle={t('auth_otp_subtitle', 'Telefonunuza gönderilen 6 haneli kodu girin')}
         destination={maskPhone(pending.phone)}
-        demoCode={pending.code}
+        demoCode={pending.demoCode}
         onVerify={verifyOtp}
         onResend={resendOtp}
         onCancel={cancelPending}
@@ -77,15 +79,18 @@ export function LoginPage() {
       title={t('auth_login_title', 'Giriş yap')}
       subtitle={t('auth_login_subtitle', 'Temsilci hesabınızla devam edin')}
       footer={
-        <>
-          {t('auth_no_account', 'Hesabın yok mu?')}{' '}
-          <Link to="/register" style={{ color: 'var(--accent)' }}>
-            {t('auth_register_link', 'Kayıt ol')}
-          </Link>
-        </>
+        isRegisterEnabled() ? (
+          <>
+            {t('auth_no_account', 'Hesabın yok mu?')}{' '}
+            <Link to="/register" style={{ color: 'var(--accent)' }}>
+              {t('auth_register_link', 'Kayıt ol')}
+            </Link>
+          </>
+        ) : undefined
       }
     >
       <form onSubmit={submit} noValidate>
+        <AuthDemoEnvBanner />
         <AuthError message={errors.form} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <Field label={t('auth_email', 'E-posta')} htmlFor="email" error={errors.email}>

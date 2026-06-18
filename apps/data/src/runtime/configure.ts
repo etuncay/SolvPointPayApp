@@ -1,3 +1,4 @@
+import { createHttpAuthAdapter } from '../adapters/http/auth-http.adapter';
 import { createHttpCustomersAdapter } from '../adapters/http/customers-http.adapter';
 import { createHttpFormReferenceAdapter } from '../adapters/http/form-reference-http.adapter';
 import { createHttpAccountsAdapter } from '../adapters/http/accounts-http.adapter';
@@ -27,6 +28,8 @@ import { setAccountsApiPort } from '../services/accounts.service';
 import { setAgentRegistrationApiPort } from '../services/registration.service';
 import { setTransactionsApiPort } from '../services/transactions.service';
 import { setWalletsApiPort } from '../services/wallets.service';
+import { createMockAuthAdapter } from '../adapters/mock/auth-mock.adapter';
+import { setAuthPort } from '../services/auth.service';
 
 export type DataDriver = 'dexie' | 'http';
 
@@ -51,6 +54,7 @@ export function configureDataLayer(options: ConfigureDataLayerOptions = {}): voi
     }
     activeDriver = 'http';
     const base = options.apiBaseUrl.trim();
+    setAuthPort(createHttpAuthAdapter(base));
     setCustomersApiPort(createHttpCustomersAdapter(base));
     setFormReferenceApiPort(createHttpFormReferenceAdapter(base));
     setAccountsApiPort(createHttpAccountsAdapter(base));
@@ -61,6 +65,7 @@ export function configureDataLayer(options: ConfigureDataLayerOptions = {}): voi
     return;
   }
   activeDriver = 'dexie';
+  setAuthPort(createMockAuthAdapter());
   setCustomersApiPort(createDexieCustomersAdapter());
   setFormReferenceApiPort(createDexieFormReferenceAdapter());
   setAccountsApiPort(createDexieAccountsAdapter());

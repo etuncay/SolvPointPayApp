@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { BackOfficeRole } from '@epay/ui';
-import { getCurrentUser } from '../domain/current-user';
 import type { ApprovalRequest } from '../domain/types';
 import { approvalsService } from '../api';
+import { useApprovalCurrentUser } from './use-approval-current-user';
 
-export function useApprovalDetail(role: BackOfficeRole) {
+export function useApprovalDetail() {
   const { approvalId } = useParams<{ approvalId: string }>();
   const navigate = useNavigate();
-  const user = useMemo(() => getCurrentUser(role), [role]);
+  const user = useApprovalCurrentUser();
   const [detail, setDetail] = useState<ApprovalRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);

@@ -79,7 +79,7 @@ export type TransferSubmitPayload = OwnWalletPayload | BankAccountPayload | Pers
 
 export type TransferSubmitResult =
   | { ok: true; transactionId: number; status: 'Pending' | 'OnHold'; sanctionHit: boolean; receiverSanctionHit?: boolean }
-  | { ok: false; code: 'DUPLICATE' | 'KYC_BLOCKED' | 'RISK_COUNTRY'; message: string };
+  | { ok: false; code: 'DUPLICATE' | 'KYC_BLOCKED' | 'RISK_COUNTRY' | 'LIMIT_EXCEEDED'; message: string };
 
 export interface MaskedRecipient {
   name: string;

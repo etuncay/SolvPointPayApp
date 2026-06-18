@@ -60,3 +60,8 @@ Create feature/module skeleton per approved brief. Clarify target path before co
 - Raw `fetch` in page components — use a data layer from the brief
 
 When implementing from a plan, follow the plan **UI** section and file tree only.
+
+## Subagent delegation
+
+- **Before Required step 1:** Launch `brief-validator`; abort if brief blockers exist.
+- **Before path generation:** Launch `repo-explorer` to match existing repo layout.

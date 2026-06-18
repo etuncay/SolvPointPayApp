@@ -80,6 +80,8 @@ Base: `{apiBaseUrl}/customer-portal`
 |--------|-----|----------|
 | POST | `/customer-portal/auth/login` | Giriş |
 | POST | `/customer-portal/auth/verify-otp` | OTP doğrulama |
+| GET | `/customer-portal/auth/me` | Oturum profili (401 = oturum yok) |
+| POST | `/customer-portal/auth/logout` | Çıkış |
 | POST | `/customer-portal/auth/password-reset` | Parola sıfırlama |
 | GET | `/customer-portal/profile` | Profil |
 | GET | `/customer-portal/wallets` | Cüzdanlar |
@@ -138,13 +140,20 @@ Tam liste: `apps/data/src/adapters/http/customer-portal-http.adapter.ts`
 
 ### Playground mock seed
 
-Management/agent ortak fixture:
+Management/agent ortak fixture — **tek kaynak `@epay/data`**:
 
 ```ts
-import { CUSTOMERS, TOP_AGENTS, buildBackOfficeWallets } from '@epay/data';
-
-const wallets = buildBackOfficeWallets({ customers: CUSTOMERS, agents: TOP_AGENTS });
+import {
+  CUSTOMERS,
+  TOP_AGENTS,
+  BACK_OFFICE_WALLET_SEED,
+  BACK_OFFICE_TRANSACTION_SEED,
+  BACK_OFFICE_AGENT_WALLET_SEED,
+  BACK_OFFICE_AGENT_TRANSACTION_SEED,
+} from '@epay/data';
 ```
+
+`apps/*/src/mocks/transactions.ts` ve `wallets.ts` yalnızca bu sabitleri re-export eder; yerel `build*` çağrısı yapmayın.
 
 Alternatif alt yol: `@epay/data/seed-playground-mock-data`
 

@@ -101,3 +101,7 @@ Reply (in `locale.chat`) with a **`## Verification results`** table: Screen | Sc
 - Never perform irreversible production actions during automated runs.
 
 Related: [verification.md](../../plans/_shared/verification.md) - [screen-test-docs.mdc](../../rules/screen-test-docs.mdc)
+
+## Subagent delegation
+
+- **Before Step 3 (browser test):** Launch `route-mapper` to resolve screen list, routes, and auth requirements.

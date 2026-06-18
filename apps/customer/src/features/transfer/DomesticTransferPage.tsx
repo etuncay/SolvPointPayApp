@@ -11,9 +11,11 @@ import { Button } from '@/components/ui/Button';
 import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon } from '@/components/icons/Icon';
 import { PAYMENT_PURPOSES, paymentPurposeI18nKey, TRANSFER_CURRENCIES } from '@/lib/enums';
-import { validateFreeText } from '@/lib/validators';
+import { firstFreeTextError } from '@/lib/validators';
+import { useTransferLimits } from '@/lib/use-transfer-limits';
 import { fmtMoney } from '@/lib/format';
 import { Trans, useTranslation } from 'react-i18next';
+import { TransferLimitDemoBanner } from '@/components/TransferLimitDemoBanner';
 import { amountToInput, buildDraft, parseAmount, type TransferPrefill } from './transfer-form-shared';
 
 function calcDomesticFee(amount: number): number {
@@ -26,7 +28,7 @@ export function DomesticTransferPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const prefill = (location.state as { prefill?: TransferPrefill } | null)?.prefill;
-  const { submitForReview, draft: existingDraft } = useTransferDraft();
+  const { submitForReview, draft: existingDraft, transferTabConflict } = useTransferDraft();
   // İşlem Onay → Düzenle ile dönüldüğünde alanlar dolu gelir.
   const editDraft = existingDraft?.kind === 'domestic' ? existingDraft : null;
 
@@ -52,6 +54,8 @@ export function DomesticTransferPage() {
   const [desc, setDesc] = useState(editDraft?.description ?? '');
   const [saveRecipient, setSaveRecipient] = useState(editDraft?.saveRecipient ?? false);
   const [descErr, setDescErr] = useState<string | null>(null);
+  const [amountErr, setAmountErr] = useState<string | null>(null);
+  const { internetDailyLimit, validateTransferTotal } = useTransferLimits();
 
   useEffect(() => {
     if (walletId || persistent.length === 0) return;
@@ -80,12 +84,18 @@ export function DomesticTransferPage() {
   async function onReview(e: React.FormEvent) {
     e.preventDefault();
     if (!wallet || !valid) return;
-    const descError = validateFreeText(desc);
-    if (descError) {
-      setDescErr(descError);
+    const sensitiveErr = firstFreeTextError(name, desc);
+    if (sensitiveErr) {
+      setDescErr(t(sensitiveErr));
+      return;
+    }
+    const limitErr = validateTransferTotal(total, wallet.balance);
+    if (limitErr) {
+      setAmountErr(t(limitErr));
       return;
     }
     setDescErr(null);
+    setAmountErr(null);
     const draft = buildDraft(
       'domestic',
       'Yurt İçi Transfer',
@@ -105,7 +115,8 @@ export function DomesticTransferPage() {
       },
     );
     draft.saveRecipient = saveRecipient;
-    await submitForReview(draft);
+    const ok = await submitForReview(draft);
+    if (!ok) return;
     navigate('/confirm');
   }
 
@@ -123,9 +134,10 @@ export function DomesticTransferPage() {
 
         <form onSubmit={onReview} className="transfer-domestic-layout">
           <div className="card card-pad transfer-form-card">
-            {descErr && (
+            <TransferLimitDemoBanner limit={internetDailyLimit} symbol={sym} />
+            {(descErr || amountErr) && (
               <AlertBanner tone="error" icon="warn">
-                {descErr}
+                {descErr ?? amountErr}
               </AlertBanner>
             )}
             <SourceWalletPicker
@@ -252,7 +264,7 @@ export function DomesticTransferPage() {
                 block
                 className="btn-lg"
                 style={{ marginTop: 18 }}
-                disabled={!valid}
+                disabled={!valid || transferTabConflict}
               >
                 {t('domestic_continue')}{' '}
                 <Icon name="right" style={{ width: 18, height: 18 }} />

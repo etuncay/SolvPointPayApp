@@ -154,18 +154,6 @@ export function ManualCorrectionPage() {
     );
   }, [lastValues, reserveError]);
 
-  if (!permissions.view) {
-    return (
-      <div className="empty-state" style={{ padding: 48 }}>
-        <h3>{t('finrec_forbidden_title')}</h3>
-        <p className="t-mute">{t('cr_forbidden_sub')}</p>
-        <Button type="button" onClick={() => navigate('/transfers')} style={{ marginTop: 16 }}>
-          {t('cr_back_transfers')}
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <>
       <PageHead title={t('cr_title')} subtitle={t('cr_subtitle')} />

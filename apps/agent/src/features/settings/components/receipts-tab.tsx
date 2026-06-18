@@ -5,6 +5,7 @@ import { DynamicTable, type TableCustomFunctions } from '@epay/ui';
 import { printReceipt } from '@/features/receipt/print-receipt';
 import { agentTransactionsService } from '@/features/transaction-confirmation/api/agent-transactions-service';
 import { buildReceiptsTableConfig } from '../settings-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** 1.3 › Dekontlarım — DynamicTable + JSON config. */
 export function ReceiptsTab() {
@@ -13,6 +14,7 @@ export function ReceiptsTab() {
     t(key, { defaultValue: fb ?? key });
 
   const hasRows = useMemo(() => agentTransactionsService.listAgentReceipts().length > 0, []);
+  const ui = useAgentUiPermissions();
 
   const tableConfig = useMemo(
     () => buildReceiptsTableConfig(translate),
@@ -38,7 +40,7 @@ export function ReceiptsTab() {
   return (
     <DynamicTable
       config={tableConfig}
-      permissions={{}}
+      permissions={ui.table.settingsReceipts}
       customFunctions={customFunctions}
       locale={i18n.language}
       t={translate}

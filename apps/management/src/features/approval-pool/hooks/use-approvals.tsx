@@ -1,11 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { BackOfficeRole } from '@epay/ui';
-import { getCurrentUser } from '../domain/current-user';
 import type { ApprovalListFilter } from '../domain/types';
 import { approvalsService } from '../api';
+import { useApprovalCurrentUser } from './use-approval-current-user';
 
-export function useApprovals(role: BackOfficeRole) {
-  const user = useMemo(() => getCurrentUser(role), [role]);
+export function useApprovals() {
+  const user = useApprovalCurrentUser();
   const [filter, setFilter] = useState<ApprovalListFilter>('pending_mine');
 
   const rows = useMemo(

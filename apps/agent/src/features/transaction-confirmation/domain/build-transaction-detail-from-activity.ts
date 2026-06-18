@@ -1,8 +1,16 @@
 import type { AgentActivityRecord } from '@epay/data';
 import { AGENTS } from '@/mocks/agents';
+import { parseCustomerNo } from '@/features/customer-search/domain/format-customer-no';
 import { DEMO_AGENT_ID } from '../api/agent-transactions-store';
 import type { TransactionDetail, TransactionParty } from './transaction-detail';
 import { isTerminalStatus, type TransactionStatus, type TransactionType } from './transaction-types';
+
+function formatActivityTimestamp(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso.slice(0, 19).replace('T', ' ');
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
 
 function walletParty(activity: AgentActivityRecord): TransactionParty {
   const agent = AGENTS.find((a) => a.id === DEMO_AGENT_ID);
@@ -21,12 +29,10 @@ function walletParty(activity: AgentActivityRecord): TransactionParty {
 }
 
 function counterpartyParty(activity: AgentActivityRecord): TransactionParty {
-  const cpNo = activity.counterpartyNo?.startsWith('MUS-')
-    ? Number(activity.counterpartyNo.slice(4))
-    : null;
+  const cpNo = activity.counterpartyNo ? parseCustomerNo(activity.counterpartyNo) : null;
   const acct = activity.counterpartyAccount ?? '';
   return {
-    customerNo: Number.isFinite(cpNo) ? cpNo : null,
+    customerNo: cpNo,
     walletNo: acct.startsWith('CZ-') ? acct : null,
     walletId: null,
     name: activity.counterpartyName ?? '—',
@@ -54,8 +60,8 @@ export function buildTransactionDetailFromActivity(activity: AgentActivityRecord
     foreignReferenceNo:
       activity.transactionType === 'InternationalTransfer' ? `FX-${activity.referenceNo}` : null,
     status,
-    createdAt: activity.createdAt,
-    withdrawalDate: activity.createdAt.slice(0, 10),
+    createdAt: formatActivityTimestamp(activity.createdAt),
+    withdrawalDate: formatActivityTimestamp(activity.createdAt).slice(0, 10),
     transactionType: activity.transactionType as TransactionType,
     paymentPurpose: 'Bireysel Transfer',
     description: activity.description ?? `${activity.transactionType} işlemi`,

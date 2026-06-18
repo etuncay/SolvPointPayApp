@@ -6,6 +6,7 @@ import { DynamicForm, FormMode, PageHead, type CustomFunctions } from '@epay/ui'
 import { SignedReceiptPrintField } from './components/signed-receipt-print-field';
 import { buildSignedReceiptFormConfig } from './signed-receipt-form-config';
 import { agentTransactionsService } from './api/agent-transactions-service';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 const ACCEPT = '.pdf,.jpg,.jpeg,.png';
 const ALLOWED_MIME = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -17,6 +18,7 @@ export function SignedReceiptPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const txId = Number(id);
+  const ui = useAgentUiPermissions();
 
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
@@ -46,7 +48,7 @@ export function SignedReceiptPage() {
           <DynamicForm
             config={formConfig}
             mode={FormMode.Create}
-            permissions={{ create: true }}
+            permissions={ui.form.transactionApproveAction}
             customFunctions={customFunctions}
             t={translate}
             onButtonClick={(key, values) => {

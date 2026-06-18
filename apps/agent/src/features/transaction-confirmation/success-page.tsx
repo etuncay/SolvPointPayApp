@@ -5,12 +5,14 @@ import { DynamicForm, FormMode, PageHead, type CustomFunctions } from '@epay/ui'
 import successFormJson from './config/success.form.config.json';
 import { TransactionSuccessPanel } from './components/transaction-success-panel';
 import type { FormConfig } from '@epay/ui';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** İşlem başarıyla tamamlandı — DynamicForm + özel panel. */
 export function TransactionSuccessPage() {
   const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const txId = Number(id);
+  const ui = useAgentUiPermissions();
 
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
@@ -34,7 +36,7 @@ export function TransactionSuccessPage() {
       <DynamicForm
         config={formConfig}
         mode={FormMode.View}
-        permissions={{ view: true }}
+        permissions={ui.form.transactionView}
         customFunctions={customFunctions}
         t={translate}
       />

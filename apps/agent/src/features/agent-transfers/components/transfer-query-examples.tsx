@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 const EXAMPLES = [
   { value: '78568632556', labelKey: 'ag_tr_ex_indv_l2' },
   { value: '75683988090', labelKey: 'ag_tr_ex_indv_l1' },
+  { value: '84590344827', labelKey: 'ag_tr_ex_indv_t0' },
+  { value: '36338154452', labelKey: 'ag_tr_ex_blocked' },
   { value: '1792956117', labelKey: 'ag_tr_ex_corp' },
   { value: '00000000000', labelKey: 'ag_tr_ex_none' },
 ] as const;

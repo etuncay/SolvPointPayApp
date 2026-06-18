@@ -28,6 +28,7 @@ export function Topbar({
   searchPlaceholder,
   roleLabel,
   roleCycleTitle,
+  roleBadge,
   role,
   onCycleRole,
   onLogout,
@@ -40,6 +41,7 @@ export function Topbar({
   onOpenSettings,
   userName,
   userRoleLabel,
+  userBadge,
   logoutLabel,
   logoutDesc,
   settingsDesc,
@@ -56,6 +58,8 @@ export function Topbar({
   roleLabel: string;
   /** Rol chip tooltip — Risk menüsü gibi rol kısıtları için ipucu */
   roleCycleTitle?: string;
+  /** Örn. alltest süper test rozeti */
+  roleBadge?: React.ReactNode;
   role: BackOfficeRole;
   /** Verilmezse rol chip'i statik gösterilir (rol hesaptan gelir) */
   onCycleRole?: () => void;
@@ -70,6 +74,8 @@ export function Topbar({
   onOpenSettings: () => void;
   userName: string;
   userRoleLabel: string;
+  /** Kullanıcı adı yanında rozet (örn. alltest hesabı) */
+  userBadge?: React.ReactNode;
   logoutLabel: string;
   logoutDesc: string;
   settingsDesc: string;
@@ -128,6 +134,7 @@ export function Topbar({
           <span className="role-chip-dot" />
           {roleLabel}
         </span>
+        {roleBadge}
         <IconButton onClick={onToggleTheme} aria-label="Tema">
           {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
         </IconButton>
@@ -186,7 +193,10 @@ export function Topbar({
         >
           <div className="user-avatar">{initials(userName)}</div>
           <div className="user-meta">
-            <b>{userName}</b>
+            <b style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              {userName}
+              {userBadge}
+            </b>
             <span>{userRoleLabel}</span>
           </div>
           {userOpen && (

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { ArrowLeft, Check, RotateCcw, ThumbsDown } from 'lucide-react';
 import { Button, PageHead } from '@epay/ui';
-import { useRole } from '@/domain/role-context';
 import { rowCanApprove, rowCanReject, rowCanWithdraw } from './domain/permissions';
+import { userIdsMatch } from './domain/current-user';
 import { useApprovalDetail } from './hooks/use-approval-detail';
 import { PayloadDiffView } from './components/payload-diff-view';
 import { ApproveModal } from './components/approve-modal';
@@ -26,9 +26,8 @@ function statusLabelKey(uiStatus: string): string {
 
 export function ApprovalDetailPage() {
   const { t, i18n } = useTranslation();
-  const { role } = useRole();
   const { user, detail, loading, notFound, approve, reject, withdraw, resubmit, goBack } =
-    useApprovalDetail(role);
+    useApprovalDetail();
   const tr = i18n.language === 'tr';
 
   const [approveOpen, setApproveOpen] = useState(false);
@@ -123,7 +122,7 @@ export function ApprovalDetailPage() {
                 <RotateCcw size={14} /> {t('ap_action_withdraw')}
               </Button>
             )}
-            {isWithdrawn && user.id === detail.initiatedBy && (
+            {isWithdrawn && userIdsMatch(user.id, detail.initiatedBy) && (
               <>
                 <Button type="button" variant="primary" onClick={onResubmit}>
                   {t('ap_resubmit')}

@@ -21,6 +21,8 @@ function resolvePort(): CustomerPortalApi {
 export const customerPortalApi: CustomerPortalApi = {
   login: (input) => resolvePort().login(input),
   verifyOtp: (input) => resolvePort().verifyOtp(input),
+  getSessionProfile: () => resolvePort().getSessionProfile(),
+  logout: () => resolvePort().logout(),
   requestPasswordReset: (email) => resolvePort().requestPasswordReset(email),
   getProfile: () => resolvePort().getProfile(),
   listWallets: () => resolvePort().listWallets(),
@@ -47,9 +49,12 @@ export const customerPortalApi: CustomerPortalApi = {
   verifyContact: (id, code) => resolvePort().verifyContact(id, code),
   getTopupInstructions: () => resolvePort().getTopupInstructions(),
   createSupportCase: (input) => resolvePort().createSupportCase(input),
+  listSupportCases: () => resolvePort().listSupportCases(),
   createTransferDraft: (draft) => resolvePort().createTransferDraft(draft),
   approveTransfer: (id, otp, key, decl) =>
     resolvePort().approveTransfer(id, otp, key, decl),
   cancelTransfer: (id) => resolvePort().cancelTransfer(id),
   getReceipt: (id) => resolvePort().getReceipt(id),
+  getPendingTransfer: () => resolvePort().getPendingTransfer(),
+  clearPendingTransfer: () => resolvePort().clearPendingTransfer(),
 };

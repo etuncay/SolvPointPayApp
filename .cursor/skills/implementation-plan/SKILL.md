@@ -57,3 +57,8 @@ Produce plan files only — no application code unless user also requests implem
 | Implement | Read-only body; only todos[].status |
 
 Do not assume monorepo layout, product-specific UI DSL, or fixed app folder names unless brief and repo confirm them.
+
+## Subagent delegation
+
+- **Before Step 3 (gap analysis):** Launch `repo-explorer` in parallel; merge its gap table into the plan.
+- **Before Step 9 (present to user):** Launch `plan-reviewer`; fix critical issues before sharing the plan.

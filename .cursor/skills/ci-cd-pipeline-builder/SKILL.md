@@ -45,3 +45,7 @@ Wrong-ecosystem template; deploy before green tests; missing cache; expensive ma
 Detect first; one canonical pipeline per repo; require green CI before deploy; protected environments for prod; regenerate when stack changes.
 
 Refs: [GitHub Actions](https://docs.github.com/actions), [GitLab CI](https://docs.gitlab.com/ee/ci/)
+
+## Subagent delegation
+
+- **Before Step 2 (generate pipeline):** Launch `command-validator` to verify lint/test/build commands exist.

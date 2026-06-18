@@ -7,16 +7,19 @@ import { useTransferDraft } from '@/app/TransferDraftContext';
 import { MoneyInput } from '@/components/money/MoneyInput';
 import { Field } from '@/components/ui/Field';
 import { Button } from '@/components/ui/Button';
+import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon } from '@/components/icons/Icon';
+import { useTransferLimits } from '@/lib/use-transfer-limits';
 import { fmtMoney } from '@/lib/format';
 import { Trans, useTranslation } from 'react-i18next';
+import { TransferLimitDemoBanner } from '@/components/TransferLimitDemoBanner';
 import { amountToInput, buildDraft, parseAmount } from './transfer-form-shared';
 
 export function ReceivePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { profile } = useAuth();
-  const { submitForReview, draft: existingDraft } = useTransferDraft();
+  const { submitForReview, draft: existingDraft, transferTabConflict } = useTransferDraft();
   // İşlem Onay → Düzenle ile dönüldüğünde alanlar dolu gelir.
   const editDraft = existingDraft?.kind === 'receive' ? existingDraft : null;
 
@@ -31,6 +34,8 @@ export function ReceivePage() {
 
   const [ibanId, setIbanId] = useState('');
   const [amountStr, setAmountStr] = useState(amountToInput(editDraft?.amount));
+  const [amountErr, setAmountErr] = useState<string | null>(null);
+  const { internetDailyLimit, validateTransferTotal } = useTransferLimits();
 
   // Düzenle akışında draft IBAN değerini, liste yüklendiğinde id'ye eşle.
   useEffect(() => {
@@ -47,6 +52,12 @@ export function ReceivePage() {
   async function onReview(e: React.FormEvent) {
     e.preventDefault();
     if (!wallet || !iban) return;
+    const limitErr = validateTransferTotal(amount, wallet.balance);
+    if (limitErr) {
+      setAmountErr(t(limitErr));
+      return;
+    }
+    setAmountErr(null);
     const draft = buildDraft(
       'receive',
       t('receive_confirm_type'),
@@ -64,7 +75,8 @@ export function ReceivePage() {
         bank: iban.bank,
       },
     );
-    await submitForReview(draft);
+    const ok = await submitForReview(draft);
+    if (!ok) return;
     navigate('/confirm');
   }
 
@@ -87,6 +99,14 @@ export function ReceivePage() {
         </div>
 
         <form onSubmit={onReview} className="card card-pad receive-form-card">
+          <TransferLimitDemoBanner limit={internetDailyLimit} symbol={wallet?.symbol ?? '₺'} />
+          {amountErr ? (
+            <div style={{ marginBottom: 16 }}>
+              <AlertBanner tone="error" icon="warn">
+                {amountErr}
+              </AlertBanner>
+            </div>
+          ) : null}
           <Field label="IBAN" required hint={t('receive_iban_hint')} full>
             <select
               className="select"
@@ -142,7 +162,7 @@ export function ReceivePage() {
             type="submit"
             variant="primary"
             className="btn-lg btn-block"
-            disabled={!valid}
+            disabled={!valid || transferTabConflict}
           >
             {t('receive_continue')}{' '}
             <Icon name="right" style={{ width: 18, height: 18 }} />

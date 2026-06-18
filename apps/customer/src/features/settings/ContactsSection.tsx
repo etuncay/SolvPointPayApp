@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Modal } from '@/components/ui/Modal';
 import { OtpInput } from '@/components/ui/OtpInput';
+import { DemoOtpHint } from '@/components/DemoOtpHint';
 import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon, type IconName } from '@/components/icons/Icon';
+import { isDemoMode } from '@/lib/data-layer';
 
 type Draft = { id: string | null; kind: ContactKind; value: string };
 type Flash = { tone: 'info' | 'error'; msg: string } | null;
@@ -78,12 +80,18 @@ function VerifyModal({
       ) : null}
 
       {!isEmail ? (
-        <Field label={t('settings_verify_code_label')} required full>
-          <OtpInput value={code} onChange={setCode} />
-        </Field>
-      ) : (
-        <p className="hint">{t('settings_verify_email_demo')}</p>
-      )}
+        <>
+          <Field label={t('settings_verify_code_label')} required full>
+            <OtpInput value={code} onChange={setCode} />
+          </Field>
+          <DemoOtpHint onUseCode={setCode} />
+        </>
+      ) : isDemoMode() ? (
+        <>
+          <p className="hint">{t('settings_verify_email_demo')}</p>
+          <DemoOtpHint />
+        </>
+      ) : null}
 
       <div style={{ display: 'flex', gap: 10, marginTop: 20, justifyContent: 'flex-end' }}>
         <Button variant="ghost" onClick={doResend}>

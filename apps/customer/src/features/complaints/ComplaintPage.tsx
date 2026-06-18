@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon } from '@/components/icons/Icon';
 import { COMPLAINT_TYPES, complaintTypeI18nKey } from '@/lib/enums';
-import { validateFreeText } from '@/lib/validators';
+import { firstFreeTextError } from '@/lib/validators';
 import { useTranslation } from 'react-i18next';
 
 const emptyForm = () => ({
@@ -43,9 +43,9 @@ export function ComplaintPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const msgErr = validateFreeText(form.message);
-    if (msgErr) {
-      setError(msgErr);
+    const sensitiveErr = firstFreeTextError(form.subject, form.message);
+    if (sensitiveErr) {
+      setError(t(sensitiveErr));
       return;
     }
     setError(null);

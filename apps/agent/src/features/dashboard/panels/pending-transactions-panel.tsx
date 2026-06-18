@@ -5,6 +5,7 @@ import { Clock } from 'lucide-react';
 import { DynamicTable, type TableCustomFunctions } from '@epay/ui';
 import { agentTransactionsService } from '@/features/transaction-confirmation/api/agent-transactions-service';
 import { buildPendingTransactionsTableConfig } from '../dashboard-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** §5 — Bekleyen İşlemler (DynamicTable + JSON config). Boşsa panel render edilmez. */
 export function PendingTransactionsPanel() {
@@ -15,6 +16,7 @@ export function PendingTransactionsPanel() {
 
   const initialCount = useMemo(() => agentTransactionsService.listPendingTransactions().length, []);
   const [visible, setVisible] = useState(initialCount > 0);
+  const ui = useAgentUiPermissions();
 
   const tableConfig = useMemo(
     () => buildPendingTransactionsTableConfig(translate),
@@ -40,7 +42,7 @@ export function PendingTransactionsPanel() {
         </div>
         <DynamicTable
           config={tableConfig}
-          permissions={{}}
+          permissions={ui.table.dashboardPendingTx}
           customFunctions={customFunctions}
           locale={i18n.language}
           t={translate}

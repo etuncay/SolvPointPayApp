@@ -7,8 +7,16 @@ import {
   hydrateBackOfficeWallets,
   hydrateBackOfficeWalletDetails,
   initMockDataLayer,
+  getActiveDataDriver,
+  BACK_OFFICE_TRANSACTION_SEED,
+  BACK_OFFICE_WALLET_SEED,
   type DataDriver,
 } from '@epay/data';
+
+/** Dexie/mock sürücü aktifken true — gerçek HTTP API kullanılmıyor. */
+export function isDemoMode(): boolean {
+  return getActiveDataDriver() !== 'http';
+}
 
 /**
  * Mock tamamlanana kadar dexie; production'da VITE_DATA_DRIVER=http ile gerçek API.
@@ -19,12 +27,7 @@ export async function bootstrapDataLayer(): Promise<void> {
   if (driver === 'http') {
     const base = import.meta.env.VITE_API_BASE_URL as string | undefined;
     if (!base?.trim()) {
-      console.warn('[data-layer] VITE_DATA_DRIVER=http ama VITE_API_BASE_URL yok; dexie kullanılıyor');
-      await initMockDataLayer();
-      await seedManagementTransactions();
-      await loadTransfersStore();
-      await loadWalletsStore();
-      return;
+      throw new Error('[data-layer] VITE_DATA_DRIVER=http iken VITE_API_BASE_URL zorunlu');
     }
     configureDataLayer({ driver: 'http', apiBaseUrl: base });
     await loadTransfersStore();
@@ -39,15 +42,16 @@ export async function bootstrapDataLayer(): Promise<void> {
 }
 
 async function seedManagementTransactions(): Promise<void> {
-  const { TRANSACTIONS } = await import('@/mocks/transactions');
-  const { WALLETS } = await import('@/mocks/wallets');
-  await hydrateBackOfficeTransactions(TRANSACTIONS);
+  await hydrateBackOfficeTransactions(BACK_OFFICE_TRANSACTION_SEED);
   await hydrateBackOfficeTransactionDetails(
-    buildBackOfficeTransactionDetails({ transactions: TRANSACTIONS }),
+    buildBackOfficeTransactionDetails({ transactions: BACK_OFFICE_TRANSACTION_SEED }),
   );
-  await hydrateBackOfficeWallets(WALLETS);
+  await hydrateBackOfficeWallets(BACK_OFFICE_WALLET_SEED);
   await hydrateBackOfficeWalletDetails(
-    buildBackOfficeWalletDetails({ wallets: WALLETS, transactions: TRANSACTIONS }),
+    buildBackOfficeWalletDetails({
+      wallets: BACK_OFFICE_WALLET_SEED,
+      transactions: BACK_OFFICE_TRANSACTION_SEED,
+    }),
   );
 }
 

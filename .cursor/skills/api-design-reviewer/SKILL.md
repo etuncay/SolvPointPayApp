@@ -62,3 +62,7 @@ Encode team rules as a Spectral ruleset. Fail CI on breaking diffs for published
 ## Output
 
 Deliver: scorecard, breaking-change list, convention violations (severity), recommended fixes. Link to specific paths/operations in the spec.
+
+## Subagent delegation
+
+- **Before review checklist:** Launch `openapi-linter` for spectral lint and oasdiff breaking detection.

@@ -3,7 +3,8 @@ import { getWallets } from '@/lib/wallets-store';
 import { agentTransactionsStore, DEMO_AGENT_ID } from '@/features/transaction-confirmation/api/agent-transactions-store';
 import { formatCustomerNo, parseCustomerNo } from '@/features/customer-search/domain/format-customer-no';
 import type { CustomerSearchWarning } from '@/features/customer-search/domain/types';
-import { isDuplicateReference } from '../domain/idempotency';
+import { releaseReference, tryAcquireReference } from '../domain/idempotency';
+import { checkTransactionLimit } from '@/features/limits/api/check-transaction-limit';
 import { getWithdrawalFeeTiers } from '../domain/fees';
 import type {
   AuthorizedPerson,
@@ -85,7 +86,7 @@ function screenSanction(name: string): boolean {
 export interface WithdrawalService {
   lookupRecipient(query: { customerNo?: string; idNo?: string }): RecipientLookupResult | null;
   getWithdrawalFees(currency: string): WithdrawalFeeTier[];
-  initiateWithdrawal(payload: WithdrawalSubmitPayload): WithdrawalSubmitResult;
+  initiateWithdrawal(payload: WithdrawalSubmitPayload): Promise<WithdrawalSubmitResult>;
 }
 
 export const mockWithdrawalAdapter: WithdrawalService = {
@@ -112,43 +113,59 @@ export const mockWithdrawalAdapter: WithdrawalService = {
     return getWithdrawalFeeTiers(currency);
   },
 
-  initiateWithdrawal(payload) {
+  async initiateWithdrawal(payload) {
     const ref = payload.transactionReferenceNo.trim() || payload.foreignReferenceNo?.trim() || '';
-    if (ref && isDuplicateReference(ref)) {
+    if (ref && !tryAcquireReference(ref)) {
       return { ok: false, code: 'DUPLICATE', message: 'ag_wd_err_duplicate' };
     }
 
-    const sanctionHit = screenSanction(payload.screenName);
-    const status: 'Pending' | 'OnHold' = sanctionHit ? 'OnHold' : 'Pending';
+    try {
+      const limitCheck = await checkTransactionLimit({
+        operationType: 'WalletWithdrawal',
+        currency: payload.currency,
+        amount: payload.amount,
+        customerId: payload.customerId,
+        walletId: payload.walletId,
+        corporateAuthorizedPersonId: payload.authorizedPersonIdNo,
+      });
+      if (!limitCheck.ok) {
+        return { ok: false, code: 'LIMIT_EXCEEDED', message: limitCheck.message };
+      }
 
-    const now = new Date();
-    const createdAt = now.toISOString().slice(0, 19).replace('T', ' ');
+      const sanctionHit = screenSanction(payload.screenName);
+      const status: 'Pending' | 'OnHold' = sanctionHit ? 'OnHold' : 'Pending';
 
-    const tx = agentTransactionsStore.addRecord({
-      txNo: `TX-WD-${now.getTime().toString().slice(-8)}`,
-      referenceNo: payload.transactionReferenceNo.trim() || `REF-WD-${now.getTime().toString().slice(-8)}`,
-      foreignReferenceNo: payload.foreignReferenceNo?.trim() || null,
-      senderCustomerId: payload.customerId,
-      senderAgentId: null,
-      receiverCustomerId: null,
-      receiverAgentId: DEMO_AGENT_ID,
-      senderWalletId: payload.walletId,
-      receiverWalletId: null,
-      senderIban: null,
-      receiverIban: null,
-      type: 'WalletWithdrawal',
-      currency: payload.currency,
-      amount: payload.amount,
-      feeFixed: 0,
-      feeVariable: 0,
-      status,
-      recordStatus: 1,
-      createdAt,
-      paymentPurpose: 'Nakit Çekim',
-      description: payload.isSuspicious ? 'Şüpheli işaretli para çekme' : 'Para çekme talebi',
-      withdrawalDate: createdAt.slice(0, 10),
-    });
+      const now = new Date();
+      const createdAt = now.toISOString().slice(0, 19).replace('T', ' ');
 
-    return { ok: true, transactionId: tx.id, status, sanctionHit };
+      const tx = agentTransactionsStore.addRecord({
+        txNo: `TX-WD-${now.getTime().toString().slice(-8)}`,
+        referenceNo: ref || `REF-WD-${now.getTime().toString().slice(-8)}`,
+        foreignReferenceNo: payload.foreignReferenceNo?.trim() || null,
+        senderCustomerId: payload.customerId,
+        senderAgentId: null,
+        receiverCustomerId: null,
+        receiverAgentId: DEMO_AGENT_ID,
+        senderWalletId: payload.walletId,
+        receiverWalletId: null,
+        senderIban: null,
+        receiverIban: null,
+        type: 'WalletWithdrawal',
+        currency: payload.currency,
+        amount: payload.amount,
+        feeFixed: 0,
+        feeVariable: 0,
+        status,
+        recordStatus: 1,
+        createdAt,
+        paymentPurpose: 'Nakit Çekim',
+        description: payload.isSuspicious ? 'Şüpheli işaretli para çekme' : 'Para çekme talebi',
+        withdrawalDate: createdAt.slice(0, 10),
+      });
+
+      return { ok: true, transactionId: tx.id, status, sanctionHit };
+    } finally {
+      if (ref) releaseReference(ref);
+    }
   },
 };

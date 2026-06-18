@@ -1,4 +1,5 @@
 import { deriveUiStatus } from './ui-status';
+import { userIdsMatch } from './current-user';
 import type {
   ApprovalActionResult,
   ApprovalRequest,
@@ -41,7 +42,7 @@ export function canReject(user: CurrentUser, r: ApprovalRequest): boolean {
 export function canWithdraw(user: CurrentUser, r: ApprovalRequest): boolean {
   if (terminal(r)) return false;
   if (r.uiStatus === 'withdrawn') return false;
-  return user.id === r.initiatedBy && (r.firstStatus === 'Pending' || r.firstStatus === null);
+  return userIdsMatch(user.id, r.initiatedBy) && (r.firstStatus === 'Pending' || r.firstStatus === null);
 }
 
 function duplicateApproveError(r: ApprovalRequest, tier: 1 | 2): string | null {
@@ -77,7 +78,7 @@ export function applyApprove(
   }
 
   // §0.5 — 1. ve 2. onaycı farklı kişiler olmak zorundadır.
-  if (isAwaitingSecond(r) && r.firstApprover && user.id === r.firstApprover) {
+  if (isAwaitingSecond(r) && r.firstApprover && userIdsMatch(user.id, r.firstApprover)) {
     return { ok: false, error: 'ap_same_approver' };
   }
 

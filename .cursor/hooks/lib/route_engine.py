@@ -11,7 +11,7 @@ from typing import Any
 
 ROOT = Path(os.environ.get("CURSOR_PROJECT_DIR", "."))
 MANIFEST_PATH = ROOT / ".cursor/config/context-manifest.json"
-REGISTRY_PATH = ROOT / ".cursor/skills/claude-skills-router/registry.json"
+REGISTRY_PATH = ROOT / ".cursor/skills/skills-router/registry.json"
 ACTIVE_CTX_PATH = ROOT / ".cursor/logs/.active-context.json"
 BRIEF_DIR = ROOT / ".cursor/plans/_briefs"
 DEFAULTS_PATH = ROOT / ".cursor/config/project.defaults.yaml"

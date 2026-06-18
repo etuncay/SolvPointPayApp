@@ -21,4 +21,4 @@ Greenfield, new feature without brief, create plan, design/mockup, scaffold — 
 5. Plan: `.cursor/plans/features/{slug}.plan.md` — get approval before code
 6. Implement: plan body read-only; only `todos[].status`; verify per [verification.md](../plans/_shared/verification.md)
 
-Registry: [registry.json](../skills/claude-skills-router/registry.json). Options: [intake-canonical-options.md](../plans/_shared/intake-canonical-options.md).
+Registry: [registry.json](../skills/skills-router/registry.json). Options: [intake-canonical-options.md](../plans/_shared/intake-canonical-options.md).

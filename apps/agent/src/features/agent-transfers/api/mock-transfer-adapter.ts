@@ -23,6 +23,7 @@ import {
   type TransferSubmitResult,
   type TransferVariant,
 } from '../domain/types';
+import { checkTransactionLimit } from '@/features/limits/api/check-transaction-limit';
 
 export interface TransferService {
   lookupSender(query: { customerNo?: string; idNo?: string }): SenderLookupResult | null;
@@ -31,7 +32,7 @@ export interface TransferService {
   getFxQuote(sourceCcy: string, targetCcy: string, amount: number): FxQuote;
   lookupRecipientMasked(idNo: string): ReturnType<typeof lookupRecipientMasked>;
   createReceiverInfo(input: { idNo: string; name: string; phone: string; email: string }): void;
-  initiateTransfer(payload: TransferSubmitPayload, options?: { receiverScreenName?: string; skipReceiverSanction?: boolean }): TransferSubmitResult;
+  initiateTransfer(payload: TransferSubmitPayload, options?: { receiverScreenName?: string; skipReceiverSanction?: boolean }): Promise<TransferSubmitResult>;
   rescreenReceiver(name: string): boolean;
 }
 
@@ -127,7 +128,7 @@ export const mockTransferAdapter: TransferService = {
     return screenSanction(name);
   },
 
-  initiateTransfer(payload, options) {
+  async initiateTransfer(payload, options) {
     const ref = payload.clientReference.trim();
     if (ref && isDuplicateReference(ref)) {
       return { ok: false, code: 'DUPLICATE', message: 'ag_tr_err_duplicate' };
@@ -143,6 +144,17 @@ export const mockTransferAdapter: TransferService = {
       if (risk === 'blocked') {
         return { ok: false, code: 'RISK_COUNTRY', message: 'ag_tr_err_risk_country' };
       }
+    }
+
+    const limitCheck = await checkTransactionLimit({
+      operationType: VARIANT_TX_TYPE[payload.variant],
+      currency: payload.currency,
+      amount: payload.amount,
+      customerId: payload.senderCustomerId,
+      corporateAuthorizedPersonId: payload.authorizedPersonIdNo,
+    });
+    if (!limitCheck.ok) {
+      return { ok: false, code: 'LIMIT_EXCEEDED', message: limitCheck.message };
     }
 
     if (screenSanction(payload.screenName)) {

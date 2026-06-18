@@ -28,9 +28,12 @@ import type {
 export interface CustomerPortalApi {
   login(input: CustomerLoginInput): Promise<CustomerLoginResult>;
   verifyOtp(input: CustomerOtpVerifyInput): Promise<CustomerLoginResult>;
+  /** HttpOnly oturum / mock sessionProfile — yoksa null */
+  getSessionProfile(): Promise<CustomerProfile | null>;
+  logout(): Promise<void>;
   requestPasswordReset(email: string): Promise<{ ok: true }>;
 
-  getProfile(): Promise<CustomerProfile>;
+  getProfile(): Promise<CustomerProfile | null>;
   listWallets(): Promise<CustomerWallet[]>;
   listTransactions(query: TransactionsListQuery): Promise<PaginatedTransactions>;
   getTransactionById(id: string): Promise<CustomerTransaction | undefined>;
@@ -68,6 +71,7 @@ export interface CustomerPortalApi {
 
   getTopupInstructions(): Promise<TopupInstructions>;
   createSupportCase(input: SupportCaseInput): Promise<SupportCaseRecord>;
+  listSupportCases(): Promise<SupportCaseRecord[]>;
 
   createTransferDraft(draft: TransferDraftInput): Promise<TransferConfirmation>;
   approveTransfer(
@@ -78,4 +82,7 @@ export interface CustomerPortalApi {
   ): Promise<TransferApproveResult>;
   cancelTransfer(transactionId: string): Promise<boolean>;
   getReceipt(transactionId: string): Promise<ReceiptRecord | undefined>;
+  /** Mock: sessionStorage; HTTP: sunucu pending işlem (yoksa null) */
+  getPendingTransfer(): Promise<TransferConfirmation | null>;
+  clearPendingTransfer(): Promise<void>;
 }

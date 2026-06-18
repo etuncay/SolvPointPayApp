@@ -12,6 +12,7 @@ import { WithdrawalIdentitySection } from './components/withdrawal-identity-sect
 import { CorporateDocWarning } from './components/corporate-doc-warning';
 import { useWithdrawal } from './hooks/use-withdrawal';
 import { buildWithdrawalSearchFormConfig } from './withdrawal-search-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** Agent Para Çekme (5.para-cekme.md) — DynamicForm + ücret DynamicTable + kimlik tarama. */
 export function WithdrawalPage() {
@@ -21,6 +22,7 @@ export function WithdrawalPage() {
 
   const {
     loading,
+    submitting,
     notFound,
     result,
     selectedWallet,
@@ -38,6 +40,7 @@ export function WithdrawalPage() {
     submit,
     cancel,
   } = useWithdrawal();
+  const ui = useAgentUiPermissions();
 
   const isCorporate = result?.customerType === 'corporate';
   const hasResult = result != null;
@@ -120,7 +123,7 @@ export function WithdrawalPage() {
           <DynamicForm
             config={searchFormConfig}
             mode={FormMode.Create}
-            permissions={{ create: false, update: false, delete: false }}
+            permissions={ui.form.search}
             initialValues={{
               customerNo: initialQuery.customerNo ?? '',
               idNo: initialQuery.idNo ?? '',
@@ -184,10 +187,10 @@ export function WithdrawalPage() {
                 key={formKey}
                 config={formConfig}
                 mode={FormMode.Create}
-                permissions={{ create: true }}
+                permissions={ui.form.withdrawalSubmit}
                 initialValues={initialValues}
                 customFunctions={customFunctions}
-                loading={loading}
+                loading={loading || submitting}
                 t={translate}
                 onButtonClick={(key, values) => {
                   if (key === 'continue') submit(values);
@@ -204,7 +207,7 @@ export function WithdrawalPage() {
               <div className="section-h" style={{ marginBottom: 12 }}>{t('ag_wd_panel_fees')}</div>
               <DynamicTable
                 config={feesConfig}
-                permissions={{}}
+                permissions={ui.table.fees}
                 customFunctions={feeFns}
                 locale={i18n.language}
                 t={translate}

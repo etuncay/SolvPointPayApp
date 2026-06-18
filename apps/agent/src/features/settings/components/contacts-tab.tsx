@@ -7,6 +7,7 @@ import { settingsService } from '../api/settings-service';
 import type { ContactChannel } from '../api/agent-settings-store';
 import { buildContactsTableConfig } from '../settings-table-config';
 import { buildContactAddFormConfig } from '../settings-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?\d[\d\s]{8,}$/;
@@ -18,6 +19,7 @@ export function ContactsTab() {
     t(key, { defaultValue: fb ?? key });
   const [listVersion, setListVersion] = useState(0);
   const [formKey, setFormKey] = useState(0);
+  const ui = useAgentUiPermissions();
   const refresh = () => setListVersion((v) => v + 1);
 
   const tableConfig = useMemo(
@@ -121,7 +123,7 @@ export function ContactsTab() {
         key={formKey}
         config={addFormConfig}
         mode={FormMode.Create}
-        permissions={{ create: true }}
+        permissions={ui.form.settingsContactAdd}
         customFunctions={{}}
         t={translate}
         header={{ hidePageHead: true, saveLabel: t('ag_ct_add') }}
@@ -129,7 +131,7 @@ export function ContactsTab() {
       />
       <DynamicTable
         config={tableConfig}
-        permissions={{}}
+        permissions={ui.table.settingsContacts}
         customFunctions={customFunctions}
         locale={i18n.language}
         t={translate}

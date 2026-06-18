@@ -6,6 +6,7 @@ import { fmtNumber } from '@/lib/format';
 import { settingsService } from '../api/settings-service';
 import { AGENT_GLOBAL_DAILY_LIMIT } from '../api/agent-settings-store';
 import { buildUsersTableConfig } from '../settings-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** 1.3 › Kullanıcı Yönetimi — DynamicTable + JSON config. */
 export function UsersTab() {
@@ -13,6 +14,7 @@ export function UsersTab() {
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
   const [listVersion, setListVersion] = useState(0);
+  const ui = useAgentUiPermissions();
   const refresh = () => setListVersion((v) => v + 1);
 
   const tableConfig = useMemo(
@@ -54,7 +56,7 @@ export function UsersTab() {
       </p>
       <DynamicTable
         config={tableConfig}
-        permissions={{}}
+        permissions={ui.table.settingsUsers}
         customFunctions={customFunctions}
         locale={i18n.language}
         t={translate}

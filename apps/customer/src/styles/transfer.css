@@ -152,6 +152,11 @@
   display: flex;
   gap: 6px;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.intl-fx-refresh-note.is-expired {
+  color: var(--warn, #b45309);
 }
 
 .intl-status-flow {

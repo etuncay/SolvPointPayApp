@@ -8,6 +8,7 @@ import {
   REGEXP_ONLY_DIGITS,
 } from '@epay/ui';
 import type { SecurityChecks } from '../domain/types';
+import { ApprovalOtpDemoHint } from './approval-otp-demo-hint';
 
 type Props = {
   editable: boolean;
@@ -67,6 +68,7 @@ export function SecurityPanel({
               ))}
             </InputOTPGroup>
           </InputOTP>
+          {editable ? <ApprovalOtpDemoHint onUseCode={onOtpChange} /> : null}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

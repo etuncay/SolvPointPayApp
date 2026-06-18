@@ -1,43 +1,14 @@
-import {
-  buildBackOfficeTransactions,
-  type TransactionSeedAgent,
-  type TransactionSeedCustomer,
-  type TransactionSeedWallet,
-} from './build-back-office-transactions';
 import type { BackOfficeTransaction } from '../types/transaction';
+import { buildBackOfficeTransactionSeed } from './back-office-seed-utils';
+import { BACK_OFFICE_AGENT_WALLET_SEED, BACK_OFFICE_WALLET_SEED } from './seed-wallets';
 
-export type { TransactionSeedWallet, TransactionSeedCustomer, TransactionSeedAgent };
+/** Dexie + management mock — BACK_OFFICE_WALLET_SEED ile senkron */
+export const BACK_OFFICE_TRANSACTION_SEED: BackOfficeTransaction[] =
+  buildBackOfficeTransactionSeed(BACK_OFFICE_WALLET_SEED);
 
-/** Dexie ilk seed — management hydrate öncesi varsayılan fixture */
-const DEFAULT_WALLETS: TransactionSeedWallet[] = [
-  { id: 1, walletNo: 'MS-9901-01', ccy: 'TRY', customerId: 10001, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 2, walletNo: 'MS-9901-02', ccy: 'USD', customerId: 10001, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 3, walletNo: 'MS-9902-01', ccy: 'TRY', customerId: 10002, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 4, walletNo: 'MS-9903-01', ccy: 'EUR', customerId: 10003, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 5, walletNo: 'MS-9904-01', ccy: 'TRY', customerId: 10004, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 6, walletNo: 'MS-9905-01', ccy: 'GBP', customerId: 10005, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 7, walletNo: 'AG-0501-01', ccy: 'TRY', customerId: null, agentId: 501, cat: 'agent', recordStatus: 1 },
-  { id: 8, walletNo: 'AG-0502-01', ccy: 'TRY', customerId: null, agentId: 502, cat: 'agent', recordStatus: 1 },
-  { id: 9, walletNo: 'MS-9902-02', ccy: 'EUR', customerId: 10002, agentId: null, cat: 'customer', recordStatus: 1 },
-  { id: 10, walletNo: 'MS-9903-02', ccy: 'USD', customerId: 10003, agentId: null, cat: 'customer', recordStatus: 1 },
-];
-
-const DEFAULT_CUSTOMERS: TransactionSeedCustomer[] = [
-  { id: 10001, status: 'active', type: 'individual' },
-  { id: 10002, status: 'active', type: 'individual' },
-  { id: 10003, status: 'active', type: 'corporate' },
-  { id: 10004, status: 'active', type: 'individual' },
-  { id: 10005, status: 'active', type: 'individual' },
-];
-
-const DEFAULT_AGENTS: TransactionSeedAgent[] = [{ id: 501 }, { id: 502 }];
-
-/** Dexie seed — deterministik ~100 kayıt */
-export const BACK_OFFICE_TRANSACTION_SEED: BackOfficeTransaction[] = buildBackOfficeTransactions({
-  wallets: DEFAULT_WALLETS,
-  customers: DEFAULT_CUSTOMERS,
-  agents: DEFAULT_AGENTS,
-});
+/** Agent mock — transactional cüzdanlar dahil */
+export const BACK_OFFICE_AGENT_TRANSACTION_SEED: BackOfficeTransaction[] =
+  buildBackOfficeTransactionSeed(BACK_OFFICE_AGENT_WALLET_SEED);
 
 export async function ensureBackOfficeTransactionsSeeded(
   db: import('../db/dexie').EPayDataDB,

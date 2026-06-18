@@ -1,40 +1,55 @@
+/* ──────────────────────────────────────────────────────
+ *  RoleProvider — etkin rol (izinler) tek kaynaktan.
+ *  Oturum açıkken: hesap rolü (auth) + isteğe bağlı demo override.
+ *  Oturum yokken: yalnızca ?demoRole= veya varsayılan ops.
+ *  ?role= ve epay-backoffice-role kullanılmaz.
+ * ────────────────────────────────────────────────────── */
 import * as React from 'react';
 import type { BackOfficeRole } from '@epay/ui';
 import { useOptionalAuth } from './auth-context';
+import {
+  DEMO_ROLE_OVERRIDE_KEY,
+  LEGACY_ROLE_STORAGE_KEY,
+  isBackOfficeRole,
+  nextRoleInCycle,
+  readDemoRoleFromUrl,
+  readDemoRoleOverride,
+  resolveEffectiveRole,
+} from './role-resolution';
 
-const RoleContext = React.createContext<{
+interface RoleContextValue {
+  /** İzinler ve menü için etkin rol */
   role: BackOfficeRole;
-  setRole: (r: BackOfficeRole) => void;
+  /** Oturumdaki hesap rolü; oturum yoksa null */
+  accountRole: BackOfficeRole | null;
+  /** Demo override aktif (etkin rol ≠ hesap rolü) */
+  isDemoRoleOverride: boolean;
+  setDemoRole: (role: BackOfficeRole) => void;
+  clearDemoRole: () => void;
+  /** @deprecated setDemoRole kullanın */
+  setRole: (role: BackOfficeRole) => void;
   cycleRole: () => void;
-} | null>(null);
-
-const ROLES: BackOfficeRole[] = ['ops', 'finance', 'compliance', 'management', 'alltest'];
-const STORAGE_KEY = 'epay-backoffice-role';
-
-function isBackOfficeRole(value: string | null): value is BackOfficeRole {
-  return value != null && ROLES.includes(value as BackOfficeRole);
 }
 
-/** URL ?role=compliance veya sessionStorage — Risk menüsü testi için */
-function readInitialRole(): BackOfficeRole {
+const RoleContext = React.createContext<RoleContextValue | null>(null);
+
+function readInitialGuestRole(): BackOfficeRole {
   if (typeof window === 'undefined') return 'ops';
+  return readDemoRoleFromUrl(window.location.search) ?? 'ops';
+}
 
-  const fromUrl = new URLSearchParams(window.location.search).get('role');
-  if (isBackOfficeRole(fromUrl)) return fromUrl;
-
+function persistDemoOverride(role: BackOfficeRole | null): void {
   try {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
-    if (isBackOfficeRole(stored)) return stored;
+    if (role) sessionStorage.setItem(DEMO_ROLE_OVERRIDE_KEY, role);
+    else sessionStorage.removeItem(DEMO_ROLE_OVERRIDE_KEY);
   } catch {
     /* private mode */
   }
-
-  return 'ops';
 }
 
-function persistRole(role: BackOfficeRole) {
+function clearLegacyRoleStorage(): void {
   try {
-    sessionStorage.setItem(STORAGE_KEY, role);
+    sessionStorage.removeItem(LEGACY_ROLE_STORAGE_KEY);
   } catch {
     /* ignore */
   }
@@ -42,26 +57,73 @@ function persistRole(role: BackOfficeRole) {
 
 export function RoleProvider({ children }: { children: React.ReactNode }) {
   const auth = useOptionalAuth();
-  const [legacyRole, setLegacyRole] = React.useState<BackOfficeRole>(readInitialRole);
+  const accountRole = auth?.user?.role ?? null;
 
-  // Oturum açıksa rol HESAPTAN gelir (tek kaynak). Aksi halde legacy (test/URL).
-  const role: BackOfficeRole = auth?.user?.role ?? legacyRole;
+  const [guestRole, setGuestRole] = React.useState<BackOfficeRole>(readInitialGuestRole);
+  const [demoOverride, setDemoOverride] = React.useState<BackOfficeRole | null>(null);
 
-  const setRole = React.useCallback((next: BackOfficeRole) => {
-    setLegacyRole(next);
-    persistRole(next);
+  React.useEffect(() => {
+    if (!accountRole) {
+      setDemoOverride(null);
+      setGuestRole(readInitialGuestRole());
+      return;
+    }
+    clearLegacyRoleStorage();
+    setDemoOverride(readDemoRoleOverride(sessionStorage));
+  }, [accountRole]);
+
+  const role = React.useMemo(
+    () =>
+      resolveEffectiveRole({
+        accountRole,
+        demoOverride: accountRole ? demoOverride : null,
+        guestRole,
+      }),
+    [accountRole, demoOverride, guestRole],
+  );
+
+  const isDemoRoleOverride =
+    accountRole != null && demoOverride != null && demoOverride !== accountRole;
+
+  const setDemoRole = React.useCallback(
+    (next: BackOfficeRole) => {
+      if (!isBackOfficeRole(next)) return;
+      if (accountRole) {
+        setDemoOverride(next);
+        persistDemoOverride(next);
+        return;
+      }
+      setGuestRole(next);
+    },
+    [accountRole],
+  );
+
+  const clearDemoRole = React.useCallback(() => {
+    setDemoOverride(null);
+    persistDemoOverride(null);
   }, []);
 
   const cycleRole = React.useCallback(() => {
-    setRole(ROLES[(ROLES.indexOf(role) + 1) % ROLES.length]);
-  }, [role, setRole]);
+    setDemoRole(nextRoleInCycle(role));
+  }, [role, setDemoRole]);
 
-  return (
-    <RoleContext.Provider value={{ role, setRole, cycleRole }}>{children}</RoleContext.Provider>
+  const value = React.useMemo(
+    (): RoleContextValue => ({
+      role,
+      accountRole,
+      isDemoRoleOverride,
+      setDemoRole,
+      clearDemoRole,
+      setRole: setDemoRole,
+      cycleRole,
+    }),
+    [role, accountRole, isDemoRoleOverride, setDemoRole, clearDemoRole, cycleRole],
   );
+
+  return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
 }
 
-export function useRole() {
+export function useRole(): RoleContextValue {
   const ctx = React.useContext(RoleContext);
   if (!ctx) throw new Error('useRole RoleProvider içinde kullanılmalı');
   return ctx;

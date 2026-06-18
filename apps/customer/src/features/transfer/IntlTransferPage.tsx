@@ -11,9 +11,12 @@ import { Button } from '@/components/ui/Button';
 import { AlertBanner } from '@/components/ui/AlertBanner';
 import { Icon } from '@/components/icons/Icon';
 import { COUNTRIES, PAYMENT_PURPOSES, paymentPurposeI18nKey, TRANSFER_CURRENCIES } from '@/lib/enums';
-import { validateFreeText } from '@/lib/validators';
+import { firstFreeTextError } from '@/lib/validators';
+import { useTransferLimits } from '@/lib/use-transfer-limits';
 import { fmtMoney } from '@/lib/format';
 import { Trans, useTranslation } from 'react-i18next';
+import { TransferLimitDemoBanner } from '@/components/TransferLimitDemoBanner';
+import { useFxQuote } from '@/lib/use-fx-quote';
 import { amountToInput, buildDraft, parseAmount, type TransferPrefill } from './transfer-form-shared';
 
 const RISKY_COUNTRIES = ['BAE', 'Suudi Arabistan'] as const;
@@ -32,7 +35,7 @@ export function IntlTransferPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const prefill = (location.state as { prefill?: TransferPrefill } | null)?.prefill;
-  const { submitForReview, draft: existingDraft } = useTransferDraft();
+  const { submitForReview, draft: existingDraft, transferTabConflict } = useTransferDraft();
   // İşlem Onay → Düzenle ile dönüldüğünde alanlar dolu gelir.
   const editDraft = existingDraft?.kind === 'intl' ? existingDraft : null;
 
@@ -66,8 +69,10 @@ export function IntlTransferPage() {
   const [desc, setDesc] = useState(editDraft?.description ?? '');
   const [saveRecipient, setSaveRecipient] = useState(editDraft?.saveRecipient ?? false);
   const [descErr, setDescErr] = useState<string | null>(null);
-  const [fxRate, setFxRate] = useState(1);
-  const [fxTick, setFxTick] = useState(0);
+  const [amountErr, setAmountErr] = useState<string | null>(null);
+  const { internetDailyLimit, validateTransferTotal } = useTransferLimits();
+  const { rate: fxRate, secsLeft: fxSecsLeft, loading: fxLoading, stale: fxStale, refresh: refreshFx } =
+    useFxQuote(srcCur, dstCur);
 
   useEffect(() => {
     if (walletId || persistent.length === 0) return;
@@ -76,29 +81,14 @@ export function IntlTransferPage() {
     setSrcCur(first.currency);
   }, [persistent, walletId]);
 
-  useEffect(() => {
-    let cancelled = false;
-    const load = () => {
-      void customerPortalApi.getFxQuote(srcCur, dstCur).then((q) => {
-        if (!cancelled) setFxRate(q.rate);
-      });
-    };
-    load();
-    const id = window.setInterval(load, 90_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-  }, [srcCur, dstCur, fxTick]);
-
   const wallet = wallets.find((w) => w.id === walletId);
   const srcSym = symbolFor(srcCur);
   const dstSym = symbolFor(dstCur);
   const amount = parseAmount(amountStr);
-  const rate = srcCur === dstCur ? 1 : fxRate;
-  const net = amount * rate;
   const fee = calcIntlFee(amount);
   const total = amount + fee;
+  const rate = srcCur === dstCur ? 1 : fxRate;
+  const net = amount * rate;
   const valid = Boolean(walletId && name.trim() && country && amount > 0);
   const risky = RISKY_COUNTRIES.includes(country as (typeof RISKY_COUNTRIES)[number]);
 
@@ -111,12 +101,23 @@ export function IntlTransferPage() {
   async function onReview(e: React.FormEvent) {
     e.preventDefault();
     if (!wallet || !valid) return;
-    const descError = validateFreeText(desc);
-    if (descError) {
-      setDescErr(descError);
+    let effectiveRate = srcCur === dstCur ? 1 : fxRate;
+    if (srcCur !== dstCur && fxStale) {
+      effectiveRate = await refreshFx();
+    }
+    const effectiveNet = amount * effectiveRate;
+    const sensitiveErr = firstFreeTextError(name, desc);
+    if (sensitiveErr) {
+      setDescErr(t(sensitiveErr));
+      return;
+    }
+    const limitErr = validateTransferTotal(total, wallet.balance);
+    if (limitErr) {
+      setAmountErr(t(limitErr));
       return;
     }
     setDescErr(null);
+    setAmountErr(null);
     const draft = buildDraft(
       'intl',
       'Yurt Dışı Transfer',
@@ -134,13 +135,14 @@ export function IntlTransferPage() {
         purpose,
         description: desc,
         dstCurrency: dstCur,
-        fxRate: rate,
-        netAmount: net,
+        fxRate: effectiveRate,
+        netAmount: effectiveNet,
         dstSymbol: dstSym,
       },
     );
     draft.saveRecipient = saveRecipient;
-    await submitForReview(draft);
+    const ok = await submitForReview(draft);
+    if (!ok) return;
     navigate('/confirm');
   }
 
@@ -168,9 +170,10 @@ export function IntlTransferPage() {
 
         <form onSubmit={onReview} className="transfer-domestic-layout">
           <div className="card card-pad transfer-form-card">
-            {descErr && (
+            <TransferLimitDemoBanner limit={internetDailyLimit} symbol={srcSym} />
+            {(descErr || amountErr) && (
               <AlertBanner tone="error" icon="warn">
-                {descErr}
+                {descErr ?? amountErr}
               </AlertBanner>
             )}
             <SourceWalletPicker
@@ -267,14 +270,19 @@ export function IntlTransferPage() {
                   <div className="intl-fx-net-value tnum">{fmtMoney(net, dstSym)}</div>
                 </div>
               </div>
-              <p className="intl-fx-refresh-note">
+              <p className={`intl-fx-refresh-note${fxStale ? ' is-expired' : ''}`}>
                 <Icon name="refresh" style={{ width: 13, height: 13 }} />
-                {t('intl_fx_refresh')}
+                {fxLoading
+                  ? t('intl_fx_refreshing')
+                  : fxSecsLeft > 0
+                    ? t('intl_fx_ttl', { secs: fxSecsLeft })
+                    : t('intl_fx_expired')}
                 <button
                   type="button"
                   className="btn btn-quiet"
                   style={{ padding: '2px 6px', marginLeft: 4, fontSize: 11.5 }}
-                  onClick={() => setFxTick((n) => n + 1)}
+                  onClick={() => void refreshFx()}
+                  disabled={fxLoading}
                 >
                   {t('intl_fx_refresh_now')}
                 </button>
@@ -362,7 +370,7 @@ export function IntlTransferPage() {
                 block
                 className="btn-lg"
                 style={{ marginTop: 18 }}
-                disabled={!valid}
+                disabled={!valid || transferTabConflict || (srcCur !== dstCur && (fxLoading || fxStale))}
               >
                 {t('domestic_continue')}{' '}
                 <Icon name="right" style={{ width: 18, height: 18 }} />

@@ -2,12 +2,12 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftRight, X } from 'lucide-react';
 import { DynamicForm, FormMode, IconButton } from '@epay/ui';
-import { agentTransactionsStore } from '@/features/transaction-confirmation/api/agent-transactions-store';
-import { buildTransactionDetail } from '@/features/transaction-confirmation/domain/build-transaction-detail';
+import { resolveAgentTransactionDetail } from '@/features/transaction-confirmation/domain/resolve-agent-transaction';
 import { buildTransactionDetailFormConfig } from '../transaction-detail-form-config';
 import { rowToDetailFormValues } from '../domain/row-to-detail-form-values';
 import type { AgentTransactionRow } from '../domain/types';
 import { TransactionStatusBadge } from './transaction-status-badge';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 interface Props {
   row: AgentTransactionRow | null;
@@ -18,6 +18,7 @@ interface Props {
 export function TransactionDetailDrawer({ row, onClose }: Props) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const ui = useAgentUiPermissions();
 
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
@@ -30,8 +31,7 @@ export function TransactionDetailDrawer({ row, onClose }: Props) {
 
   const initialValues = useMemo(() => {
     if (!row) return {};
-    const tx = agentTransactionsStore.get(row.id);
-    const detail = tx ? buildTransactionDetail(tx, [], [], null) : null;
+    const detail = resolveAgentTransactionDetail(row.id);
     const feeFixed = detail?.feeFixed ?? Math.max(5, Math.round(row.amount * 0.01));
     const feeVariable = detail?.feeVariable ?? Math.max(0, Math.round(row.amount * 0.005));
     return rowToDetailFormValues(row, lang, t, feeFixed, feeVariable);
@@ -88,7 +88,7 @@ export function TransactionDetailDrawer({ row, onClose }: Props) {
           <DynamicForm
             config={formConfig}
             mode={FormMode.View}
-            permissions={{ view: true }}
+            permissions={ui.form.transactionView}
             initialValues={initialValues}
             t={translate}
           />

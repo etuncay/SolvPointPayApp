@@ -8,6 +8,7 @@ import { FeedbackAttachments } from './components/feedback-attachments';
 import { FeedbackCustomerLookup } from './components/feedback-customer-lookup';
 import { FeedbackOwnerSegment } from './components/feedback-owner-segment';
 import { useAgentFeedback } from './hooks/use-agent-feedback';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** Agent Dilek, Şikâyet ve Öneriler — referans dso-page + DynamicForm. */
 export function FeedbackPage() {
@@ -26,6 +27,7 @@ export function FeedbackPage() {
     submit,
     openFilePicker,
   } = useAgentFeedback();
+  const ui = useAgentUiPermissions();
 
   const formConfig = useMemo(
     () => buildFeedbackFormConfig(translate),
@@ -112,7 +114,7 @@ export function FeedbackPage() {
               key={formKey}
               config={formConfig}
               mode={FormMode.Create}
-              permissions={{ create: true }}
+              permissions={ui.form.feedbackCreate}
               initialValues={initialValues}
               customFunctions={customFunctions}
               loading={submitting}

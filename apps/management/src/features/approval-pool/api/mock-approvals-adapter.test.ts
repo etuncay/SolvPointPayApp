@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { getCurrentUser } from '../domain/current-user';
+import { getCurrentUser, resolveCurrentUser } from '../domain/current-user';
 import {
   mockApprovalsAdapter,
   resetApprovalsStore,
@@ -49,7 +49,10 @@ describe('mockApprovalsAdapter', () => {
   });
 
   it('withdraw yalnızca başlatanda', () => {
-    const ops = getCurrentUser('ops');
+    const ops = resolveCurrentUser(
+      { id: 'usr-ops', fullName: 'Ahmet Yılmaz', role: 'ops' },
+      'ops',
+    );
     const comp = getCurrentUser('compliance');
     expect(mockApprovalsAdapter.withdraw(1, comp).ok).toBe(false);
     const ok = mockApprovalsAdapter.withdraw(1, ops);
@@ -58,7 +61,10 @@ describe('mockApprovalsAdapter', () => {
   });
 
   it('resubmit eski kaydı Superseded yapar', () => {
-    const ops = getCurrentUser('ops');
+    const ops = resolveCurrentUser(
+      { id: 'usr-ops', fullName: 'Ahmet Yılmaz', role: 'ops' },
+      'ops',
+    );
     mockApprovalsAdapter.withdraw(1, ops);
     const res = mockApprovalsAdapter.resubmit(1, ops);
     expect(res.ok).toBe(true);
@@ -69,7 +75,10 @@ describe('mockApprovalsAdapter', () => {
   });
 
   it('reddedilen talep resubmit edilebilir → eski Superseded (§0.6)', () => {
-    const ops = getCurrentUser('ops');
+    const ops = resolveCurrentUser(
+      { id: 'usr-ops', fullName: 'Ahmet Yılmaz', role: 'ops' },
+      'ops',
+    );
     const comp = getCurrentUser('compliance');
     mockApprovalsAdapter.reject(1, comp, 'Eksik belge');
     expect(mockApprovalsAdapter.getById(1)?.uiStatus).toBe('rejected');

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { customerPortalApi, DEMO_CUSTOMER_PASSWORD } from '@epay/data';
+import { customerPortalApi } from '@epay/data';
 import type { CustomerSettings } from '@epay/data';
 import { useThemeSettings, type TextSize, type ThemeMode } from '@/app/ThemeProvider';
 import { useAuth } from '@/app/AuthProvider';
@@ -17,7 +17,7 @@ import {
   EMPLOYMENT_CATEGORIES,
   employmentCategoryI18nKey,
 } from '@/lib/enums';
-import { ContactsSection } from './ContactsSection';
+import { SettingsEnvironmentBanner } from '@/features/settings/SettingsEnvironmentBanner';
 
 type SettingsSection =
   | 'profile'
@@ -241,6 +241,8 @@ export function SettingsPage() {
           </div>
         </div>
 
+        <SettingsEnvironmentBanner />
+
         {savedFlash ? (
           <div style={{ marginBottom: 16 }}>
             <AlertBanner tone="info" icon="check">
@@ -394,9 +396,6 @@ export function SettingsPage() {
                       </select>
                     </Field>
                     {pwMsg ? <p className="hint">{pwMsg}</p> : null}
-                    <p className="hint">
-                      {t('settings_pw_demo_hint', { pw: DEMO_CUSTOMER_PASSWORD })}
-                    </p>
                     <Button type="submit" variant="primary" style={{ alignSelf: 'flex-start' }}>
                       <Icon name="lock" /> {t('settings_pw_submit')}
                     </Button>

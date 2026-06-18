@@ -18,6 +18,7 @@ import { AddressRepeater } from './components/address-repeater';
 import { ContactRepeater } from './components/contact-repeater';
 import { DocumentList } from './components/document-list';
 import { buildRegistrationFormConfig } from './registration-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 type RegistrationDocsMap = Record<string, string | undefined>;
 
@@ -68,6 +69,7 @@ export function CustomerRegistrationPage({ mode = 'new' }: { mode?: 'new' | 'edi
   const [pendingLock, setPendingLock] = useState(false);
   const [knownCustomer, setKnownCustomer] = useState(knownByQuery);
   const [formKey, setFormKey] = useState(0);
+  const ui = useAgentUiPermissions();
 
   const formConfig = useMemo(
     () => buildRegistrationFormConfig(translate),
@@ -224,7 +226,7 @@ export function CustomerRegistrationPage({ mode = 'new' }: { mode?: 'new' | 'edi
         key={formKey}
         config={formConfig}
         mode={FormMode.Create}
-        permissions={{ create: true }}
+        permissions={ui.form.customerRegister(mode)}
         initialValues={seededValues}
         customFunctions={customFunctions}
         t={translate}

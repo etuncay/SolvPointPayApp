@@ -11,6 +11,7 @@ import { buildConfirmationFormConfig } from './confirmation-form-config';
 import { detailToFormValues } from './domain/detail-to-form-values';
 import { useConfirmation } from './hooks/use-confirmation';
 import type { DeclarationInput, SecurityChecks } from './domain/types';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 const EMPTY_CHECKS: SecurityChecks = {
   identityChecked: false,
@@ -23,6 +24,7 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { txId, view, loading, mode, approve, cancel } = useConfirmation(requestApprove);
+  const ui = useAgentUiPermissions();
 
   const [otp, setOtp] = useState('');
   const [checks, setChecks] = useState<SecurityChecks>(EMPTY_CHECKS);
@@ -70,8 +72,8 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
     [isApprove, view?.requiresAuthority],
   );
 
-  const runApprove = (declaration?: DeclarationInput) => {
-    const result = approve({ otp, checks, declaration });
+  const runApprove = async (declaration?: DeclarationInput) => {
+    const result = await approve({ otp, checks, declaration });
     if (!result.ok) {
       toast.error(t(result.error ?? 'ap_save_failed'));
       return false;
@@ -86,7 +88,7 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
       setDeclOpen(true);
       return;
     }
-    runApprove();
+    void runApprove();
   };
 
   const handleCancel = () => {
@@ -124,7 +126,7 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
         title={isApprove ? t('ag_cf_title_approve') : t('ag_cf_title_detail')}
         subtitle={<span className="mono">{view.detail.transactionNo}</span>}
         actions={
-          isApprove ? (
+          isApprove && ui.flags.canApproveTransaction ? (
             <>
               <Button type="button" variant="primary" onClick={handleApprove}>
                 <CheckCircle size={14} /> {t('ag_cf_approve')}
@@ -158,7 +160,7 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
       <DynamicForm
         config={formConfig}
         mode={isApprove ? FormMode.Update : FormMode.View}
-        permissions={{ view: true, update: isApprove }}
+        permissions={ui.form.transactionApprove(isApprove)}
         initialValues={initialValues}
         customFunctions={customFunctions}
         t={translate}
@@ -170,7 +172,7 @@ export function ConfirmationPage({ requestApprove = false }: { requestApprove?: 
           onClose={() => setDeclOpen(false)}
           onConfirm={(declaration) => {
             setDeclOpen(false);
-            runApprove(declaration);
+            void runApprove(declaration);
           }}
         />
       ) : null}

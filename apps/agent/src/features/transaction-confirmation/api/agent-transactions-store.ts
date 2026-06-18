@@ -7,6 +7,15 @@ import type {
   PendingCustomerRow,
   SecurityChecks,
 } from '../domain/types';
+import {
+  clearPersistedAgentTxStore,
+  fromPersisted,
+  loadPersistedAgentTxStore,
+  savePersistedAgentTxStore,
+  toPersisted,
+  type MutableAgentTxState,
+  type ReceiptState,
+} from './agent-transactions-store-persist';
 
 /** Mock: oturum açan temsilci. Gerçek API'de oturumdan gelir. */
 export const DEMO_AGENT_ID = AGENTS[0]?.id ?? 99901;
@@ -295,41 +304,72 @@ function seedPendingCustomers(): PendingCustomerRow[] {
   ];
 }
 
-type ReceiptState = {
-  generated: boolean;
-  signedFileName: string | null;
-};
+type ReceiptStateLocal = ReceiptState;
 
-const records = seedRecords();
+function seedReceipts(): Map<number, ReceiptStateLocal> {
+  return new Map([
+    [90005, { generated: true, signedFileName: 'imzali-dekont-90005.pdf' }],
+    [90006, { generated: true, signedFileName: 'imzali-dekont-90006.pdf' }],
+  ]);
+}
+
+function createFreshState(): MutableAgentTxState {
+  return {
+    records: seedRecords(),
+    nextRecordId: 95000,
+    security: new Map<number, SecurityChecks>(),
+    declarations: new Map<number, DeclarationInput>(),
+    receipts: seedReceipts(),
+  };
+}
+
+function hydrateState(agentId: number): MutableAgentTxState {
+  const persisted = loadPersistedAgentTxStore(agentId);
+  if (persisted) return fromPersisted(persisted);
+  return createFreshState();
+}
+
+function persistState(agentId: number, state: MutableAgentTxState): void {
+  savePersistedAgentTxStore(agentId, toPersisted(agentId, state));
+}
+
+const state = hydrateState(DEMO_AGENT_ID);
 const pendingCustomers = seedPendingCustomers();
-let nextRecordId = 95000;
-const security = new Map<number, SecurityChecks>();
-const declarations = new Map<number, DeclarationInput>();
-const receipts = new Map<number, ReceiptState>([
-  [90005, { generated: true, signedFileName: 'imzali-dekont-90005.pdf' }],
-  [90006, { generated: true, signedFileName: 'imzali-dekont-90006.pdf' }],
-]);
+
+/** Test / demo sıfırlama — seed'e döner ve sessionStorage'ı temizler. */
+export function resetAgentTransactionsStoreForTests(): void {
+  clearPersistedAgentTxStore(DEMO_AGENT_ID);
+  const fresh = createFreshState();
+  state.records.length = 0;
+  state.records.push(...fresh.records);
+  state.nextRecordId = fresh.nextRecordId;
+  state.security.clear();
+  state.declarations.clear();
+  state.receipts.clear();
+  for (const [id, receipt] of fresh.receipts) state.receipts.set(id, receipt);
+}
 
 export const agentTransactionsStore = {
   /** Temsilci kapsamındaki tüm seed kayıtlar. */
   list(): Transaction[] {
-    return records;
+    return state.records;
   },
 
   get(id: number): Transaction | null {
-    return records.find((r) => r.id === id) ?? null;
+    return state.records.find((r) => r.id === id) ?? null;
   },
 
   /** Yeni işlem kaydı oluşturur (ör. Para Çekme submit) ve onay ekranında erişilebilir kılar. */
   addRecord(input: Omit<Transaction, 'id'>): Transaction {
-    const tx = { ...input, id: nextRecordId++ } as Transaction;
-    records.push(tx);
+    const tx = { ...input, id: state.nextRecordId++ } as Transaction;
+    state.records.push(tx);
+    persistState(DEMO_AGENT_ID, state);
     return tx;
   },
 
   /** Açık referans no zaten kayıtlı mı (idempotency). */
   hasReference(referenceNo: string): boolean {
-    return records.some((r) => r.referenceNo === referenceNo);
+    return state.records.some((r) => r.referenceNo === referenceNo);
   },
 
   listPendingCustomers(): PendingCustomerRow[] {
@@ -341,33 +381,36 @@ export const agentTransactionsStore = {
   },
 
   hasReceipt(id: number): boolean {
-    return receipts.get(id)?.generated ?? false;
+    return state.receipts.get(id)?.generated ?? false;
   },
 
   markReceiptGenerated(id: number): void {
-    const prev = receipts.get(id);
-    receipts.set(id, { generated: true, signedFileName: prev?.signedFileName ?? null });
+    const prev = state.receipts.get(id);
+    state.receipts.set(id, { generated: true, signedFileName: prev?.signedFileName ?? null });
+    persistState(DEMO_AGENT_ID, state);
   },
 
   attachSignedReceipt(id: number, fileName: string): void {
-    receipts.set(id, { generated: true, signedFileName: fileName });
+    state.receipts.set(id, { generated: true, signedFileName: fileName });
+    persistState(DEMO_AGENT_ID, state);
   },
 
   signedReceiptName(id: number): string | null {
-    return receipts.get(id)?.signedFileName ?? null;
+    return state.receipts.get(id)?.signedFileName ?? null;
   },
 
   recordApproval(id: number, checks: SecurityChecks, declaration?: DeclarationInput): void {
-    const tx = records.find((r) => r.id === id);
+    const tx = state.records.find((r) => r.id === id);
     if (!tx) return;
     tx.status = 'Completed';
-    security.set(id, checks);
-    if (declaration) declarations.set(id, declaration);
+    state.security.set(id, checks);
+    if (declaration) state.declarations.set(id, declaration);
     this.markReceiptGenerated(id);
   },
 
   recordCancel(id: number): void {
-    const tx = records.find((r) => r.id === id);
+    const tx = state.records.find((r) => r.id === id);
     if (tx) tx.status = 'Canceled';
+    persistState(DEMO_AGENT_ID, state);
   },
 };

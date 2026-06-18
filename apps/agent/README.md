@@ -21,6 +21,8 @@ URL: http://localhost:5176
 
 Management ile aynı oturum anahtarlarını paylaşmaz; iki uygulama yan yana çalışabilir.
 
+Mock modda (`VITE_DATA_DRIVER=dexie`, varsayılan) sarı `DemoModeBanner` giriş ve oturum açık ekranlarda görünür.
+
 ## Menü yapısı (docs/Agent)
 
 | No | Menü | Route |
@@ -34,7 +36,7 @@ Management ile aynı oturum anahtarlarını paylaşmaz; iki uygulama yan yana ç
 | 6.1–6.4 | Alt akışlar | `/transfers/own-wallet`, `bank-account`, `person`, `abroad` |
 | 7 | İşlem Hareketleri | `/transactions` |
 | 8 | Dilek, Şikâyet ve Öneriler | `/feedback` |
-| — | Playground (geliştirme) | `/playground` |
+| — | Playground (yalnızca `import.meta.env.DEV`) | `/playground` |
 
 Menüde olmayan akış ekranları (1.1 İşlem Onay, 1.2 İmzalı Dekont, 1.3 Ayarlar) route olarak henüz eklenmedi; Ayarlar üst bar drawer üzerinden erişilir.
 

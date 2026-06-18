@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { DynamicForm, FormMode } from '@epay/ui';
 import { buildDocumentUploadFormConfig } from '../customer-search-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 export interface DocumentUploadPayload {
   category: string;
@@ -29,6 +30,7 @@ export function DocumentUploadModal({ open, onClose, onSubmit }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [i18n.language],
   );
+  const ui = useAgentUiPermissions();
 
   if (!open) return null;
 
@@ -45,7 +47,7 @@ export function DocumentUploadModal({ open, onClose, onSubmit }: Props) {
           <DynamicForm
             config={formConfig}
             mode={FormMode.Create}
-            permissions={{ create: true }}
+            permissions={ui.form.documentUpload}
             t={translate}
             onButtonClick={(key, values) => {
               if (key === 'cancel') {

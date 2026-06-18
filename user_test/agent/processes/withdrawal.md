@@ -2,7 +2,7 @@
 screen: withdrawal
 route: /withdrawal
 app: agent
-updated: 2026-05-31
+updated: 2026-06-18
 status: ready
 ---
 
@@ -30,6 +30,8 @@ Temsilcinin alıcı müşteri sorgusu, cüzdan/tutar kuralları (CustomerPersist
 | Tüzel + belge eksik uyarısı | — | `3131516608` | Karadeniz Denizcilik — `kyc: Pending` |
 | Tüzel + yetkili (onaylı) | — | `1792956117` | Anadolu Gıda — `kyc: Approved`, yetkili `10000000146` |
 | Tüzel + sanction (OnHold) | — | `1792956117` | Yetkili TCKN `20000000147` (Sanction Test Kişi) |
+| Blokaj + risk uyarısı | `99910` | `36338154452` | Yusuf Avcı — [demo-yusuf-avci-blocked](../fixtures/customers/demo-yusuf-avci-blocked.md) |
+| Tier 0 + sıkı limit | `99913` | `84590344827` | Sıla Yıldız — [demo-sila-yildiz-tier0](../fixtures/customers/demo-sila-yildiz-tier0.md) |
 | Idempotency | Caner sonrası | — | Referans `REF-AG-90001` (mevcut seed işlem) |
 
 ### Mock cüzdan türleri (§8)
@@ -103,11 +105,17 @@ Tutar değiştikçe **Aktif** sütununda ilgili kademe vurgulanır.
 | 16 | **Yeni Müşteri Kaydı** tıkla | `/customers/new?returnTo=/withdrawal&context=withdraw&idNo=11111111111` |
 | 17 | Kayıt tamamlayıp `/withdrawal` dönüşü (veya URL ile `?idNo=`) | Otomatik yeniden sorgu (mount’ta `idNo` / `customerNo` query) |
 
-### E — Idempotency
+### E — Idempotency ve çift tıklama
 
 | # | Aksiyon | Beklenen |
 |---|---------|----------|
 | 18 | Caner bulundu → İşlem Ref: `REF-AG-90001` → **Devam Et** | Toast: `ag_wd_err_duplicate`; yeni işlem oluşmaz |
+| 18b | Benzersiz ref ile form doldur → **Devam Et**'e hızlı çift tık | Yalnızca **1** işlem; ikinci istek `ag_wd_err_duplicate` veya buton `loading` ile engellenir |
+| 18c | Aynı benzersiz ref ile ikinci submit (sayfa yenilemeden) | `ag_wd_err_duplicate`; kayıt sayısı değişmez |
+
+**Koruma katmanları:** `useWithdrawal.submitting` (UI) + `tryAcquireReference` (mock adapter in-flight kilidi) + `agentTransactionsStore.hasReference` (persist).
+
+Otomatik test: `apps/agent/src/features/withdrawal/api/mock-withdrawal-adapter.test.ts`
 
 ### F — Tüzel müşteri
 
@@ -134,6 +142,27 @@ Tutar değiştikçe **Aktif** sütununda ilgili kademe vurgulanır.
 |---|---------|----------|
 | 28 | Dil tr → en → ar | `ag_wd_*` etiketler, butonlar, hata mesajları güncellenir |
 
+### I — Uyumluluk uyarıları (blocked / düşük KYC)
+
+| # | Aksiyon | Beklenen |
+|---|---------|----------|
+| 29 | TCKN `75683988090` (Caner, L1) sorgula | `SearchWarningsBanner` → `kyc_low`; kimlik tarama paneli açık |
+| 30 | TCKN `84590344827` (Sıla, Tier 0) sorgula | Yalnızca `kyc_low` — [demo-sila-yildiz-tier0](../fixtures/customers/demo-sila-yildiz-tier0.md) |
+| 31 | TCKN `36338154452` (Yusuf, blocked) sorgula | `blocked` + `risk_high` — [demo-yusuf-avci-blocked](../fixtures/customers/demo-yusuf-avci-blocked.md) |
+| 32 | Yusuf ile form doldur → **Devam Et** | Mock'ta blokaj **submit'i engellemez**; uyarı bilgilendiricidir |
+
+### J — Limit aşımı (mock)
+
+| # | Aksiyon | Beklenen |
+|---|---------|----------|
+| 33 | Sıla `84590344827` — persistent cüzdan, tutar **10.001** TRY, ref benzersiz → **Devam Et** | Toast **`ag_limit_exceeded`** |
+| 34 | Caner `75683988090` — persistent cüzdan (`MS-9901-01`), tutar **186.000** TRY | Toast **`ag_limit_exceeded`** (L1 aylık 185k) |
+| 35 | Caner — transactional cüzdan (`MS-9901-TX`), tutar kilitli **12.500** | Limit içinde → başarılı submit |
+
+Otomatik doğrulama: `apps/agent/src/features/limits/api/mock-limit-demo-thresholds.test.ts`
+
+Transfer limit senaryoları: [agent-transfers.md § E–F](agent-transfers.md)
+
 ## Checklist (son durum)
 
 - [ ] Sorgu (Müşteri No / TCKN)
@@ -144,12 +173,20 @@ Tutar değiştikçe **Aktif** sütununda ilgili kademe vurgulanır.
 - [ ] Ücret tablosu + aktif kademe
 - [ ] Kimlik tarama + TUR tip kilidi + OCR
 - [ ] Referans zorunluluğu
-- [ ] Idempotency (`REF-AG-90001`)
+- [ ] Idempotency (`REF-AG-90001`) + çift tıklama (18b)
 - [ ] Tüzel belge eksik uyarısı
 - [ ] Tüzel yetkili geçerli / geçersiz
 - [ ] Sanction OnHold
 - [ ] Submit → `/transactions/:id?mode=confirm`
+- [ ] Uyumluluk uyarı bandı (kyc_low / blocked / risk_high) — § I
+- [ ] Limit reddi (`ag_limit_exceeded`) — § J
 - [ ] i18n (tr/en/ar)
+
+## Uyumluluk
+
+Sanction, blocked, KYC ve limit matrisi: [fixtures/compliance-scenarios.md](../fixtures/compliance-scenarios.md)
+
+Transfer uyarı/limit demo: [agent-transfers.md](agent-transfers.md)
 
 ## Bilinen sorunlar
 

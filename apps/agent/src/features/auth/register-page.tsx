@@ -5,6 +5,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { Button, Field, Input, PasswordInput, Select, type BackOfficeRole } from '@epay/ui';
 import { useAuth } from '@/domain/auth-context';
 import { AuthLayout, AuthError, authButtonStyle } from './auth-layout';
+import { AuthDemoEnvBanner } from './auth-demo-env-banner';
 import { OtpStep } from './otp-step';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -54,13 +55,13 @@ export function RegisterPage() {
     return e;
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next = validate();
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    const r = startRegister({
+    const r = await startRegister({
       fullName: values.fullName,
       email: values.email,
       phone: values.phone,
@@ -68,7 +69,13 @@ export function RegisterPage() {
       role: values.role as BackOfficeRole,
     });
     if (!r.ok) {
-      setErrors({ form: r.error === 'exists' ? t('auth_err_exists', 'Bu e-posta zaten kayıtlı') : t('auth_err_invalid', 'İşlem başarısız') });
+      const msg =
+        r.error === 'exists'
+          ? t('auth_err_exists', 'Bu e-posta zaten kayıtlı')
+          : r.error === 'registration_disabled'
+            ? t('auth_err_register_disabled', 'Kayıt kapalı — yöneticinizle iletişime geçin')
+            : t('auth_err_invalid', 'İşlem başarısız');
+      setErrors({ form: msg });
     }
   };
 
@@ -76,6 +83,7 @@ export function RegisterPage() {
   if (done) {
     return (
       <AuthLayout title={t('auth_reg_done_title', 'Hesabınız oluşturuldu')}>
+        <AuthDemoEnvBanner variant="register" />
         <div style={{ textAlign: 'center' }}>
           <div style={{ display: 'grid', placeItems: 'center', marginBottom: 12, color: 'var(--ok-fg)' }}>
             <CheckCircle2 size={42} />
@@ -98,9 +106,9 @@ export function RegisterPage() {
         title={t('auth_otp_title', 'Doğrulama kodu')}
         subtitle={t('auth_reg_otp_subtitle', 'E-posta adresinize gönderilen 6 haneli kodu girin')}
         destination={pending.email}
-        demoCode={pending.code}
-        onVerify={(code) => {
-          const r = verifyOtp(code);
+        demoCode={pending.demoCode}
+        onVerify={async (code) => {
+          const r = await verifyOtp(code);
           if (r.ok) setDone(true);
           return r;
         }}
@@ -124,6 +132,7 @@ export function RegisterPage() {
       }
     >
       <form onSubmit={submit} noValidate>
+        <AuthDemoEnvBanner variant="register" />
         <AuthError message={errors.form} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <Field label={t('auth_fullname', 'Ad Soyad')} htmlFor="fullName" error={errors.fullName}>

@@ -1,5 +1,6 @@
 import { MOCK_USER_IDS } from '@/features/approval-pool/domain/types';
 import { userNameById } from '@/features/approval-pool/domain/current-user';
+import type { CustomerPortalSupportCaseFeedEntry } from '@epay/data';
 import { documentsService } from '@/features/dms/api/mock-documents-adapter';
 import type {
   CaseActionLogEntry,
@@ -211,6 +212,45 @@ export function resetSupportCasesStore(seed: SupportCase[] = SEED): void {
     return m ? Number(m[1]) : 0;
   }), 0) + 1;
   nextLogSeq = 1;
+}
+
+function mapPortalComplaintType(type: string): ComplaintType {
+  if (type === 'Request' || type === 'Information') return 'Technical';
+  if (type === 'Objection') return 'Billing';
+  return 'General';
+}
+
+/** Müşteri portalı şikâyet feed → destek merkezi listesi (demo köprüsü). */
+export function ingestCustomerPortalSupportCases(
+  entries: CustomerPortalSupportCaseFeedEntry[],
+): void {
+  for (const entry of entries) {
+    if (store.some((c) => c.caseNo === entry.caseNo)) continue;
+    const row: SupportCase = {
+      id: nextId++,
+      caseNo: entry.caseNo,
+      subject: entry.subject,
+      complaintType: mapPortalComplaintType(entry.complaintType),
+      requesterType: 'Customer',
+      requesterId: entry.customerId,
+      detail: entry.message,
+      ownerUserId: null,
+      departmentId: 'support',
+      urgency: 'Medium',
+      criticality: 'Medium',
+      caseStatus: 'Unassigned',
+      lastAction: null,
+      reconciliationId: null,
+      source: 'manual',
+      createdAt: entry.createdAt,
+      updatedAt: entry.createdAt,
+      closedAt: null,
+      notesText: `Müşteri portalı — tip: ${entry.complaintType}`,
+      actionLog: [],
+      documentIds: [],
+    };
+    store = [...store, row];
+  }
 }
 
 export function getSupportCasesStore(): SupportCase[] {

@@ -39,3 +39,7 @@ New team member, stale docs after refactor, internal handoff, standardized servi
 Unvalidated setup commands; architecture overload for contractors; missing troubleshooting; docs drift from repo.
 
 Update onboarding in the same PR as behavior changes.
+
+## Subagent delegation
+
+- **Before Step 5 (draft doc):** Launch `repo-explorer` and `command-validator` in parallel; use validated commands only.

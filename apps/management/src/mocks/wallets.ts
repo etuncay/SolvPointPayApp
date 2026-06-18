@@ -1,5 +1,5 @@
-import { CUSTOMERS, TOP_AGENTS } from './data';
 import {
+  BACK_OFFICE_WALLET_SEED,
   buildBackOfficeWallets,
   type BackOfficeWallet,
   type BackOfficeWalletCategory,
@@ -8,7 +8,7 @@ import {
 export type Wallet = BackOfficeWallet;
 export type WalletCategory = BackOfficeWalletCategory;
 
-export const WALLETS: Wallet[] = buildBackOfficeWallets({
-  customers: CUSTOMERS,
-  agents: TOP_AGENTS,
-});
+export { buildBackOfficeWallets };
+
+/** Tek kaynak @epay/data — Dexie seed ile aynı fixture */
+export const WALLETS: Wallet[] = BACK_OFFICE_WALLET_SEED;

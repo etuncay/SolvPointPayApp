@@ -7,32 +7,84 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { customerPortalApi, type CustomerProfile } from '@epay/data';
+import { customerPortalApi, getActiveDataDriver, type CustomerProfile } from '@epay/data';
+import {
+  CUSTOMER_AUTH_SESSION_KEY,
+  CUSTOMER_LOGIN_IDENTITY_KEY,
+} from '@/config/auth-keys';
 
 interface AuthContextValue {
   authed: boolean;
+  bootstrapping: boolean;
   profile: CustomerProfile | null;
   pendingOtp: boolean;
+  pendingProfile: CustomerProfile | null;
   login: (identity: string, password: string, taxNo?: string) => Promise<string | null>;
   verifyOtp: (otp: string) => Promise<string | null>;
-  logout: () => void;
-  revokeSession: () => void;
+  logout: () => Promise<void>;
+  revokeSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-const IDENTITY_KEY = 'epay-customer-login-identity';
-const AUTHED_KEY = 'epay-customer-authed';
+
+function isHttpAuth(): boolean {
+  return getActiveDataDriver() === 'http';
+}
+
+function loadMockAuthed(): boolean {
+  return sessionStorage.getItem(CUSTOMER_AUTH_SESSION_KEY) === '1';
+}
+
+function persistMockAuthed(authed: boolean): void {
+  if (isHttpAuth()) return;
+  if (authed) sessionStorage.setItem(CUSTOMER_AUTH_SESSION_KEY, '1');
+  else sessionStorage.removeItem(CUSTOMER_AUTH_SESSION_KEY);
+}
+
+function persistMockIdentity(identity: string): void {
+  if (isHttpAuth()) return;
+  if (identity) sessionStorage.setItem(CUSTOMER_LOGIN_IDENTITY_KEY, identity);
+  else sessionStorage.removeItem(CUSTOMER_LOGIN_IDENTITY_KEY);
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTHED_KEY) === '1');
+  const [bootstrapping, setBootstrapping] = useState(() => isHttpAuth());
+  const [authed, setAuthed] = useState(() => (isHttpAuth() ? false : loadMockAuthed()));
   const [profile, setProfile] = useState<CustomerProfile | null>(null);
   const [pendingOtp, setPendingOtp] = useState(false);
-  const [identity, setIdentity] = useState(() => sessionStorage.getItem(IDENTITY_KEY) ?? '');
+  const [pendingProfile, setPendingProfile] = useState<CustomerProfile | null>(null);
+  const [identity, setIdentity] = useState(
+    () => (isHttpAuth() ? '' : sessionStorage.getItem(CUSTOMER_LOGIN_IDENTITY_KEY) ?? ''),
+  );
 
   useEffect(() => {
-    if (authed && !profile) {
-      void customerPortalApi.getProfile().then(setProfile).catch(() => undefined);
-    }
+    if (!isHttpAuth()) return;
+    void customerPortalApi
+      .getSessionProfile()
+      .then((sessionProfile) => {
+        if (sessionProfile) {
+          setProfile(sessionProfile);
+          setAuthed(true);
+        }
+      })
+      .finally(() => setBootstrapping(false));
+  }, []);
+
+  useEffect(() => {
+    if (isHttpAuth() || !authed || profile) return;
+    void customerPortalApi
+      .getProfile()
+      .then((p) => {
+        if (p) setProfile(p);
+        else {
+          persistMockAuthed(false);
+          setAuthed(false);
+        }
+      })
+      .catch(() => {
+        persistMockAuthed(false);
+        setAuthed(false);
+      });
   }, [authed, profile]);
 
   const login = useCallback(async (id: string, password: string, taxNo?: string) => {
@@ -44,41 +96,56 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return 'Kimlik bilgileri hatalı.';
     }
     setIdentity(id);
-    sessionStorage.setItem(IDENTITY_KEY, id);
+    persistMockIdentity(id);
+    setPendingProfile(res.profile ?? null);
     setPendingOtp(true);
     return null;
   }, []);
 
   const verifyOtp = useCallback(
     async (otp: string) => {
-      const id = identity || sessionStorage.getItem(IDENTITY_KEY) || '';
+      const id = identity || (!isHttpAuth() ? sessionStorage.getItem(CUSTOMER_LOGIN_IDENTITY_KEY) : null) || '';
       const res = await customerPortalApi.verifyOtp({ identity: id, otp });
       if (!res.ok || !res.profile) return 'OTP hatalı.';
       setProfile(res.profile);
       setAuthed(true);
       setPendingOtp(false);
-      sessionStorage.setItem(AUTHED_KEY, '1');
+      setPendingProfile(null);
+      persistMockAuthed(true);
       return null;
     },
     [identity],
   );
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await customerPortalApi.logout().catch(() => undefined);
+    await customerPortalApi.clearPendingTransfer().catch(() => undefined);
     setAuthed(false);
     setProfile(null);
     setPendingOtp(false);
+    setPendingProfile(null);
     setIdentity('');
-    sessionStorage.removeItem(IDENTITY_KEY);
-    sessionStorage.removeItem(AUTHED_KEY);
+    persistMockIdentity('');
+    persistMockAuthed(false);
   }, []);
 
-  const revokeSession = useCallback(() => {
-    logout();
+  const revokeSession = useCallback(async () => {
+    await logout();
   }, [logout]);
 
   const value = useMemo(
-    () => ({ authed, profile, pendingOtp, login, verifyOtp, logout, revokeSession }),
-    [authed, profile, pendingOtp, login, verifyOtp, logout, revokeSession],
+    () => ({
+      authed,
+      bootstrapping,
+      profile,
+      pendingOtp,
+      pendingProfile,
+      login,
+      verifyOtp,
+      logout,
+      revokeSession,
+    }),
+    [authed, bootstrapping, profile, pendingOtp, pendingProfile, login, verifyOtp, logout, revokeSession],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

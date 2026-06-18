@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Modal } from '@/components/ui/Modal';
 import { Icon } from '@/components/icons/Icon';
+import { firstFreeTextError } from '@/lib/validators';
 import { PAYMENT_PURPOSES, paymentPurposeI18nKey, COUNTRIES } from '@/lib/enums';
 
 type RecipientForm = {
@@ -128,9 +129,11 @@ export function RecipientsPage() {
   const [deleteTarget, setDeleteTarget] = useState<SavedRecipient | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<RecipientForm>(emptyForm);
+  const [formError, setFormError] = useState<string | null>(null);
 
   function openAdd() {
     setForm(emptyForm());
+    setFormError(null);
     setEditId(null);
     setModal('add');
   }
@@ -147,10 +150,17 @@ export function RecipientsPage() {
       purpose: r.purpose ?? PAYMENT_PURPOSES[0],
     });
     setEditId(r.id);
+    setFormError(null);
     setModal('edit');
   }
 
   async function save() {
+    const sensitiveErr = firstFreeTextError(form.label, form.name);
+    if (sensitiveErr) {
+      setFormError(t(sensitiveErr));
+      return;
+    }
+    setFormError(null);
     if (modal === 'add') {
       await customerPortalApi.createRecipient(form);
     } else if (editId) {
@@ -228,6 +238,9 @@ export function RecipientsPage() {
           <p style={{ color: 'var(--muted)', fontSize: 13.5, marginBottom: 20 }}>
             {t('recipients_modal_hint')}
           </p>
+          {formError ? (
+            <p style={{ color: 'var(--neg)', fontSize: 13.5, marginBottom: 12 }}>{formError}</p>
+          ) : null}
           <div className="form-grid">
             <Field label={t('recipients_field_label')} required full>
               <input

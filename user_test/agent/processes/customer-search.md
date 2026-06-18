@@ -24,7 +24,7 @@ Temsilcinin Müşteri No veya Kimlik No ile tek müşteri sorgulaması; profil/h
 |---------|------------|------|---------------|
 | Normal + düşük KYC uyarısı | `99901` veya `MUS-00099901` | `75683988090` | [demo-caner-avci](../fixtures/customers/demo-caner-avci.md) — L1 KYC, aktif |
 | Süresi dolmuş belge uyarısı | `99902` veya `MUS-00099902` | `78568632556` | Hatice Acar — mock belge `validTo` geçmiş |
-| Blokaj + yüksek risk uyarıları | `99910` veya `MUS-00099910` | `36338154452` | Yusuf Avcı — `blocked`, `riskSeg: high` |
+| Blokaj + yüksek risk uyarıları | `99910` veya `MUS-00099910` | `36338154452` | [demo-yusuf-avci-blocked](../fixtures/customers/demo-yusuf-avci-blocked.md) |
 | Bulunamadı | `00000001` | `11111111111` | — |
 | Ana sayfa deep link | — | `54820017634` | Bekleyen müşteri: Selim Korkmaz |
 
@@ -126,6 +126,10 @@ Satır tıklama → `/customers?idNo={TCKN}`
 - [ ] Belge Yükle
 - [ ] Ana sayfa → `/customers?idNo=`
 - [ ] i18n (tr/en/ar)
+
+## Uyumluluk
+
+Tüm sanction / blocked / KYC senaryoları: [fixtures/compliance-scenarios.md](../fixtures/compliance-scenarios.md)
 
 ## Bilinen sorunlar
 

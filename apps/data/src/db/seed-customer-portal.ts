@@ -11,13 +11,86 @@ import type {
   CustomerContact,
 } from '../types/customer-portal';
 import { getDb } from './dexie';
+import { resetDemoCustomerPassword } from './demo-customer-password';
+
+import { applyRecipientOverlay } from './customer-recipient-overlay';
 
 const META_KEY = 'customerPortalSeeded';
 /** Seed şeması/değerleri değişince artır → mevcut Dexie DB'leri bir kez yeniden seed eder.
  *  v3: Genişletilmiş transaction listesi (16 kayıt) + ek dekontlar. */
 const SEED_VERSION = 3;
 
+const RECIPIENT_SEED_TIMESTAMP = '2026-06-01T00:00:00.000Z';
+
+export const CUSTOMER_PORTAL_SEED_RECIPIENT_IDS = ['r1', 'r2', 'r3', 'r4'] as const;
+
 export const DEMO_CUSTOMER_PASSWORD = 'Demo123!';
+
+/** Kayıtlı kişiler seed — tek kaynak; CRUD/transfer overlay ile birleştirilir. */
+export function getCustomerPortalRecipientsSeed(
+  now: string = new Date().toISOString(),
+): SavedRecipient[] {
+  return [
+    {
+      id: 'r1',
+      label: 'Burak — Kardeşim',
+      name: 'Burak Yıldız',
+      country: 'Türkiye',
+      isIntl: false,
+      phone: '+90 533 •• •• 218',
+      email: 'burak.y@ornek.com',
+      customerNo: 'CUS-3310947',
+      purpose: 'FamilySupport',
+      recordStatus: 1,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'r2',
+      label: 'Ahmed (Dubai)',
+      name: 'Ahmed Al-Rashid',
+      country: 'BAE',
+      isIntl: true,
+      phone: '+971 50 •• •• 11',
+      email: 'ahmed.r@ornek.ae',
+      purpose: 'FamilySupport',
+      description: 'Aylık destek',
+      recordStatus: 1,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'r3',
+      label: 'Zeynep',
+      name: 'Zeynep Kaya',
+      country: 'Türkiye',
+      isIntl: false,
+      phone: '+90 542 •• •• 90',
+      customerNo: 'CUS-7782214',
+      purpose: 'Other',
+      recordStatus: 1,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'r4',
+      label: 'Maria — Tedarikçi',
+      name: 'Maria Schmidt',
+      country: 'Almanya',
+      isIntl: true,
+      email: 'maria@schmidt-gmbh.de',
+      purpose: 'GoodsPayment',
+      description: 'GmbH faturaları',
+      recordStatus: 1,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+}
+
+/** Deterministik referans — seed sync testleri. */
+export const CUSTOMER_PORTAL_RECIPIENTS_SEED =
+  getCustomerPortalRecipientsSeed(RECIPIENT_SEED_TIMESTAMP);
 
 export function getCustomerPortalSeed(): {
   profile: CustomerProfile;
@@ -403,62 +476,7 @@ export function getCustomerPortalSeed(): {
   ];
 
   const now = new Date().toISOString();
-  const recipients: SavedRecipient[] = [
-    {
-      id: 'r1',
-      label: 'Burak — Kardeşim',
-      name: 'Burak Yıldız',
-      country: 'Türkiye',
-      isIntl: false,
-      phone: '+90 533 •• •• 218',
-      email: 'burak.y@ornek.com',
-      customerNo: 'CUS-3310947',
-      purpose: 'FamilySupport',
-      recordStatus: 1,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: 'r2',
-      label: 'Ahmed (Dubai)',
-      name: 'Ahmed Al-Rashid',
-      country: 'BAE',
-      isIntl: true,
-      phone: '+971 50 •• •• 11',
-      email: 'ahmed.r@ornek.ae',
-      purpose: 'FamilySupport',
-      description: 'Aylık destek',
-      recordStatus: 1,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: 'r3',
-      label: 'Zeynep',
-      name: 'Zeynep Kaya',
-      country: 'Türkiye',
-      isIntl: false,
-      phone: '+90 542 •• •• 90',
-      customerNo: 'CUS-7782214',
-      purpose: 'Other',
-      recordStatus: 1,
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: 'r4',
-      label: 'Maria — Tedarikçi',
-      name: 'Maria Schmidt',
-      country: 'Almanya',
-      isIntl: true,
-      email: 'maria@schmidt-gmbh.de',
-      purpose: 'GoodsPayment',
-      description: 'GmbH faturaları',
-      recordStatus: 1,
-      createdAt: now,
-      updatedAt: now,
-    },
-  ];
+  const recipients = getCustomerPortalRecipientsSeed(now);
 
   const ibans: OwnIban[] = [
     {
@@ -642,6 +660,7 @@ export async function ensureCustomerPortalSeeded(): Promise<void> {
   if (existing?.value === SEED_VERSION) return;
 
   const seed = getCustomerPortalSeed();
+  resetDemoCustomerPassword();
   await db.transaction(
     'rw',
     [
@@ -673,6 +692,7 @@ export async function ensureCustomerPortalSeeded(): Promise<void> {
       await db.customerWallets.bulkPut(seed.wallets);
       await db.customerTransactions.bulkPut(seed.transactions);
       await db.customerRecipients.bulkPut(seed.recipients);
+      await applyRecipientOverlay(db);
       await db.customerIbans.bulkPut(seed.ibans);
       await db.customerFees.bulkPut(seed.fees);
       await db.customerSettings.put(seed.settings);

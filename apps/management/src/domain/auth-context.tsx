@@ -1,17 +1,17 @@
 /* ──────────────────────────────────────────────────────
  *  AuthProvider — oturum + OTP akış durumu.
- *  Oturum sessionStorage'da; rol oturumdaki kullanıcıdan gelir.
+ *  Mock: sessionStorage + demo OTP. HTTP: HttpOnly cookie, RBAC sunucuda.
  * ────────────────────────────────────────────────────── */
 import * as React from 'react';
 import {
-  activateAccount,
-  authenticate,
-  getAccountUser,
-  registerAccount,
+  authApi,
+  getActiveDataDriver,
   type AuthErrorCode,
   type AuthUser,
   type RegisterPayload,
 } from '@epay/data';
+import { clearDemoRoleStorage } from './role-resolution';
+import { sanitizeAuthUser } from './navigation-role';
 
 type OtpKind = 'login' | 'register';
 
@@ -20,8 +20,8 @@ interface PendingOtp {
   userId: string;
   email: string;
   phone: string;
-  /** Demo: gerçek SMS olmadığından kod ekranda ipucu olarak gösterilir. */
-  code: string;
+  /** Demo modda OTP ipucu; production HTTP'de yok */
+  demoCode?: string;
 }
 
 export interface FlowResult {
@@ -32,102 +32,137 @@ export interface FlowResult {
 interface AuthContextValue {
   user: AuthUser | null;
   pending: PendingOtp | null;
-  startLogin: (email: string, password: string) => FlowResult;
-  startRegister: (payload: RegisterPayload) => FlowResult;
-  verifyOtp: (code: string) => FlowResult;
-  resendOtp: () => void;
+  startLogin: (email: string, password: string) => Promise<FlowResult>;
+  startRegister: (payload: RegisterPayload) => Promise<FlowResult>;
+  verifyOtp: (code: string) => Promise<FlowResult>;
+  resendOtp: () => Promise<void>;
   cancelPending: () => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = React.createContext<AuthContextValue | null>(null);
 const SESSION_KEY = 'epay-auth-session';
 
-function loadSession(): AuthUser | null {
+function isHttpAuth(): boolean {
+  return getActiveDataDriver() === 'http';
+}
+
+function loadMockSession(): AuthUser | null {
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as AuthUser) : null;
+    if (!raw) return null;
+    const parsed = sanitizeAuthUser(JSON.parse(raw) as AuthUser);
+    if (!parsed) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+    return parsed;
   } catch {
     return null;
   }
 }
 
-function persistSession(user: AuthUser | null): void {
+function persistMockSession(user: AuthUser | null): void {
+  if (isHttpAuth()) return;
   try {
-    if (user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    const safe = sanitizeAuthUser(user);
+    if (safe) sessionStorage.setItem(SESSION_KEY, JSON.stringify(safe));
     else sessionStorage.removeItem(SESSION_KEY);
   } catch {
     /* private mode */
   }
 }
 
-function generateOtp(): string {
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<AuthUser | null>(loadSession);
+  const [user, setUser] = React.useState<AuthUser | null>(() =>
+    isHttpAuth() ? null : loadMockSession(),
+  );
   const [pending, setPending] = React.useState<PendingOtp | null>(null);
 
-  const startLogin = React.useCallback((email: string, password: string): FlowResult => {
-    const res = authenticate(email, password);
-    if (!res.ok || !res.userId) return { ok: false, error: res.error };
-    const acc = getAccountUser(res.userId);
-    if (!acc) return { ok: false, error: 'invalid' };
-    const code = generateOtp();
-    setPending({ kind: 'login', userId: acc.id, email: acc.email, phone: acc.phone, code });
-    // eslint-disable-next-line no-console
-    console.info('[demo OTP]', code);
+  React.useEffect(() => {
+    if (!isHttpAuth()) return;
+    void authApi.getSessionUser().then((sessionUser) => {
+      const safe = sanitizeAuthUser(sessionUser);
+      if (safe) setUser(safe);
+    });
+  }, []);
+
+  const startLogin = React.useCallback(async (email: string, password: string): Promise<FlowResult> => {
+    const res = await authApi.authenticate(email, password);
+    if (!res.ok) return { ok: false, error: res.error };
+
+    if (res.user) {
+      const safe = sanitizeAuthUser(res.user);
+      if (!safe) return { ok: false, error: 'invalid' };
+      clearDemoRoleStorage();
+      setUser(safe);
+      persistMockSession(safe);
+      return { ok: true };
+    }
+
+    if (!res.userId) return { ok: false, error: 'invalid' };
+    const acc = await authApi.getAccountUser(res.userId);
+    setPending({
+      kind: 'login',
+      userId: res.userId,
+      email: acc?.email ?? email.trim(),
+      phone: acc?.phone ?? '',
+      demoCode: res.demoOtp,
+    });
     return { ok: true };
   }, []);
 
-  const startRegister = React.useCallback((payload: RegisterPayload): FlowResult => {
-    const res = registerAccount(payload);
-    if (!res.ok || !res.userId) return { ok: false, error: res.error };
-    const code = generateOtp();
-    setPending({ kind: 'register', userId: res.userId, email: payload.email, phone: payload.phone, code });
-    // eslint-disable-next-line no-console
-    console.info('[demo OTP]', code);
+  const startRegister = React.useCallback(async (payload: RegisterPayload): Promise<FlowResult> => {
+    const res = await authApi.registerAccount(payload);
+    if (!res.ok) return { ok: false, error: res.error };
+    if (!res.userId) return { ok: false, error: 'invalid' };
+    setPending({
+      kind: 'register',
+      userId: res.userId,
+      email: payload.email,
+      phone: payload.phone,
+      demoCode: res.demoOtp,
+    });
     return { ok: true };
   }, []);
 
   const verifyOtp = React.useCallback(
-    (code: string): FlowResult => {
+    async (code: string): Promise<FlowResult> => {
       if (!pending) return { ok: false, error: 'expired' };
-      if (code.trim() !== pending.code) return { ok: false, error: 'otp' };
+      const r = await authApi.verifyOtp(pending.userId, code, pending.kind);
+      if (!r.ok) return { ok: false, error: r.error };
 
       if (pending.kind === 'register') {
-        activateAccount(pending.userId);
         setPending(null);
         return { ok: true };
       }
 
-      const acc = getAccountUser(pending.userId);
+      const safe = sanitizeAuthUser(r.user);
       setPending(null);
-      if (!acc) return { ok: false, error: 'expired' };
-      setUser(acc);
-      persistSession(acc);
+      if (!safe) return { ok: false, error: 'expired' };
+      clearDemoRoleStorage();
+      setUser(safe);
+      persistMockSession(safe);
       return { ok: true };
     },
     [pending],
   );
 
-  const resendOtp = React.useCallback(() => {
-    setPending((prev) => {
-      if (!prev) return prev;
-      const code = generateOtp();
-      // eslint-disable-next-line no-console
-      console.info('[demo OTP]', code);
-      return { ...prev, code };
-    });
-  }, []);
+  const resendOtp = React.useCallback(async () => {
+    if (!pending) return;
+    const r = await authApi.resendOtp(pending.userId, pending.kind);
+    if (!r.ok) return;
+    setPending((prev) => (prev ? { ...prev, demoCode: r.demoOtp ?? prev.demoCode } : prev));
+  }, [pending]);
 
   const cancelPending = React.useCallback(() => setPending(null), []);
 
-  const logout = React.useCallback(() => {
+  const logout = React.useCallback(async () => {
+    await authApi.logout();
+    clearDemoRoleStorage();
     setUser(null);
     setPending(null);
-    persistSession(null);
+    persistMockSession(null);
   }, []);
 
   const value = React.useMemo(

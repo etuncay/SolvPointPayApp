@@ -7,6 +7,7 @@ import { buildReceiptModelFromView } from './build-receipt-model';
 import type { ReceiptLang } from '@epay/data';
 import { ReceiptDocumentField } from './components/receipt-document-field';
 import { buildReceiptViewFormConfig } from './receipt-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 function asLang(value: string): ReceiptLang {
   return value === 'en' || value === 'ar' ? value : 'tr';
@@ -17,6 +18,7 @@ export function ReceiptPrintPage() {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation();
   const lang = asLang(i18n.language);
+  const ui = useAgentUiPermissions();
 
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
@@ -68,7 +70,7 @@ export function ReceiptPrintPage() {
         <DynamicForm
           config={formConfig}
           mode={FormMode.View}
-          permissions={{ view: true }}
+          permissions={ui.form.transactionView}
           initialValues={{}}
           customFunctions={customFunctions}
           t={translate}

@@ -1,10 +1,29 @@
 import { simulateNetworkLatency } from './latency';
 import { getDb } from '../../db/dexie';
+import { deleteRecipientInOverlay } from '../../db/customer-recipient-overlay';
+import {
+  buildSavedRecipient,
+  persistSavedRecipient,
+  recipientInputFromTransferDraft,
+} from '../../db/customer-recipient-ops';
 import {
   ensureCustomerPortalSeeded,
-  DEMO_CUSTOMER_PASSWORD,
   getCustomerPortalSeed,
 } from '../../db/seed-customer-portal';
+import {
+  getDemoCustomerPassword,
+  setDemoCustomerPassword,
+} from '../../db/demo-customer-password';
+import {
+  clearPendingTransfer,
+  loadPendingTransfer,
+  savePendingTransfer,
+  type PendingTransferRecord,
+} from '../../db/pending-transfer-store';
+import {
+  buildSupportCaseRecord,
+  publishSupportCaseToFeed,
+} from '../../db/customer-support-case-ops';
 import type { CustomerPortalApi } from '../../contracts/customer-portal-api';
 import type {
   CustomerProfile,
@@ -15,6 +34,7 @@ import type {
   CustomerContact,
   SavedRecipient,
   TransferDraftInput,
+  TransferConfirmation,
   TransactionsListQuery,
 } from '../../types/customer-portal';
 
@@ -28,11 +48,25 @@ const FX_RATES: Record<string, number> = {
   'GBP>TRY': 41.5,
 };
 
-let pendingTransfer: {
-  transactionId: string;
-  referenceNo: string;
-  draft: TransferDraftInput;
-} | null = null;
+let pendingTransfer: PendingTransferRecord | null = loadPendingTransfer();
+
+function toTransferConfirmation(record: PendingTransferRecord): TransferConfirmation {
+  const { draft, transactionId, referenceNo, foreignReferenceNo } = record;
+  return {
+    transactionId,
+    referenceNo,
+    foreignReferenceNo,
+    draft,
+    requiresDeclaration: draft.amount >= 20000 || draft.kind === 'intl',
+    otpSent: true,
+  };
+}
+
+function setPendingTransfer(record: PendingTransferRecord | null): void {
+  pendingTransfer = record;
+  if (record) savePendingTransfer(record);
+  else clearPendingTransfer();
+}
 
 /** Demo referans — işlem başına bir kez */
 function createReferenceNo(): string {
@@ -155,7 +189,7 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
         input.identity === profile.customerNo ||
         input.identity === '4827193' ||
         input.identity.toLowerCase() === 'elif.demir@ornek.com';
-      if (!identityOk || input.password !== DEMO_CUSTOMER_PASSWORD) {
+      if (!identityOk || input.password !== getDemoCustomerPassword()) {
         return { ok: false, errorCode: 'invalid_credentials' };
       }
       return { ok: true, requiresOtp: true, profile };
@@ -173,6 +207,16 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
       return { ok: true, profile };
     },
 
+    async getSessionProfile() {
+      await simulateNetworkLatency();
+      return sessionProfile;
+    },
+
+    async logout() {
+      await simulateNetworkLatency();
+      clearCustomerPortalSession();
+    },
+
     async requestPasswordReset() {
       await simulateNetworkLatency();
       return { ok: true };
@@ -181,10 +225,7 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
     async getProfile() {
       await ensureCustomerPortalSeeded();
       await simulateNetworkLatency();
-      if (sessionProfile) return sessionProfile;
-      const p = await getDb().customerProfile.toCollection().first();
-      if (!p) throw new Error('Profil bulunamadı');
-      return p;
+      return sessionProfile;
     },
 
     async listWallets() {
@@ -232,21 +273,14 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
     },
 
     async createRecipient(input) {
+      await ensureCustomerPortalSeeded();
       await simulateNetworkLatency();
-      const now = new Date().toISOString();
-      const id = `r-${Date.now()}`;
-      const row: SavedRecipient = {
-        ...input,
-        id,
-        recordStatus: 1,
-        createdAt: now,
-        updatedAt: now,
-      };
-      await getDb().customerRecipients.put(row);
-      return row;
+      const row = buildSavedRecipient(input);
+      return persistSavedRecipient(row);
     },
 
     async updateRecipient(id, input) {
+      await ensureCustomerPortalSeeded();
       await simulateNetworkLatency();
       const existing = await getDb().customerRecipients.get(id);
       if (!existing || existing.recordStatus === 0) return undefined;
@@ -255,19 +289,21 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
         ...input,
         updatedAt: new Date().toISOString(),
       };
-      await getDb().customerRecipients.put(updated);
-      return updated;
+      return persistSavedRecipient(updated);
     },
 
     async deleteRecipient(id) {
+      await ensureCustomerPortalSeeded();
       await simulateNetworkLatency();
       const existing = await getDb().customerRecipients.get(id);
       if (!existing) return false;
-      await getDb().customerRecipients.put({
+      const deleted: SavedRecipient = {
         ...existing,
         recordStatus: 0,
         updatedAt: new Date().toISOString(),
-      });
+      };
+      await getDb().customerRecipients.put(deleted);
+      deleteRecipientInOverlay(id);
       return true;
     },
 
@@ -315,12 +351,13 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
 
     async changePassword(currentPassword, newPassword) {
       await simulateNetworkLatency();
-      if (currentPassword !== DEMO_CUSTOMER_PASSWORD) {
+      if (currentPassword !== getDemoCustomerPassword()) {
         return { ok: false, errorCode: 'invalid_current' };
       }
       if (newPassword.length < 8) {
         return { ok: false, errorCode: 'weak_password' };
       }
+      setDemoCustomerPassword(newPassword);
       return { ok: true };
     },
 
@@ -450,26 +487,43 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
     },
 
     async createSupportCase(input) {
+      await ensureCustomerPortalSeeded();
       await simulateNetworkLatency();
-      const id = `SC-${Date.now()}`;
-      const row = {
-        ...input,
-        id,
-        caseNo: `CASE-${id.slice(-6)}`,
-        createdAt: new Date().toISOString(),
-        status: 'Open',
-      };
+      if (!input.consent) {
+        throw new Error('Aydınlatma metni onayı gerekli');
+      }
+      const profile = sessionProfile ?? (await getDb().customerProfile.toCollection().first());
+      const row = buildSupportCaseRecord(input);
       await getDb().customerSupportCases.put(row);
+      if (profile?.customerNo) {
+        publishSupportCaseToFeed(row, profile.customerNo);
+      }
       return row;
+    },
+
+    async listSupportCases() {
+      await ensureCustomerPortalSeeded();
+      await simulateNetworkLatency();
+      const rows = await getDb().customerSupportCases.toArray();
+      return rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     },
 
     async createTransferDraft(draft) {
       await simulateNetworkLatency();
+      const settingsRow = await getDb().customerSettings.toCollection().first();
+      const settings = normalizeSettings(settingsRow ?? SETTINGS_DEFAULTS);
+      const wallet = await getDb().customerWallets.get(draft.sourceWalletId);
+      if (draft.total > settings.internetDailyLimit) {
+        throw new Error('INTERNET_LIMIT_EXCEEDED');
+      }
+      if (wallet && draft.total > wallet.balance) {
+        throw new Error('INSUFFICIENT_BALANCE');
+      }
       const transactionId = `TRX-${Date.now()}`;
       const referenceNo = createReferenceNo();
       const foreignReferenceNo =
         draft.kind === 'intl' ? `FT-${Math.random().toString(36).slice(2, 8).toUpperCase()}` : undefined;
-      pendingTransfer = { transactionId, referenceNo, draft };
+      setPendingTransfer({ transactionId, referenceNo, foreignReferenceNo, draft });
       const requiresDeclaration = draft.amount >= 20000 || draft.kind === 'intl';
       return {
         transactionId,
@@ -483,14 +537,19 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
 
     async approveTransfer(transactionId, otp, _idempotencyKey, _declaration) {
       await simulateNetworkLatency();
-      if (!pendingTransfer || pendingTransfer.transactionId !== transactionId) {
+      const pending = pendingTransfer ?? loadPendingTransfer();
+      if (!pending || pending.transactionId !== transactionId) {
         throw new Error('Geçersiz işlem');
       }
+      pendingTransfer = pending;
       if (otp !== '123456' && otp !== '000000') {
         throw new Error('OTP hatalı');
       }
-      const { draft } = pendingTransfer;
+      const { draft } = pending;
       const status = draft.kind === 'intl' ? 'Sent' : 'Completed';
+      const wallet = await getDb().customerWallets.get(draft.sourceWalletId);
+      const balanceAfter =
+        wallet != null ? Math.max(0, wallet.balance - draft.total) : 0;
       const tx: CustomerTransaction = {
         id: transactionId,
         date: new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' }),
@@ -504,11 +563,11 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
               ? 'Yurt Dışı Transfer'
               : 'Para Al',
         counterparty: draft.recipientName,
-        referenceNo: pendingTransfer.referenceNo,
+        referenceNo: pending.referenceNo,
         currency: draft.currency,
         symbol: draft.symbol,
         amount: draft.amount,
-        balanceAfter: 0,
+        balanceAfter,
         status,
         description: draft.description,
         purpose: draft.purpose,
@@ -521,45 +580,42 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
         fileName: `dekont-${transactionId}.pdf`,
         createdAt: new Date().toISOString(),
       });
-      const wallet = await getDb().customerWallets.get(draft.sourceWalletId);
       if (wallet && wallet.editable) {
         const next: CustomerWallet = {
           ...wallet,
-          balance: Math.max(0, wallet.balance - draft.total),
+          balance: balanceAfter,
         };
         await getDb().customerWallets.put(next);
       }
-      // "Kişiyi Kayıtlı Kişilerime Kaydet" (4.2/4.3) — onay sonrası alıcı kalıcılaşır.
+      // "Kişiyi Kayıtlı Kişilerime Kaydet" (4.2/4.3) — CRUD ile aynı kalıcılık yolu.
       if (draft.saveRecipient && draft.kind !== 'receive') {
-        const now = new Date().toISOString();
-        const recipient: SavedRecipient = {
-          id: `r-${Date.now()}`,
-          label: draft.recipientName,
-          name: draft.recipientName,
-          country: draft.country,
-          isIntl: draft.kind === 'intl',
-          phone: draft.phone,
-          email: draft.email,
-          purpose: draft.purpose,
-          description: draft.description,
-          recordStatus: 1,
-          createdAt: now,
-          updatedAt: now,
-        };
-        await getDb().customerRecipients.put(recipient);
+        const row = buildSavedRecipient(recipientInputFromTransferDraft(draft));
+        await persistSavedRecipient(row);
       }
-      const referenceNo = pendingTransfer.referenceNo;
-      pendingTransfer = null;
+      const referenceNo = pending.referenceNo;
+      setPendingTransfer(null);
       return { transactionId, referenceNo, status, receiptAvailable: true };
     },
 
     async cancelTransfer(transactionId) {
       await simulateNetworkLatency();
       if (pendingTransfer?.transactionId === transactionId) {
-        pendingTransfer = null;
+        setPendingTransfer(null);
         return true;
       }
       return false;
+    },
+
+    async getPendingTransfer() {
+      await simulateNetworkLatency();
+      const record = pendingTransfer ?? loadPendingTransfer();
+      if (record) pendingTransfer = record;
+      return record ? toTransferConfirmation(record) : null;
+    },
+
+    async clearPendingTransfer() {
+      await simulateNetworkLatency();
+      setPendingTransfer(null);
     },
 
     async getReceipt(transactionId) {
@@ -572,6 +628,6 @@ export function createDexieCustomerPortalAdapter(): CustomerPortalApi {
 
 export function clearCustomerPortalSession(): void {
   sessionProfile = null;
-  pendingTransfer = null;
+  setPendingTransfer(null);
   for (const key of Object.keys(contactResendLog)) delete contactResendLog[key];
 }

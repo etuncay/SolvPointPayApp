@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { BackOfficeRole } from '@epay/ui';
-import { useRole } from '@/domain/role-context';
+import { useNavigationRole } from '@/hooks/use-navigation-role';
 import { dashboardService } from '../api/dashboard-service';
 import type { DashboardSnapshot, WidgetCode, WidgetDataMap } from '../domain/types';
 
@@ -24,7 +24,7 @@ type DashboardContextValue = {
 const DashboardContext = createContext<DashboardContextValue | null>(null);
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
-  const { role } = useRole();
+  const { navigationRole } = useNavigationRole();
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
@@ -33,18 +33,18 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     async (count: number) => {
       setLoading(true);
       try {
-        const next = await dashboardService.refreshAll(role as BackOfficeRole, count);
+        const next = await dashboardService.refreshAll(navigationRole as BackOfficeRole, count);
         setSnapshot(next);
       } finally {
         setLoading(false);
       }
     },
-    [role],
+    [navigationRole],
   );
 
   useEffect(() => {
     void load(refreshCount);
-  }, [role]); // eslint-disable-line react-hooks/exhaustive-deps -- rol değişince yeniden yükle
+  }, [navigationRole]); // eslint-disable-line react-hooks/exhaustive-deps -- rol değişince yeniden yükle
 
   const refresh = useCallback(async () => {
     const nextCount = refreshCount + 1;

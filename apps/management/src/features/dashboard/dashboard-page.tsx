@@ -3,7 +3,7 @@ import { RefreshCw, Shield, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button, PageHead } from '@epay/ui';
 import { useAuth } from '@/domain/auth-context';
-import { useRole } from '@/domain/role-context';
+import { useNavigationRole } from '@/hooks/use-navigation-role';
 import { useUserPreferences } from '@/domain/user-preferences';
 import { useSettings } from '@/domain/settings-context';
 import { getCurrentUser } from '@/features/approval-pool/domain/current-user';
@@ -65,16 +65,16 @@ function WelcomeBanner({
 function DashboardContent() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const { role } = useRole();
+  const { navigationRole } = useNavigationRole();
   const { preferences } = useUserPreferences();
   const { openSettings } = useSettings();
   const { snapshot, refresh, refreshCount } = useDashboard();
   const [bannerOpen, setBannerOpen] = useState(true);
   const [fsId, setFsId] = useState<string | null>(null);
 
-  const fullName = user?.fullName ?? getCurrentUser(role).displayName;
+  const fullName = user?.fullName ?? getCurrentUser(navigationRole).displayName;
   const displayName = fullName.split(/\s+/)[0] ?? fullName;
-  const visible = resolveVisibleWidgets(role, ALL_WIDGETS);
+  const visible = resolveVisibleWidgets(navigationRole, ALL_WIDGETS);
   const fsWidget = fsId ? visible.find((w) => w.id === fsId) : null;
 
   const refreshedLabel = snapshot?.refreshedAt
@@ -87,7 +87,7 @@ function DashboardContent() {
   const handleRefresh = () => void refresh();
 
   const handleExport = (code: WidgetCode) => {
-    void exportWidgetCsv(code, role, refreshCount);
+    void exportWidgetCsv(code, navigationRole, refreshCount);
   };
 
   return (

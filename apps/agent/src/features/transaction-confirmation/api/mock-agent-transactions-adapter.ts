@@ -1,9 +1,5 @@
-import { generateAgentActivities } from '@epay/data';
-import { buildTransactionDetail } from '../domain/build-transaction-detail';
-import { buildTransactionDetailFromActivity } from '../domain/build-transaction-detail-from-activity';
-import type { Transaction } from '@/mocks/transactions';
 import { isCriticalRisk } from '../domain/confirmation-mode';
-import { isTerminalStatus } from '../domain/transaction-types';
+import type { AgentTransactionsPort } from '../contracts/agent-transactions-port';
 import type {
   AgentReceiptRow,
   AgentTransactionSeed,
@@ -13,62 +9,46 @@ import type {
   PendingCustomerRow,
   PendingTransactionRow,
 } from '../domain/types';
-import { agentTransactionsStore, DEMO_AGENT_ID } from './agent-transactions-store';
+import { mapTransactionApprovalOtpError } from '../domain/map-otp-error';
+import { resolveAgentTransaction } from '../domain/resolve-agent-transaction';
+import { buildTransactionDetail } from '../domain/build-transaction-detail';
+import { agentTransactionsStore } from './agent-transactions-store';
+import { transactionApprovalOtpApi } from './transaction-approval-otp.service';
 
-
-
-const OTP_PATTERN = /^\d{6}$/;
-
-/** @epay/data hesap hareketleri seed'i ile hizalı — store'da yoksa detay fallback. */
-const ACTIVITY_BY_TX_ID = new Map(generateAgentActivities().map((a) => [a.transactionId, a]));
-
-function buildDetail(tx: Transaction) {
-  return buildTransactionDetail(tx, [], [], null);
+function toConfirmationView(resolved: NonNullable<ReturnType<typeof resolveAgentTransaction>>): ConfirmationView {
+  const { detail, agentRole, hasReceipt, storeBacked } = resolved;
+  return {
+    id: detail.id,
+    detail,
+    requiresAuthority: storeBacked && Boolean(detail.senderAuthorized || detail.receiverAuthorized),
+    isCritical: isCriticalRisk(detail),
+    hasReceipt,
+    agentRole,
+    storeBacked,
+  };
 }
 
-function resolveAgentRole(tx: Transaction): ConfirmationView['agentRole'] {
-  if (tx.senderAgentId === DEMO_AGENT_ID) return 'Sender';
-  if (tx.receiverAgentId === DEMO_AGENT_ID) return 'Receiver';
-  return null;
-}
-
-export const mockAgentTransactionsAdapter = {
+export const mockAgentTransactionsAdapter: AgentTransactionsPort = {
   getConfirmation(id: number): ConfirmationView | null {
-    const tx = agentTransactionsStore.get(id);
-    if (tx) {
-      const detail = buildDetail(tx);
-      return {
-        id: tx.id,
-        detail,
-        requiresAuthority: Boolean(detail.senderAuthorized || detail.receiverAuthorized),
-        isCritical: isCriticalRisk(detail),
-        hasReceipt: agentTransactionsStore.hasReceipt(id),
-        agentRole: resolveAgentRole(tx),
-      };
-    }
-
-    const activity = ACTIVITY_BY_TX_ID.get(id);
-    if (!activity) return null;
-    const detail = buildTransactionDetailFromActivity(activity);
-    const isInflow = activity.direction === 'Inflow';
-    return {
-      id,
-      detail,
-      requiresAuthority: false,
-      isCritical: isCriticalRisk(detail),
-      hasReceipt: isTerminalStatus(detail.status),
-      agentRole: isInflow ? 'Receiver' : 'Sender',
-    };
+    const resolved = resolveAgentTransaction(id);
+    if (!resolved) return null;
+    return toConfirmationView(resolved);
   },
 
-  approve(id: number, input: ApproveInput): ApproveResult {
+  async approve(id: number, input: ApproveInput): Promise<ApproveResult> {
     const tx = agentTransactionsStore.get(id);
     if (!tx) return { ok: false, error: 'ag_cf_err_not_found' };
     if (tx.status !== 'Pending') return { ok: false, error: 'ag_cf_err_state' };
 
-    if (!OTP_PATTERN.test(input.otp)) return { ok: false, error: 'ag_cf_err_otp' };
+    const otpResult = await transactionApprovalOtpApi.verifyOtp({
+      transactionId: id,
+      otp: input.otp,
+    });
+    if (!otpResult.ok) {
+      return { ok: false, error: mapTransactionApprovalOtpError(otpResult.error) };
+    }
 
-    const detail = buildDetail(tx);
+    const detail = buildTransactionDetail(tx, [], [], null);
     const needsAuthority = Boolean(detail.senderAuthorized || detail.receiverAuthorized);
     const { identityChecked, photoMatched, authorityChecked, noSuspicion } = input.checks;
     if (!identityChecked || !photoMatched || !noSuspicion || (needsAuthority && !authorityChecked)) {
@@ -98,6 +78,7 @@ export const mockAgentTransactionsAdapter = {
   },
 
   markReceiptPrinted(id: number): void {
+    if (!agentTransactionsStore.get(id)) return;
     agentTransactionsStore.markReceiptGenerated(id);
   },
 
@@ -116,7 +97,7 @@ export const mockAgentTransactionsAdapter = {
       .list()
       .filter((tx) => tx.status === 'Pending' && agentTransactionsStore.isAgentScoped(tx))
       .map((tx) => {
-        const detail = buildDetail(tx);
+        const detail = buildTransactionDetail(tx, [], [], null);
         return {
           id: tx.id,
           transactionNo: detail.transactionNo,
@@ -151,7 +132,6 @@ export const mockAgentTransactionsAdapter = {
       }));
   },
 
-  /** Günlük grafik agregasyonu için ham kayıtlar (başarılı=terminal Completed/Sent). */
   listDailyActivity(): AgentTransactionSeed[] {
     return agentTransactionsStore
       .list()
@@ -164,4 +144,4 @@ export const mockAgentTransactionsAdapter = {
   },
 };
 
-export type AgentTransactionsService = typeof mockAgentTransactionsAdapter;
+export type AgentTransactionsService = AgentTransactionsPort;

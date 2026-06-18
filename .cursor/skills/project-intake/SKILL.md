@@ -57,3 +57,8 @@ Source column: `prompt` | `inferred` | `config` | `user-mc`
 | scaffold | module-scaffolder |
 
 Do not write code before `required_before_code` fields are set.
+
+## Subagent delegation
+
+- **Step 3 (infer):** Launch `repo-explorer` in parallel to validate repo signals and layout patterns.
+- **After Step 5 (save brief):** Launch `brief-validator`; fix plan blockers before routing to plan/scaffold.

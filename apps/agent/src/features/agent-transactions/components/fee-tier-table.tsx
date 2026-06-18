@@ -4,6 +4,7 @@ import { DynamicTable, type TableConfig, type TableCustomFunctions } from '@epay
 import { fmtNumber } from '@/lib/format';
 import { findActiveTier } from '@/features/agent-transfers/domain/fees';
 import type { TransferFeeTier } from '@/features/agent-transfers/domain/types';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 interface Props {
   config: TableConfig;
@@ -19,6 +20,7 @@ export function FeeTierTable({ config, tiers, amount, titleKey = 'ag_tr_own_pane
     t(key, { defaultValue: fb ?? key });
 
   const activeTierId = useMemo(() => findActiveTier(amount, tiers)?.id ?? null, [amount, tiers]);
+  const ui = useAgentUiPermissions();
 
   const feeFns: TableCustomFunctions = useMemo(
     () => ({
@@ -42,7 +44,7 @@ export function FeeTierTable({ config, tiers, amount, titleKey = 'ag_tr_own_pane
         </div>
         <DynamicTable
           config={config}
-          permissions={{}}
+          permissions={ui.table.fees}
           customFunctions={feeFns}
           locale={i18n.language}
           t={translate}

@@ -14,6 +14,7 @@ import { DocumentUploadModal } from './components/document-upload-modal';
 import { DocumentViewModal } from './components/document-view-modal';
 import { SearchWarningsBanner } from './components/search-warnings-banner';
 import { useCustomerSearch } from './hooks/use-customer-search';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 function statusClass(status: string): string {
   if (status === 'active' || status === 'Active') return 'active';
@@ -53,6 +54,7 @@ export function CustomerSearchPage() {
     handleUpload,
     initialQuery,
   } = useCustomerSearch();
+  const ui = useAgentUiPermissions();
 
   const searchConfig = useMemo(
     () => buildSearchFormConfig(translate),
@@ -115,7 +117,7 @@ export function CustomerSearchPage() {
           <DynamicForm
             config={searchConfig}
             mode={FormMode.Create}
-            permissions={{ create: false, update: false, delete: false }}
+            permissions={ui.form.search}
             initialValues={{
               customerNo: initialQuery.customerNo ?? '',
               idNo: initialQuery.idNo ?? '',
@@ -150,7 +152,7 @@ export function CustomerSearchPage() {
             <button
               type="button"
               className="btn btn-secondary"
-              disabled={!hasResult}
+              disabled={!hasResult || !ui.form.documentUpload.create}
               onClick={() => setUploadOpen(true)}
             >
               <FilePlus size={14} /> {t('ag_cs_btn_upload')}
@@ -163,7 +165,7 @@ export function CustomerSearchPage() {
             >
               <FileSearch size={14} /> {t('ag_cs_btn_view_docs')}
             </button>
-            {customerId != null ? (
+            {customerId != null && ui.flags.canEditCustomer ? (
               <Link to={`${AGENT_PATHS.customers}/${customerId}`} className="btn btn-ghost">
                 <Pencil size={14} /> {t('ag_cs_btn_edit')}
               </Link>
@@ -178,7 +180,7 @@ export function CustomerSearchPage() {
                 </div>
                 <DynamicTable
                   config={customerInfoConfig}
-                  permissions={{}}
+                  permissions={ui.table.customers}
                   customFunctions={profileFns}
                   locale={i18n.language}
                   t={translate}
@@ -195,7 +197,7 @@ export function CustomerSearchPage() {
                 </div>
                 <DynamicTable
                   config={accountsConfig}
-                  permissions={{}}
+                  permissions={ui.table.customers}
                   locale={i18n.language}
                   t={translate}
                 />
@@ -211,7 +213,7 @@ export function CustomerSearchPage() {
                 </div>
                 <DynamicTable
                   config={pendingTxConfig}
-                  permissions={{}}
+                  permissions={ui.table.customers}
                   customFunctions={pendingFns}
                   locale={i18n.language}
                   t={translate}

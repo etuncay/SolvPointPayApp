@@ -39,3 +39,7 @@ No pasted diffs, plans, or commit bodies — link paths/hashes. Max 5 skills. Co
 ## Redaction
 
 Remove API keys, JWTs, passwords, connection strings, private keys, `.env` secrets, PII, tokenized URLs.
+
+## Subagent delegation
+
+- **On invoke:** Launch `artifact-collector` in parallel; merge paths into sections 2 and 5 (no full file paste).

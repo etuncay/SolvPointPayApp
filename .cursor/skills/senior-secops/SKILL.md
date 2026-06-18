@@ -88,3 +88,7 @@ Record pass/gap per control — do not claim compliance without evidence.
 - **GDPR:** privacy by design (Art 25/32), breach 72h (Art 33)
 
 Refs: [OWASP Top 10](https://owasp.org/www-project-top-ten/), [OSV](https://osv.dev). Cross-ref: `dependency-auditor` for license/CVE depth.
+
+## Subagent delegation
+
+- **Workflow 1 start:** Launch `security-scanner` in parallel for semgrep, gitleaks, osv-scanner, checkov raw output.

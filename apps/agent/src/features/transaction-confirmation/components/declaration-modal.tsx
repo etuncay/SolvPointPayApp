@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DynamicForm, FormMode, type CustomFunctions } from '@epay/ui';
 import { buildDeclarationFormConfig } from '../declaration-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 import type { DeclarationInput, DeclarationReason } from '../domain/types';
 
 type Props = {
@@ -24,6 +25,7 @@ export function DeclarationModal({ open, onClose, onConfirm }: Props) {
   );
 
   const customFunctions: CustomFunctions = useMemo(() => ({}), []);
+  const ui = useAgentUiPermissions();
 
   if (!open) return null;
 
@@ -38,7 +40,7 @@ export function DeclarationModal({ open, onClose, onConfirm }: Props) {
           <DynamicForm
             config={formConfig}
             mode={FormMode.Create}
-            permissions={{ create: true }}
+            permissions={ui.form.transactionApproveAction}
             customFunctions={customFunctions}
             t={translate}
             onButtonClick={(key, values) => {

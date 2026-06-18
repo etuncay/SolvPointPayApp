@@ -7,7 +7,7 @@ import { DynamicTable, PageHead, type TableConfig, type TableCustomFunctions } f
 import { useRole } from '@/domain/role-context';
 import type { ApprovalListFilter } from './domain/types';
 import { getApprovalPoolPermissions, rowCanApprove, rowCanReject, rowCanWithdraw } from './domain/permissions';
-import { getCurrentUser } from './domain/current-user';
+import { useApprovalCurrentUser } from './hooks/use-approval-current-user';
 import { approvalsService } from './api';
 import { ApprovalFormModal, type ReviewStep } from './components/approval-form-modal';
 import { buildApprovalsTableConfig } from './approvals-table-config';
@@ -42,7 +42,7 @@ export function ApprovalsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const permissions = getApprovalPoolPermissions(role);
-  const user = useMemo(() => getCurrentUser(role), [role]);
+  const user = useApprovalCurrentUser();
   const tr = i18n.language === 'tr';
 
   const [filter, setFilter] = useState<ApprovalListFilter>('pending_mine');
@@ -205,23 +205,17 @@ export function ApprovalsPage() {
         ))}
       </div>
 
-      {!permissions.list ? (
-        <div className="empty-state" style={{ padding: 48 }}>
-          <p className="t-mute">{t('ap_no_access')}</p>
+      <div className="fcard">
+        <div className="fcard-body padless">
+          <DynamicTable
+            config={tableConfig}
+            permissions={{}}
+            customFunctions={customFunctions}
+            locale={i18n.language}
+            t={translate}
+          />
         </div>
-      ) : (
-        <div className="fcard">
-          <div className="fcard-body padless">
-            <DynamicTable
-              config={tableConfig}
-              permissions={{}}
-              customFunctions={customFunctions}
-              locale={i18n.language}
-              t={translate}
-            />
-          </div>
-        </div>
-      )}
+      </div>
 
       {reviewApproval && (
         <ApprovalFormModal

@@ -6,6 +6,7 @@ import { Beaker } from 'lucide-react';
 import { DynamicTable, exportTableCsv } from '@epay/ui';
 import { deleteCustomer, ensurePlaygroundCustomersSeeded } from '@epay/data';
 import { buildPlaygroundTableConfig } from './playground-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 export function PlaygroundPage() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function PlaygroundPage() {
     t(key, { defaultValue: fb ?? key });
   const [listVersion, setListVersion] = useState(0);
   const [dbReady, setDbReady] = useState(false);
+  const ui = useAgentUiPermissions();
 
   useEffect(() => {
     void ensurePlaygroundCustomersSeeded().then(() => setDbReady(true));
@@ -74,7 +76,7 @@ export function PlaygroundPage() {
         subtitle: t('pg_subtitle_table'),
         status: <span className="badge muted">DEV</span>,
       }}
-      permissions={{ new: true, edit: true, delete: true, view: true, export: true }}
+      permissions={ui.table.playground}
       locale={i18n.language}
       t={translate}
       onNew={() => navigate('/playground/new')}

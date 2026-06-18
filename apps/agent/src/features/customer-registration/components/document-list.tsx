@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DynamicTable, type TableCustomFunctions } from '@epay/ui';
 import { buildDocumentsTableConfig } from '../documents-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 const DOC_META: Array<{ key: string; category: string; typeKey: string }> = [
   { key: 'identityFront', category: 'Identity', typeKey: 'ag_cust_doc_identity_front' },
@@ -24,6 +25,7 @@ export function DocumentList({ value }: CustomFieldProps) {
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
   const docs = asDocs(value);
+  const ui = useAgentUiPermissions();
   const today = new Date().toISOString().slice(0, 10);
 
   const rows = useMemo(
@@ -58,7 +60,7 @@ export function DocumentList({ value }: CustomFieldProps) {
   return (
     <DynamicTable
       config={tableConfig}
-      permissions={{}}
+      permissions={ui.table.readOnly}
       customFunctions={customFunctions}
       locale={i18n.language}
       t={translate}

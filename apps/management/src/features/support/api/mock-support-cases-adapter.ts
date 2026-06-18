@@ -1,4 +1,5 @@
 import type { BackOfficeRole } from '@epay/ui';
+import { getCustomerPortalSupportCaseFeed } from '@epay/data';
 import { userNameById } from '@/features/approval-pool/domain/current-user';
 import {
   attachDocumentToCase,
@@ -6,6 +7,7 @@ import {
   createSupportCase,
   getSupportCaseDetail,
   getSupportCasesStore,
+  ingestCustomerPortalSupportCases,
   postSupportCaseAction,
   resolveSupportCase,
 } from '@/mocks/support-cases-store';
@@ -47,6 +49,7 @@ function ownerName(ownerUserId: string | null): string {
 export const mockSupportCasesAdapter: SupportCasesService = {
   list(role, userId, filters) {
     if (!getSupportCasePermissions(role).list) return [];
+    ingestCustomerPortalSupportCases(getCustomerPortalSupportCaseFeed());
     let rows = filterCasesByRole(role, getSupportCasesStore(), userId);
     if (filters.assignedToMe) {
       rows = rows.filter((c) => c.ownerUserId === userId);

@@ -62,6 +62,7 @@ export function useWithdrawal() {
   const [identity, setIdentity] = useState<IdentityScanState>(EMPTY_IDENTITY_SCAN);
   const [ocrStatus, setOcrStatus] = useState<'idle' | 'ok' | 'mismatch'>('idle');
   const [docModalOpen, setDocModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const initialQuery = useMemo(
     () => ({
@@ -162,8 +163,8 @@ export function useWithdrawal() {
   }, [navigate, notFoundIdNo]);
 
   const submit = useCallback(
-    (formValues: Record<string, unknown>) => {
-      if (!result || !selectedWallet) return;
+    async (formValues: Record<string, unknown>) => {
+      if (!result || !selectedWallet || submitting) return;
       const isCorporate = result.customerType === 'corporate';
       const merged = { ...draft, ...formValues, isCorporate };
 
@@ -193,32 +194,37 @@ export function useWithdrawal() {
         screenName = person.name;
       }
 
-      const res = withdrawalService.initiateWithdrawal({
-        customerId: result.customerId,
-        walletId: selectedWallet.walletId,
-        currency: String(merged.currency),
-        amount: Number(merged.amount),
-        transactionReferenceNo: String(merged.transactionReferenceNo ?? ''),
-        foreignReferenceNo: String(merged.foreignReferenceNo ?? ''),
-        isSuspicious: Boolean(merged.isSuspicious),
-        authorizedPersonIdNo: isCorporate ? String(merged.authorizedPersonIdNo) : undefined,
-        screenIdNo,
-        screenName,
-      });
+      setSubmitting(true);
+      try {
+        const res = await withdrawalService.initiateWithdrawal({
+          customerId: result.customerId,
+          walletId: selectedWallet.walletId,
+          currency: String(merged.currency),
+          amount: Number(merged.amount),
+          transactionReferenceNo: String(merged.transactionReferenceNo ?? ''),
+          foreignReferenceNo: String(merged.foreignReferenceNo ?? ''),
+          isSuspicious: Boolean(merged.isSuspicious),
+          authorizedPersonIdNo: isCorporate ? String(merged.authorizedPersonIdNo) : undefined,
+          screenIdNo,
+          screenName,
+        });
 
-      if (!res.ok) {
-        toast.error(t(res.message));
-        return;
-      }
+        if (!res.ok) {
+          toast.error(t(res.message));
+          return;
+        }
 
-      if (res.sanctionHit) {
-        toast.warning(t('ag_wd_sanction_hit'));
-      } else {
-        toast.success(t('ag_wd_submit_ok'));
+        if (res.sanctionHit) {
+          toast.warning(t('ag_wd_sanction_hit'));
+        } else {
+          toast.success(t('ag_wd_submit_ok'));
+        }
+        navigate(`/transactions/${res.transactionId}?mode=confirm&from=withdrawal`);
+      } finally {
+        setSubmitting(false);
       }
-      navigate(`/transactions/${res.transactionId}?mode=confirm&from=withdrawal`);
     },
-    [draft, navigate, ocrStatus, result, selectedWallet, t],
+    [draft, navigate, ocrStatus, result, selectedWallet, submitting, t],
   );
 
   const cancel = useCallback(() => {
@@ -227,6 +233,7 @@ export function useWithdrawal() {
 
   return {
     loading,
+    submitting,
     notFound,
     result,
     selectedWallet,

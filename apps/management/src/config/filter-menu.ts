@@ -10,14 +10,21 @@ import { filterSystemMenuItem } from '@/features/system/domain/nav-permissions';
 import { filterHrMenuItem } from '@/features/hr/domain/nav-permissions';
 import { countOpenRiskCases } from '@/mocks/risk-cases';
 
+function withoutDevPlayground(items: NavItem[]): NavItem[] {
+  if (import.meta.env.DEV) return items;
+  return items.filter((item) => item.id !== 'playground');
+}
+
 /** Rol bazlı menü filtresi — banks, risk ve ops grupları */
 export function filterMenuForRole(items: NavItem[], role: BackOfficeRole): NavItem[] {
+  const baseItems = withoutDevPlayground(items);
+
   // Süper-rol (alltest) tüm menü öğelerini olduğu gibi görür.
-  if (isAllAccessRole(role)) return items;
+  if (isAllAccessRole(role)) return baseItems;
 
   const visibleBankIds = new Set(getVisibleBanksChildIds(role));
 
-  return items.flatMap((item) => {
+  return baseItems.flatMap((item) => {
     if (item.id === 'ops') {
       const filtered = filterOpsMenuItem(item, role);
       return filtered ? [filtered] : [];

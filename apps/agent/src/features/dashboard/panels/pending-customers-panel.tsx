@@ -6,6 +6,7 @@ import { DynamicTable, type TableCustomFunctions } from '@epay/ui';
 import { AGENT_PATHS } from '@/config/agent-nav-paths';
 import { agentTransactionsService } from '@/features/transaction-confirmation/api/agent-transactions-service';
 import { buildPendingCustomersTableConfig } from '../dashboard-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** §5 — Bekleyen Müşteriler (DynamicTable + JSON config). Boşsa panel render edilmez. */
 export function PendingCustomersPanel() {
@@ -16,6 +17,7 @@ export function PendingCustomersPanel() {
 
   const initialCount = useMemo(() => agentTransactionsService.listPendingCustomers().length, []);
   const [visible, setVisible] = useState(initialCount > 0);
+  const ui = useAgentUiPermissions();
 
   const tableConfig = useMemo(
     () => buildPendingCustomersTableConfig(translate),
@@ -41,7 +43,7 @@ export function PendingCustomersPanel() {
         </div>
         <DynamicTable
           config={tableConfig}
-          permissions={{}}
+          permissions={ui.table.dashboardPendingCustomers}
           customFunctions={customFunctions}
           locale={i18n.language}
           t={translate}

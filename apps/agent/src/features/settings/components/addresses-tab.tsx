@@ -6,6 +6,7 @@ import { DynamicForm, DynamicTable, FormMode, type TableCustomFunctions } from '
 import { settingsService } from '../api/settings-service';
 import { buildAddressesTableConfig } from '../settings-table-config';
 import { buildAddressAddFormConfig } from '../settings-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** 1.3 › Adresler — DynamicForm (ekle) + DynamicTable (liste). */
 export function AddressesTab() {
@@ -14,6 +15,7 @@ export function AddressesTab() {
     t(key, { defaultValue: fb ?? key });
   const [listVersion, setListVersion] = useState(0);
   const [formKey, setFormKey] = useState(0);
+  const ui = useAgentUiPermissions();
   const refresh = () => setListVersion((v) => v + 1);
 
   const tableConfig = useMemo(
@@ -63,14 +65,14 @@ export function AddressesTab() {
         key={formKey}
         config={addFormConfig}
         mode={FormMode.Create}
-        permissions={{ create: true }}
+        permissions={ui.form.settingsAddressAdd}
         t={translate}
         header={{ hidePageHead: true, saveLabel: t('ag_ad_add') }}
         onSubmit={handleAdd}
       />
       <DynamicTable
         config={tableConfig}
-        permissions={{}}
+        permissions={ui.table.settingsAddresses}
         customFunctions={customFunctions}
         locale={i18n.language}
         t={translate}

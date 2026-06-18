@@ -29,6 +29,7 @@ import {
 } from '../domain/transitions';
 import type { ApprovalsService, CreateApprovalRequestInput } from './approvals-service';
 import type { ApprovalListFilter, ApprovalRequest, CurrentUser } from '../domain/types';
+import { userIdsMatch } from '../domain/current-user';
 import { MOCK_USER_IDS } from '../domain/types';
 
 let store: ApprovalRequest[] = APPROVAL_REQUESTS.map((r) => ({ ...r }));
@@ -54,18 +55,18 @@ function matchesPendingMine(r: ApprovalRequest, user: CurrentUser): boolean {
 }
 
 function matchesInitiatedMine(r: ApprovalRequest, user: CurrentUser): boolean {
-  return r.initiatedBy === user.id && isActive(r);
+  return userIdsMatch(user.id, r.initiatedBy) && isActive(r);
 }
 
 function matchesApprovedMine(r: ApprovalRequest, user: CurrentUser): boolean {
-  if (r.firstApprover === user.id && r.firstStatus === 'Approved') return true;
-  if (r.secondApprover === user.id && r.secondStatus === 'Approved') return true;
+  if (userIdsMatch(user.id, r.firstApprover ?? '') && r.firstStatus === 'Approved') return true;
+  if (userIdsMatch(user.id, r.secondApprover ?? '') && r.secondStatus === 'Approved') return true;
   return false;
 }
 
 function matchesRejectedMine(r: ApprovalRequest, user: CurrentUser): boolean {
-  if (r.firstApprover === user.id && r.firstStatus === 'Rejected') return true;
-  if (r.secondApprover === user.id && r.secondStatus === 'Rejected') return true;
+  if (userIdsMatch(user.id, r.firstApprover ?? '') && r.firstStatus === 'Rejected') return true;
+  if (userIdsMatch(user.id, r.secondApprover ?? '') && r.secondStatus === 'Rejected') return true;
   return false;
 }
 
@@ -197,7 +198,7 @@ export const mockApprovalsAdapter: ApprovalsService = {
     // §0.6 — geri çekilmiş VEYA reddedilmiş talep, başlatan tarafından düzenlenip
     // yeniden gönderilebilir; önceki kayıt Superseded olur.
     const resubmittable: ApprovalRequest['uiStatus'][] = ['withdrawn', 'rejected', 'second_rejected'];
-    if (!resubmittable.includes(existing.uiStatus) || existing.initiatedBy !== user.id) {
+    if (!resubmittable.includes(existing.uiStatus) || !userIdsMatch(user.id, existing.initiatedBy)) {
       return { ok: false, error: 'fx_forbidden' };
     }
     const superseded: ApprovalRequest = { ...existing, uiStatus: 'superseded' };

@@ -75,4 +75,4 @@ export interface WithdrawalSubmitPayload {
 
 export type WithdrawalSubmitResult =
   | { ok: true; transactionId: number; status: 'Pending' | 'OnHold'; sanctionHit: boolean }
-  | { ok: false; code: 'DUPLICATE' | 'NOT_FOUND'; message: string };
+  | { ok: false; code: 'DUPLICATE' | 'NOT_FOUND' | 'LIMIT_EXCEEDED'; message: string };

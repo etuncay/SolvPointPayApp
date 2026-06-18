@@ -17,7 +17,9 @@ export function isCriticalRisk(detail: TransactionDetail): boolean {
 export function resolveConfirmationMode(
   status: TransactionDetail['status'],
   requestApprove: boolean,
+  options?: { storeBacked?: boolean },
 ): ConfirmationMode {
-  if (requestApprove && status === 'Pending') return 'Approve';
+  const storeBacked = options?.storeBacked ?? true;
+  if (requestApprove && storeBacked && status === 'Pending') return 'Approve';
   return 'Detail';
 }

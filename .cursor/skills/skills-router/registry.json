@@ -63,6 +63,24 @@
       "skillPath": ".cursor/skills/ci-cd-pipeline-builder/SKILL.md"
     },
     {
+      "id": "skill-creator",
+      "priority": 72,
+      "match": "skill oluştur|create skill|yeni skill|skill yaz|optimize skill|skill eval|skill benchmark",
+      "skillPath": ".cursor/skills/skill-creator/SKILL.md"
+    },
+    {
+      "id": "handoff",
+      "priority": 68,
+      "match": "hand this off|handoff doc|pick this up later|ending session|compact this conversation|oturumu bitir|devret",
+      "skillPath": ".cursor/skills/handoff/SKILL.md"
+    },
+    {
+      "id": "mcp-server-builder",
+      "priority": 67,
+      "match": "mcp server|model context protocol|openapi.*mcp|expose api as mcp",
+      "skillPath": ".cursor/skills/mcp-server-builder/SKILL.md"
+    },
+    {
       "id": "codebase-onboarding",
       "priority": 70,
       "match": "onboarding|codebase overview|architecture overview|repo nasıl çalışıyor|sistemi anlat|projeyi tanı",
@@ -79,6 +97,30 @@
       "priority": 70,
       "match": "security scan|threat model|pentest|vuln management|hardening|secure baseline|güvenlik taraması|tehdit modeli|zafiyet",
       "skillPath": ".cursor/skills/senior-secops/SKILL.md"
+    },
+    {
+      "id": "pdf-tools",
+      "priority": 65,
+      "match": "\\.pdf|pdf birleştir|pdf böl|pdf form|pdf'den metin|merge pdf|split pdf",
+      "skillPath": ".cursor/skills/pdf-tools/SKILL.md"
+    },
+    {
+      "id": "xlsx-tools",
+      "priority": 65,
+      "match": "\\.xlsx|\\.xlsm|excel|spreadsheet|tablo düzenle|csv'ye çevir",
+      "skillPath": ".cursor/skills/xlsx-tools/SKILL.md"
+    },
+    {
+      "id": "docx-tools",
+      "priority": 65,
+      "match": "word doc|\\.docx|word belgesi|rapor word|memo|mektup",
+      "skillPath": ".cursor/skills/docx-tools/SKILL.md"
+    },
+    {
+      "id": "pptx-tools",
+      "priority": 65,
+      "match": "\\.pptx|powerpoint|sunum|slides|deck|presentation",
+      "skillPath": ".cursor/skills/pptx-tools/SKILL.md"
     }
   ]
 }

@@ -6,16 +6,24 @@ export type {
   AuthAccountRecord,
   AuthErrorCode,
   AuthResult,
+  AuthOtpResult,
   RegisterPayload,
   BackOfficeRole,
 } from './types/auth';
 export { DEMO_PASSWORD, DEMO_ACCOUNTS, AUTH_SEED_ACCOUNTS } from './db/seed-auth';
+export type { AuthPort } from './contracts/auth-port';
+export { isBackOfficeRegisterEnabled } from './config/backoffice-auth-config';
 export {
+  authApi,
+  setAuthPort,
+  getAuthPort,
   authenticate,
   getAccountUser,
   registerAccount,
   activateAccount,
 } from './services/auth.service';
+export { createMockAuthAdapter } from './adapters/mock/auth-mock.adapter';
+export { createHttpAuthAdapter } from './adapters/http/auth-http.adapter';
 
 export type { PaginatedListResponse, ApiResult } from './contracts/api-response';
 export type { ListQueryInput } from './contracts/list-query';
@@ -159,7 +167,29 @@ export {
   ensureCustomerPortalSeeded,
   DEMO_CUSTOMER_PASSWORD,
   getCustomerPortalSeed,
+  getCustomerPortalRecipientsSeed,
+  CUSTOMER_PORTAL_RECIPIENTS_SEED,
+  CUSTOMER_PORTAL_SEED_RECIPIENT_IDS,
 } from './db/seed-customer-portal';
+export {
+  getDemoCustomerPassword,
+  resetDemoCustomerPassword,
+} from './db/demo-customer-password';
+export { resetRecipientOverlay } from './db/customer-recipient-overlay';
+export {
+  recipientInputFromTransferDraft,
+  buildSavedRecipient,
+} from './db/customer-recipient-ops';
+export type { CustomerPortalSupportCaseFeedEntry } from './db/customer-support-case-feed';
+export {
+  getCustomerPortalSupportCaseFeed,
+  pushCustomerPortalSupportCaseFeed,
+  resetCustomerPortalSupportCaseFeed,
+} from './db/customer-support-case-feed';
+export {
+  buildSupportCaseRecord,
+  publishSupportCaseToFeed,
+} from './db/customer-support-case-ops';
 export { createDexieCustomerPortalAdapter } from './adapters/dexie/customer-portal-dexie.adapter';
 export { createHttpCustomerPortalAdapter } from './adapters/http/customer-portal-http.adapter';
 export { createDexieTransactionsAdapter } from './adapters/dexie/transactions-dexie.adapter';
@@ -188,8 +218,10 @@ export type {
 } from './types/transaction-detail';
 export {
   BACK_OFFICE_TRANSACTION_SEED,
+  BACK_OFFICE_AGENT_TRANSACTION_SEED,
   ensureBackOfficeTransactionsSeeded,
 } from './db/seed-transactions';
+export { buildBackOfficeTransactionSeed } from './db/back-office-seed-utils';
 export {
   buildBackOfficeTransactions,
   type BuildBackOfficeTransactionsInput,
@@ -225,7 +257,7 @@ export type {
   BackOfficeWalletDetailSeed,
   BuildBackOfficeWalletDetailsInput,
 } from './types/wallet-detail';
-export { BACK_OFFICE_WALLET_SEED, ensureBackOfficeWalletsSeeded } from './db/seed-wallets';
+export { BACK_OFFICE_WALLET_SEED, BACK_OFFICE_AGENT_WALLET_SEED, ensureBackOfficeWalletsSeeded } from './db/seed-wallets';
 export {
   CUSTOMERS,
   type Customer as PlaygroundCustomer,

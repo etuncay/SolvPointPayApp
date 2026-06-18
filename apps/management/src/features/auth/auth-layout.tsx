@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { CircleAlert } from 'lucide-react';
 import { ThemeProvider } from '@epay/ui';
+import { DemoModeBanner } from '@/components/demo-mode-banner';
+import { isDemoMode } from '@/lib/data-layer';
 
 /** Ortalanmış auth kartı — AppShell dışındaki public sayfalar için. */
 export function AuthLayout({
@@ -19,13 +21,21 @@ export function AuthLayout({
       <div
         style={{
           minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
           background: 'var(--bg)',
           color: 'var(--fg)',
-          padding: 24,
         }}
       >
+        {isDemoMode() ? <DemoModeBanner placement="page-top" /> : null}
+        <div
+          style={{
+            flex: 1,
+            display: 'grid',
+            placeItems: 'center',
+            padding: 24,
+          }}
+        >
         <div style={{ width: 'min(420px, 100%)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
             <div
@@ -65,6 +75,7 @@ export function AuthLayout({
               {footer}
             </div>
           )}
+        </div>
         </div>
       </div>
     </ThemeProvider>

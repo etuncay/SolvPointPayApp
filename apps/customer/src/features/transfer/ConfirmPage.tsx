@@ -5,11 +5,13 @@ import { customerPortalApi } from '@epay/data';
 import { useAuth } from '@/app/AuthProvider';
 import { useTransferDraft } from '@/app/TransferDraftContext';
 import { OtpInput } from '@/components/ui/OtpInput';
+import { DemoOtpHint } from '@/components/DemoOtpHint';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { Field } from '@/components/ui/Field';
 import { Icon } from '@/components/icons/Icon';
 import { fmtMoney } from '@/lib/format';
+import { firstFreeTextError } from '@/lib/validators';
 import { paymentPurposeI18nKey } from '@/lib/enums';
 import { useTranslation } from 'react-i18next';
 
@@ -36,9 +38,10 @@ export function ConfirmPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { profile } = useAuth();
-  const { draft, confirmation, approve, cancel } = useTransferDraft();
+  const { draft, confirmation, approve, cancel, hydrating, transferTabConflict } = useTransferDraft();
   const [otp, setOtp] = useState('');
   const [declaration, setDeclaration] = useState('');
+  const [declarationErr, setDeclarationErr] = useState<string | null>(null);
   const [showDeclaration, setShowDeclaration] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -55,6 +58,10 @@ export function ConfirmPage() {
     }, 1000);
     return () => window.clearInterval(timer);
   }, []);
+
+  if (hydrating) {
+    return null;
+  }
 
   if (!draft || !confirmation) {
     return (
@@ -78,11 +85,20 @@ export function ConfirmPage() {
       setShowDeclaration(true);
       return;
     }
+    const sensitiveErr = firstFreeTextError(declaration);
+    if (sensitiveErr) {
+      const msg = t(sensitiveErr);
+      setDeclarationErr(msg);
+      if (currentConfirmation.requiresDeclaration) setShowDeclaration(true);
+      else setError(msg);
+      return;
+    }
+    setDeclarationErr(null);
     setError(null);
     setSending(true);
     const err = await approve(otp, declaration);
     setSending(false);
-    if (err) setError(err);
+    if (err) setError(t(err, { defaultValue: err }));
     else navigate('/success');
   }
 
@@ -219,6 +235,7 @@ export function ConfirmPage() {
             <p className="confirm-otp-desc">
               {t('confirm_otp_desc', { phone: profile?.phone ?? '' })}
             </p>
+            <DemoOtpHint onUseCode={setOtp} />
             <OtpInput value={otp} onChange={setOtp} />
             <div className="confirm-otp-timer">
               {secs > 0 ? (
@@ -237,16 +254,13 @@ export function ConfirmPage() {
             {error ? (
               <p style={{ color: 'var(--neg)', marginTop: 12, fontSize: 14 }}>{error}</p>
             ) : null}
-            <p className="hint" style={{ marginTop: 12 }}>
-              {t('login_otp_hint')}
-            </p>
             <Button
               variant="primary"
               block
               className="btn-lg"
               style={{ marginTop: 16 }}
               onClick={() => void onApprove()}
-              disabled={otp.length < 6 || sending}
+              disabled={otp.length < 6 || sending || transferTabConflict}
             >
               {sending ? (
                 t('confirm_approving')
@@ -290,10 +304,16 @@ export function ConfirmPage() {
               className="textarea"
               style={{ minHeight: 90 }}
               value={declaration}
-              onChange={(e) => setDeclaration(e.target.value)}
+              onChange={(e) => {
+                setDeclaration(e.target.value);
+                setDeclarationErr(null);
+              }}
               placeholder={t('confirm_declaration_ph')}
             />
           </Field>
+          {declarationErr ? (
+            <p style={{ color: 'var(--neg)', fontSize: 13.5, marginTop: 8 }}>{declarationErr}</p>
+          ) : null}
           <div style={{ display: 'flex', gap: 10, marginTop: 20, justifyContent: 'flex-end' }}>
             <Button variant="ghost" onClick={() => setShowDeclaration(false)}>
               {t('confirm_declaration_abort')}
@@ -302,6 +322,12 @@ export function ConfirmPage() {
               variant="primary"
               disabled={!declaration.trim()}
               onClick={() => {
+                const sensitiveErr = firstFreeTextError(declaration);
+                if (sensitiveErr) {
+                  setDeclarationErr(t(sensitiveErr));
+                  return;
+                }
+                setDeclarationErr(null);
                 setShowDeclaration(false);
                 void onApprove();
               }}

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   AppShell,
   Breadcrumb,
+  isAllAccessRole,
   type AppLanguage,
   ThemeProvider,
   useThemeSettings,
@@ -38,6 +39,10 @@ import { fraudRulesService } from '@/features/risk-compliance/fraud-rules/api';
 import { fraudCasesService } from '@/features/risk-compliance/cases/api';
 import { useRole } from '@/domain/role-context';
 import { useAuth } from '@/domain/auth-context';
+import { useNavigationRole } from '@/hooks/use-navigation-role';
+import { RoleUrlSync } from '@/components/role-url-sync';
+import { AlltestRoleBadge } from '@/components/alltest-role-badge';
+import { DemoModeBanner } from '@/components/demo-mode-banner';
 import { SettingsProvider, type SettingsTab } from '@/domain/settings-context';
 import { UserPreferencesProvider } from '@/domain/user-preferences';
 import { NOTIFS } from '@/mocks/data';
@@ -68,7 +73,8 @@ const NOTIF_ICONS: Record<string, React.ReactNode> = {
 
 function LayoutInner() {
   const { t } = useTranslation();
-  const { role } = useRole();
+  const { role, accountRole, isDemoRoleOverride, cycleRole } = useRole();
+  const { navigationRole } = useNavigationRole();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { theme, setTheme, lang, setLang } = useThemeSettings();
@@ -196,7 +202,7 @@ function LayoutInner() {
                               ? 'wl_detail'
                               : null);
 
-  const filteredMenuItems = filterMenuForRole(MENU_ITEMS, role);
+  const filteredMenuItems = filterMenuForRole(MENU_ITEMS, navigationRole);
 
   const translateMenu = (items: NavItem[]): Record<string, NavItem> => {
     const map: Record<string, NavItem> = {};
@@ -633,9 +639,13 @@ function LayoutInner() {
     ) : null;
 
   const roleKey = `role_${role}` as 'nav_ops';
+  const accountRoleKey = accountRole ? (`role_${accountRole}` as 'nav_ops') : null;
+  const showAlltestEffective = isAllAccessRole(role);
+  const showAlltestAccount = accountRole === 'alltest';
 
   return (
     <SettingsProvider openSettings={openSettings}>
+      <RoleUrlSync />
       <AppShell
         collapsed={collapsed}
         onToggleCollapsed={() => setCollapsed(!collapsed)}
@@ -657,8 +667,12 @@ function LayoutInner() {
           env: t('env'),
           searchPlaceholder: t('search_ph'),
           roleLabel: t(roleKey),
-          roleCycleTitle: t('role_cycle_hint'),
+          roleCycleTitle: isDemoRoleOverride && accountRoleKey
+            ? `${t('role_cycle_hint')} · ${t('role_account_label')}: ${t(accountRoleKey)}`
+            : t('role_cycle_hint'),
           role,
+          onCycleRole: accountRole ? cycleRole : undefined,
+          roleBadge: showAlltestEffective ? <AlltestRoleBadge /> : undefined,
           onLogout: () => {
             logout();
             navigate('/login', { replace: true });
@@ -677,8 +691,10 @@ function LayoutInner() {
           })),
           settingsLabel: t('settings'),
           onOpenSettings: () => openSettings('app'),
-          userName: user?.fullName ?? getCurrentUser(role).displayName,
-          userRoleLabel: t(roleKey),
+          userName: user?.fullName ?? getCurrentUser(navigationRole).displayName,
+          userRoleLabel: accountRoleKey ? t(accountRoleKey) : t(roleKey),
+          userBadge:
+            showAlltestAccount && !showAlltestEffective ? <AlltestRoleBadge compact /> : undefined,
           logoutLabel: t('logout'),
           logoutDesc: lang === 'tr' ? 'Oturumu sonlandır' : 'End session',
           settingsDesc: lang === 'tr' ? 'Parola, tema, dil…' : 'Password, theme, language…',
@@ -692,6 +708,7 @@ function LayoutInner() {
           ],
         }}
       >
+        <DemoModeBanner />
         <Outlet />
       </AppShell>
       <SettingsDrawer

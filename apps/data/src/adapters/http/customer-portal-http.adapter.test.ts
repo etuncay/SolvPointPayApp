@@ -42,6 +42,48 @@ describe('createHttpCustomerPortalAdapter', () => {
     );
   });
 
+  it('login returns invalid_credentials on 401', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response('', { status: 401 }));
+    const api = createHttpCustomerPortalAdapter(BASE);
+    const res = await api.login({ identity: 'x', password: 'y' });
+    expect(res).toEqual({ ok: false, errorCode: 'invalid_credentials' });
+  });
+
+  it('getSessionProfile GET /auth/me — 200 profile', async () => {
+    const profile = { customerId: 'CUS-1', displayName: 'Test' };
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(JSON.stringify(profile), { status: 200 }),
+    );
+    const api = createHttpCustomerPortalAdapter(BASE);
+    await expect(api.getSessionProfile()).resolves.toEqual(profile);
+    expect(fetch).toHaveBeenCalledWith(
+      `${BASE}/customer-portal/auth/me`,
+      expect.objectContaining({ credentials: 'include' }),
+    );
+  });
+
+  it('getSessionProfile returns null on 401', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response('', { status: 401 }));
+    const api = createHttpCustomerPortalAdapter(BASE);
+    await expect(api.getSessionProfile()).resolves.toBeNull();
+  });
+
+  it('getProfile returns null on 401', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response('', { status: 401 }));
+    const api = createHttpCustomerPortalAdapter(BASE);
+    await expect(api.getProfile()).resolves.toBeNull();
+  });
+
+  it('logout POST /auth/logout', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response('', { status: 200 }));
+    const api = createHttpCustomerPortalAdapter(BASE);
+    await api.logout();
+    expect(fetch).toHaveBeenCalledWith(
+      `${BASE}/customer-portal/auth/logout`,
+      expect.objectContaining({ method: 'POST', credentials: 'include' }),
+    );
+  });
+
   it('listWallets GET /customer-portal/wallets', async () => {
     const fetchMock = vi.mocked(fetch);
     fetchMock.mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }));

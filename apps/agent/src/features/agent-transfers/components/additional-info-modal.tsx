@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { DynamicForm, FormMode } from '@epay/ui';
 import { buildAdditionalInfoFormConfig } from '../additional-info-form-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 export interface AdditionalInfoPayload {
   nationality: string;
@@ -31,6 +32,7 @@ export function AdditionalInfoModal({ open, isCorporate, onClose, onSubmit }: Pr
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [i18n.language],
   );
+  const ui = useAgentUiPermissions();
 
   if (!open) return null;
 
@@ -47,7 +49,7 @@ export function AdditionalInfoModal({ open, isCorporate, onClose, onSubmit }: Pr
           <DynamicForm
             config={formConfig}
             mode={FormMode.Create}
-            permissions={{ create: true }}
+            permissions={ui.form.transferSubmit}
             initialValues={{ _isCorporate: isCorporate }}
             t={translate}
             onButtonClick={(key, values) => {

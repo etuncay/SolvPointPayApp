@@ -58,3 +58,7 @@ Test RLS with non-superuser role.
 ## Best practices
 
 Timestamps on every table; index every FK; UUID/CUID PKs; audit log for regulated domains; prefer RLS over app-only tenant filters.
+
+## Subagent delegation
+
+- **Before Design process Step 1:** Launch `schema-reviewer` to inventory existing ORM models and migration patterns.

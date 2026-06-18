@@ -18,6 +18,7 @@ import {
 } from './domain/transaction-history-scope';
 import type { AgentTransactionRow } from './domain/types';
 import type { TransactionType } from '@/features/transaction-confirmation/domain/transaction-types';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 function fmtTry(n: number, lang: string): string {
   return new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {
@@ -61,6 +62,7 @@ export function TransactionHistoryPage() {
     pendingCount: 0,
   });
   const [detailRow, setDetailRow] = useState<AgentTransactionRow | null>(null);
+  const ui = useAgentUiPermissions();
 
   const handleSummary = useCallback((next: TransactionHistorySummary) => setSummary(next), []);
 
@@ -187,7 +189,7 @@ export function TransactionHistoryPage() {
         <DynamicTable
           key={tableKey}
           config={config}
-          permissions={{}}
+          permissions={ui.table.transactions}
           customFunctions={customFunctions}
           locale={lang}
           t={translate}

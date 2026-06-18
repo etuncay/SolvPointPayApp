@@ -60,3 +60,7 @@ pip-audit
 ## Output
 
 Deliver: vulnerability table (CVE, package, path, fixed version), license conflicts, outdated summary, prioritized upgrade plan. No bundled scripts — use repo lockfiles and commands above.
+
+## Subagent delegation
+
+- **At workflow start:** Launch `audit-runner` in parallel for raw scan output; interpret and prioritize in main agent.

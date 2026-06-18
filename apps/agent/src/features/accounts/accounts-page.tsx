@@ -8,6 +8,7 @@ import {
   buildAccountsActivitiesTableConfig,
   buildAccountsBalancesTableConfig,
 } from './accounts-table-config';
+import { useAgentUiPermissions } from '@/hooks/use-agent-ui-permissions';
 
 /** İşlem durumu → durum sınıfı (DynamicTable `st` pill). */
 function statusClass(status: string): string {
@@ -22,6 +23,7 @@ function statusClass(status: string): string {
 export function AccountsPage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const ui = useAgentUiPermissions();
   const translate: (key: string, fallback?: string) => string = (key, fb) =>
     t(key, { defaultValue: fb ?? key });
 
@@ -75,7 +77,7 @@ export function AccountsPage() {
           <div className="section-h" style={{ marginBottom: 12 }}>{t('ag_acc_balance_title')}</div>
           <DynamicTable
             config={balancesConfig}
-            permissions={{}}
+            permissions={ui.table.accountsBalances}
             customFunctions={balanceFns}
             locale={i18n.language}
             t={translate}
@@ -86,7 +88,7 @@ export function AccountsPage() {
       <DynamicTable
         config={activitiesConfig}
         header={{ title: t('ag_acc_activities_title'), hidePageHead: false }}
-        permissions={{ export: true }}
+        permissions={ui.table.accountsActivities}
         customFunctions={activityFns}
         locale={i18n.language}
         t={translate}

@@ -42,6 +42,8 @@ export type ConfirmationView = {
   /** Dekont üretilmiş mi — Detay Modu'nda indirme butonunu aktive eder. */
   hasReceipt: boolean;
   agentRole: AgentRole;
+  /** Store kaynaklı işlem — onay/iptal mümkün; activity fallback salt okunur. */
+  storeBacked: boolean;
 };
 
 export type ApproveResult = { ok: boolean; error?: string };
